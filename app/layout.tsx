@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Serif, Space_Mono, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
+import "./custom.css";
 
 const display = IBM_Plex_Serif({
   subsets: ["latin"],
