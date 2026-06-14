@@ -1,12 +1,31 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { IBM_Plex_Serif, Space_Mono, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({subsets:['latin'],variable:'--font-sans'});
+const display = IBM_Plex_Serif({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500"],
+  display: "swap",
+});
+
+const sans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["300", "400"],
+  display: "swap",
+});
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thetesseract.app"),
-  title: "Tesseract Agent - On-Device Intelligence for macOS",
+  title: "Tesseract Agent — On-Device Intelligence for macOS",
   description:
     "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, image generation, and more — powered by open models, processed entirely on-device.",
   icons: {
@@ -20,7 +39,7 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tesseract Agent - On-Device Intelligence for macOS",
+    title: "Tesseract Agent — On-Device Intelligence for macOS",
     description:
       "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, image generation, and a local AI agent — powered by open models, processed entirely on-device.",
     siteName: "Tesseract Agent",
@@ -36,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Tesseract Agent - On-Device Intelligence for macOS",
+    title: "Tesseract Agent — On-Device Intelligence for macOS",
     description:
       "A privacy-focused AI assistant for macOS — powered by open models, processed entirely on-device.",
     images: ["/icon-512x512.png"],
@@ -49,8 +68,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={outfit.variable}>
-      <body className="antialiased">
+    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+      <body className="antialiased font-sans">
         {children}
       </body>
     </html>
