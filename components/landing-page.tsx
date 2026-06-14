@@ -148,39 +148,34 @@ function Nav({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }
 /* ------------------------------------------------------------------ */
 
 function Footer({ dark }: { dark: boolean }) {
-  const borderColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  const innerBorderColor = dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)";
-
   return (
-    <footer className="relative z-10 w-full border-t" style={{ borderColor }}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
-          <div>
-            <div className="font-display text-3xl tracking-tight mb-2">
-              tesseract
-            </div>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              On-device intelligence for macOS. No cloud. No accounts. Just you.
-            </p>
+    <footer className="px-8 lg:px-16 xl:px-24 py-20">
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
+        <div>
+          <div className="font-display text-4xl tracking-tight mb-3">
+            tesseract
           </div>
-
-          <div className="flex flex-wrap gap-x-10 gap-y-4 text-sm">
-            <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-              Terms
-            </Link>
-            <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
-              Support
-            </Link>
-          </div>
+          <p className="text-muted-foreground text-lg max-w-xs">
+            On-device intelligence for macOS. No cloud. No accounts. Just you.
+          </p>
         </div>
 
-        <div className="mt-16 pt-8 border-t flex items-center justify-between text-xs text-muted-foreground" style={{ borderColor: innerBorderColor }}>
-          <span>© {new Date().getFullYear()} Tesseract</span>
-          <span className="font-mono">v0.1.0</span>
+        <div className="flex flex-wrap gap-x-12 gap-y-4 text-lg">
+          <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+            Privacy
+          </Link>
+          <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+            Terms
+          </Link>
+          <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
+            Support
+          </Link>
         </div>
+      </div>
+
+      <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
+        <span>© {new Date().getFullYear()} Tesseract</span>
+        <span className="font-mono">v0.1.0</span>
       </div>
     </footer>
   );
@@ -191,7 +186,6 @@ function Footer({ dark }: { dark: boolean }) {
 /* ------------------------------------------------------------------ */
 
 function FeatureCard({
-  number,
   title,
   description,
   tags,
@@ -199,7 +193,6 @@ function FeatureCard({
   delay = 0,
   dark,
 }: {
-  number: string;
   title: string;
   description: string;
   tags: string[];
@@ -207,28 +200,15 @@ function FeatureCard({
   delay?: number;
   dark: boolean;
 }) {
-  const borderColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  const hoverBorderColor = dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)";
-
   return (
     <Reveal delay={delay}>
-      <div
-        className="group relative border p-8 lg:p-10 hover:border transition-colors"
-        style={{ borderColor, transition: "border-color 0.2s" }}
-        onMouseEnter={(e) => (e.currentTarget.style.borderColor = hoverBorderColor)}
-        onMouseLeave={(e) => (e.currentTarget.style.borderColor = borderColor)}
-      >
-        <div className="flex items-start justify-between mb-8">
-          <span className="font-mono text-xs text-muted-foreground">
-            {number}
-          </span>
-          <Icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-        </div>
+      <div className="group">
+        <Icon className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors mb-6" />
 
-        <h3 className="font-display text-2xl tracking-tight mb-3">
+        <h3 className="font-display text-3xl tracking-tight mb-4">
           {title}
         </h3>
-        <p className="text-muted-foreground leading-relaxed mb-6 text-[15px]">
+        <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
           {description}
         </p>
 
@@ -236,8 +216,7 @@ function FeatureCard({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[11px] px-2.5 py-1 border text-muted-foreground"
-              style={{ borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}
+              className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground group-hover:text-foreground transition-colors"
             >
               {tag}
             </span>
@@ -325,20 +304,17 @@ export function LandingPage() {
         </section>
 
         {/* FEATURES */}
-        <section
-          id="features"
-          className="max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-40"
-        >
+        <section id="features" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
           <Reveal>
-            <h2 className="font-display text-4xl lg:text-5xl tracking-tight mb-16 lg:mb-24 max-w-2xl">
-              Everything runs on your Mac. Open-source models, optimized for
-              Apple Silicon.
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-20 lg:mb-32 max-w-3xl">
+              Everything runs
+              <br />
+              on your Mac.
             </h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-24">
             <FeatureCard
-              number="01"
               title="Voice Dictation"
               description="Hold a hotkey, speak, release. Your voice is transcribed and typed directly into whatever app you're using — a text editor, a browser, a chat window."
               tags={["push-to-talk", "on-device", "global hotkey"]}
@@ -347,7 +323,6 @@ export function LandingPage() {
               dark={dark}
             />
             <FeatureCard
-              number="02"
               title="Text-to-Speech"
               description="Hear any text read aloud with natural-sounding voice synthesis. Consistent quality across long-form content, generated in real time on your Mac."
               tags={["natural voice", "real-time", "offline"]}
@@ -356,7 +331,6 @@ export function LandingPage() {
               dark={dark}
             />
             <FeatureCard
-              number="03"
               title="AI Agent"
               description="A local AI agent that can read, write, and edit files on your Mac. Interact by voice or text. Extensible through packages — all running privately on-device."
               tags={["tool-calling", "sandboxed", "extensible"]}
@@ -365,7 +339,6 @@ export function LandingPage() {
               dark={dark}
             />
             <FeatureCard
-              number="04"
               title="Image Generation"
               description="Create images from text descriptions using on-device diffusion models. No waiting for a server, no usage limits, no content filtering by a third party."
               tags={["text-to-image", "diffusion", "unlimited"]}
@@ -377,108 +350,91 @@ export function LandingPage() {
         </section>
 
         {/* PRIVACY STATEMENT */}
-        <section
-          id="privacy"
-          className="border-y"
-          style={{ borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}
-        >
-          <div className="max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-40">
-            <Reveal delay={0.05}>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.95] mb-8 max-w-4xl">
-                Your data never
-                <br />
-                leaves your Mac.
-              </h2>
-            </Reveal>
+        <section id="privacy" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
+          <Reveal delay={0.05}>
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-4xl">
+              Your data never
+              <br />
+              leaves your Mac.
+            </h2>
+          </Reveal>
 
-            <Reveal delay={0.1}>
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-16">
-                Every model runs locally on Apple Silicon. There are no servers
-                to trust because there are no servers at all.
-              </p>
-            </Reveal>
+          <Reveal delay={0.1}>
+            <p className="text-xl text-muted-foreground leading-relaxed max-w-xl mb-20">
+              Every model runs locally on Apple Silicon. There are no servers
+              to trust because there are no servers at all.
+            </p>
+          </Reveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px border" style={{ backgroundColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}>
-              {[
-                { icon: Cpu, label: "Local inference", desc: "All AI runs on Apple Silicon" },
-                { icon: WifiOff, label: "Full offline", desc: "Works without internet after setup" },
-                { icon: UserX, label: "No accounts", desc: "No sign-ups, no telemetry" },
-                { icon: EyeOff, label: "No cloud", desc: "No servers, no API calls" },
-                { icon: Eye, label: "Open models", desc: "Inspect and replace any model" },
-                { icon: Lock, label: "Sandboxed", desc: "Your files stay under your control" },
-              ].map((item, i) => (
-                <Reveal key={i} delay={i * 0.06}>
-                  <div className={`p-6 lg:p-8 flex items-start gap-4 transition-colors ${dark ? "bg-[#0a0a0a] hover:bg-[#111]" : "bg-[#f5f2ed] hover:bg-[#f0ece6]"}`}>
-                    <item.icon className="w-4 h-4 text-muted-foreground shrink-0 mt-1" />
-                    <div>
-                      <div className="text-sm font-medium mb-0.5">{item.label}</div>
-                      <div className="text-sm text-muted-foreground">{item.desc}</div>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+            {[
+              { icon: Cpu, label: "Local inference", desc: "All AI runs on Apple Silicon" },
+              { icon: WifiOff, label: "Full offline", desc: "Works without internet after setup" },
+              { icon: UserX, label: "No accounts", desc: "No sign-ups, no telemetry" },
+              { icon: EyeOff, label: "No cloud", desc: "No servers, no API calls" },
+              { icon: Eye, label: "Open models", desc: "Inspect and replace any model" },
+              { icon: Lock, label: "Sandboxed", desc: "Your files stay under your control" },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 0.06}>
+                <div className="group">
+                  <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors mb-5" />
+                  <div className="text-lg font-medium mb-2">{item.label}</div>
+                  <div className="text-muted-foreground leading-relaxed">{item.desc}</div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </section>
 
         {/* HOW IT WORKS + REQUIREMENTS */}
-        <section className="max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-40">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-24">
-            <div className="lg:col-span-3">
+        <section className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 lg:gap-40">
+            <div>
               <Reveal delay={0.05}>
-                <h2 className="font-display text-3xl lg:text-4xl tracking-tight mb-12">
+                <h2 className="font-display text-5xl sm:text-6xl tracking-tighter mb-16">
                   How it works
                 </h2>
               </Reveal>
 
-              <div className="space-y-0">
+              <div className="space-y-10">
                 {[
                   {
-                    step: "01",
                     title: "Download",
                     desc: "Get Tesseract Agent from the Mac App Store.",
                   },
                   {
-                    step: "02",
                     title: "First Launch",
                     desc: "AI models download once on first launch. This is the only time the app needs the internet.",
                   },
                   {
-                    step: "03",
                     title: "Grant Permissions",
                     desc: "Allow microphone access for dictation and accessibility access for global hotkeys.",
                   },
                   {
-                    step: "04",
                     title: "Ready",
                     desc: "Everything runs on-device from that point forward. No internet needed.",
                   },
                 ].map((item, i) => (
                   <Reveal key={i} delay={i * 0.08}>
-                    <div className="flex items-start gap-6 py-6 border-b" style={{ borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}>
-                      <span className="font-mono text-xs text-muted-foreground pt-1">
-                        {item.step}
-                      </span>
-                      <div>
-                        <h3 className="text-sm font-medium mb-1">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {item.desc}
-                        </p>
-                      </div>
+                    <div>
+                      <h3 className="text-xl font-medium mb-2">{item.title}</h3>
+                      <p className="text-lg text-muted-foreground leading-relaxed">
+                        {item.desc}
+                      </p>
                     </div>
                   </Reveal>
                 ))}
               </div>
             </div>
 
-            <div className="lg:col-span-2">
+            <div>
               <Reveal delay={0.05}>
-                <h2 className="font-display text-3xl lg:text-4xl tracking-tight mb-12">
+                <h2 className="font-display text-5xl sm:text-6xl tracking-tighter mb-16">
                   System
                 </h2>
               </Reveal>
 
-              <div className="space-y-0">
+              <div className="space-y-8">
                 {[
                   { label: "Operating system", value: "macOS 26 or later" },
                   { label: "Chip", value: "Apple Silicon (M1 or later)" },
@@ -486,13 +442,13 @@ export function LandingPage() {
                   { label: "Internet", value: "One-time download only" },
                 ].map((item, i) => (
                   <Reveal key={i} delay={i * 0.08}>
-                    <div className="flex items-start justify-between py-5 border-b" style={{ borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}>
-                      <span className="text-sm text-muted-foreground">
+                    <div>
+                      <div className="text-sm text-muted-foreground mb-1">
                         {item.label}
-                      </span>
-                      <span className="text-sm font-medium text-right">
+                      </div>
+                      <div className="text-xl">
                         {item.value}
-                      </span>
+                      </div>
                     </div>
                   </Reveal>
                 ))}
@@ -502,40 +458,38 @@ export function LandingPage() {
         </section>
 
         {/* FINAL CTA */}
-        <section className="border-t" style={{ borderColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)" }}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-40 text-center">
-            <Reveal>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-6">
-                Ready to get started?
-              </h2>
-            </Reveal>
+        <section className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48 text-center">
+          <Reveal>
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10">
+              Ready to get started?
+            </h2>
+          </Reveal>
 
-            <Reveal delay={0.08}>
-              <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-10">
-                Download Tesseract Agent from the Mac App Store and experience
-                AI that truly belongs to you.
-              </p>
-            </Reveal>
+          <Reveal delay={0.08}>
+            <p className="text-xl text-muted-foreground max-w-lg mx-auto mb-14">
+              Download Tesseract Agent from the Mac App Store and experience
+              AI that truly belongs to you.
+            </p>
+          </Reveal>
 
-            <Reveal delay={0.16}>
-              <Button
-                size="lg"
-                className="rounded-lg h-14 px-10 text-sm font-mono"
-                style={{
-                  background: dark ? "#f0f0f0" : "#111",
-                  color: dark ? "#0a0a0a" : "#f5f2ed",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = dark ? "#ddd" : "#333";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = dark ? "#f0f0f0" : "#111";
-                }}
-              >
-                Download on the Mac App Store
-              </Button>
-            </Reveal>
-          </div>
+          <Reveal delay={0.16}>
+            <Button
+              size="lg"
+              className="rounded-lg h-14 px-10 text-base font-mono"
+              style={{
+                background: dark ? "#f0f0f0" : "#111",
+                color: dark ? "#0a0a0a" : "#f5f2ed",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = dark ? "#ddd" : "#333";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = dark ? "#f0f0f0" : "#111";
+              }}
+            >
+              Download on the Mac App Store
+            </Button>
+          </Reveal>
         </section>
       </main>
 
