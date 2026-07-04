@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { HeroButtons } from "@/components/hero-buttons";
 import TesseractViz from "@/components/tesseract-viz";
+import { Header, Footer } from "@/components/header";
 import {
   Mic,
   Volume2,
@@ -20,10 +20,10 @@ import {
   EyeOff,
   Eye,
   Lock,
-  Sun,
-  Moon,
   Server,
-  Github,
+  Zap,
+  Layers,
+  Plug,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -74,140 +74,6 @@ function Noise() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  NAVIGATION                                                         */
-/* ------------------------------------------------------------------ */
-
-function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const dark = resolvedTheme === "dark";
-
-  useEffect(() => setMounted(true), []);
-
-  return (
-    <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
-      <nav
-        className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl bg-[rgba(245,242,237,0.8)] dark:bg-[rgba(20,20,20,0.8)] border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-      >
-        <Link href="/" className="flex items-center gap-2.5 px-3 py-1.5">
-          <Image
-            src="/icon-64x64.png"
-            alt="Tesseract"
-            width={32}
-            height={32}
-            className="rounded-sm"
-          />
-          <span className="font-display text-base tracking-tight">Tesseract</span>
-        </Link>
-
-        <div
-          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
-        />
-
-        <div className="flex items-center gap-1">
-          {["Features", "Privacy", "Support"].map((item) => (
-            <Link
-              key={item}
-              href={item === "Features" ? "#features" : item === "Privacy" ? "#privacy" : `/${item.toLowerCase()}`}
-              className="px-4 py-2 text-sm rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
-
-        <div
-          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
-        />
-
-        <Button
-          variant="outline"
-          size="sm"
-          className="rounded-full h-9 px-5 text-sm font-mono border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.12)] bg-transparent"
-          asChild
-        >
-          <Link href="#download">Download</Link>
-        </Button>
-
-        <button
-          onClick={() => setTheme(dark ? "light" : "dark")}
-          className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
-          aria-label="Toggle theme"
-        >
-          {mounted ? (dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />) : <Moon className="w-4 h-4" />}
-        </button>
-
-        <Link
-          href="https://github.com/spokvulcan/tesseract"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
-          aria-label="GitHub repository"
-        >
-          <Github className="w-4 h-4" />
-        </Link>
-      </nav>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  FOOTER                                                             */
-/* ------------------------------------------------------------------ */
-
-function Footer() {
-  const [version, setVersion] = useState<string>("");
-
-  useEffect(() => {
-    fetch("/version.json")
-      .then((res) => res.json())
-      .then((data) => setVersion(data.version))
-      .catch(() => setVersion(""));
-  }, []);
-
-  return (
-    <footer className="px-8 lg:px-16 xl:px-24 py-20">
-      <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
-        <div>
-          <div className="font-display text-4xl tracking-tight mb-3">
-            Tesseract
-          </div>
-          <p className="text-muted-foreground text-lg max-w-xs">
-            On-device AI for macOS. No cloud. No accounts. Just you.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-x-12 gap-y-4 text-lg">
-          <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-            Privacy
-          </Link>
-          <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-            Terms
-          </Link>
-          <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
-            Support
-          </Link>
-          <Link
-            href="https://github.com/spokvulcan/tesseract"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-          >
-            <Github className="w-4 h-4" />
-            GitHub
-          </Link>
-        </div>
-      </div>
-
-      <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
-        <span>© {new Date().getFullYear()} Tesseract</span>
-        <span className="font-mono">{version ? `v${version}` : ""}</span>
-      </div>
-    </footer>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  FEATURE CARD                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -252,18 +118,112 @@ function FeatureCard({
 }
 
 /* ------------------------------------------------------------------ */
+/*  INFERENCE SERVER                                                   */
+/* ------------------------------------------------------------------ */
+
+function InferenceServerSection() {
+  const tools = ["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"];
+  const endpoints = [
+    { code: "/v1/chat/completions", desc: "Streaming and non-streaming completions, honors request.model" },
+    { code: "/v1/models", desc: "Lists downloaded agent models" },
+    { code: "/health", desc: "Server health check" },
+  ];
+
+  const featureStrips = [
+    { icon: Plug, title: "OpenAI Compatible", desc: "Works with any OpenAI SDK or compatible client" },
+    { icon: Zap, title: "Prefix Caching", desc: "Tiered RAM and SSD caching skips prefill for repeated prompts" },
+    { icon: Layers, title: "MLX Powered", desc: "Same model drives the agent and the server" },
+  ];
+
+  return (
+    <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
+      <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
+        <Reveal>
+          <div className="text-center mb-20">
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-8 text-foreground">
+              Your Mac. Your models.
+              <br />
+              Your endpoint.
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              Tesseract ships with an OpenAI-compatible inference server that
+              drives the same MLX-powered LLM used by the agent. Point any
+              coding agent at localhost and get a fully local backend with
+              tiered RAM and SSD prefix caching.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
+            {featureStrips.map((f, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-border p-6 lg:p-8 text-center"
+              >
+                <f.icon className="w-6 h-6 text-muted-foreground mx-auto mb-5" />
+                <h3 className="font-display text-xl tracking-tight mb-3 text-foreground">
+                  {f.title}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.2}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
+            <div>
+              <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
+                Compatible with
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {tools.map((tool) => (
+                  <span
+                    key={tool}
+                    className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground bg-secondary rounded-sm"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
+                Endpoints
+              </h3>
+              <div className="space-y-3 text-muted-foreground">
+                {endpoints.map((ep) => (
+                  <div key={ep.code} className="flex items-start gap-3">
+                    <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
+                      {ep.code}
+                    </code>
+                    <span className="text-sm leading-relaxed">{ep.desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  LANDING PAGE                                                       */
 /* ------------------------------------------------------------------ */
 
 export function LandingPage() {
-  const { setTheme } = useTheme();
-
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       <ScrollProgress />
       <Noise />
 
-      <Nav setTheme={setTheme} />
+      <Header />
 
       <main>
         {/* HERO — split layout, no divider */}
@@ -305,88 +265,7 @@ export function LandingPage() {
         </section>
 
         {/* INFERENCE SERVER */}
-        <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
-          <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
-            <Reveal>
-              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-3xl text-foreground">
-                Your Mac. Your models.
-                <br />
-                Your endpoint.
-              </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mb-14">
-                Tesseract ships with an OpenAI-compatible inference server that
-                drives the same MLX-powered LLM used by the agent. Point any
-                coding agent at localhost and get a fully local backend with
-                tiered RAM and SSD prefix caching — repeated prompts skip the
-                prefill entirely.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <div className="rounded-lg bg-card border border-border p-6 lg:p-8 mb-14 overflow-x-auto">
-                <pre className="font-mono text-sm leading-relaxed text-foreground/80">
-                  <code>
-                    <span className="text-muted-foreground">$</span> export OPENAI_API_BASE=http://localhost:8080/v1{"\n"}
-                    <span className="text-muted-foreground">$</span> export OPENAI_API_KEY=tesseract{"\n"}
-                    <span className="text-muted-foreground">$</span> openclaw{"\n"}
-                    <span className="text-muted-foreground/60">// Tesseract is now your local AI backend</span>
-                  </code>
-                </pre>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.2}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-                <div>
-                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
-                    Compatible with
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    Any OpenAI-compatible client works out of the box. OpenCode
-                    is the first integrated adapter — Tesseract serves a setup
-                    script that merges your port and model config automatically.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"].map((tool) => (
-                      <span
-                        key={tool}
-                        className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground bg-secondary rounded-sm"
-                      >
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
-                    Endpoints
-                  </h3>
-                  <div className="space-y-3 text-muted-foreground">
-                    <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
-                        /v1/chat/completions
-                      </code>
-                      <span>Streaming and non-streaming completions, honors request.model</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
-                        /v1/models
-                      </code>
-                      <span>Lists downloaded agent models</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
-                        /health
-                      </code>
-                      <span>Server health check</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
+        <InferenceServerSection />
 
         {/* FEATURES */}
         <section id="features" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
