@@ -289,15 +289,15 @@ export function LandingPage() {
         </section>
 
         {/* INFERENCE SERVER */}
-        <section className="bg-[#0a0a0a] dark:bg-[#050505] py-32 lg:py-48">
+        <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
           <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
             <Reveal>
-              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-3xl">
+              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-3xl text-foreground">
                 Your Mac. Your models.
                 <br />
                 Your endpoint.
               </h2>
-              <p className="text-lg text-white/70 leading-relaxed max-w-2xl mb-14">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mb-14">
                 Tesseract ships with an OpenAI-compatible inference server that
                 drives the same MLX-powered LLM used by the agent. Point any
                 coding agent at localhost and get a fully local backend with
@@ -307,13 +307,13 @@ export function LandingPage() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="rounded-lg bg-black/40 border border-white/[0.06] p-6 lg:p-8 mb-14 overflow-x-auto">
-                <pre className="font-mono text-sm leading-relaxed text-white/80">
+              <div className="rounded-lg bg-card border border-border p-6 lg:p-8 mb-14 overflow-x-auto">
+                <pre className="font-mono text-sm leading-relaxed text-foreground/80">
                   <code>
-                    <span className="text-white/40">$</span> export OPENAI_API_BASE=http://localhost:8080/v1{"\n"}
-                    <span className="text-white/40">$</span> export OPENAI_API_KEY=tesseract{"\n"}
-                    <span className="text-white/40">$</span> openclaw{"\n"}
-                    <span className="text-white/30"># Tesseract is now your local AI backend</span>
+                    <span className="text-muted-foreground">$</span> export OPENAI_API_BASE=http://localhost:8080/v1{"\n"}
+                    <span className="text-muted-foreground">$</span> export OPENAI_API_KEY=tesseract{"\n"}
+                    <span className="text-muted-foreground">$</span> openclaw{"\n"}
+                    <span className="text-muted-foreground/60">// Tesseract is now your local AI backend</span>
                   </code>
                 </pre>
               </div>
@@ -322,10 +322,10 @@ export function LandingPage() {
             <Reveal delay={0.2}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
                 <div>
-                  <h3 className="font-display text-2xl tracking-tight mb-4 text-white">
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
                     Compatible with
                   </h3>
-                  <p className="text-white/60 leading-relaxed mb-6">
+                  <p className="text-muted-foreground leading-relaxed mb-6">
                     Any OpenAI-compatible client works out of the box. OpenCode
                     is the first integrated adapter — Tesseract serves a setup
                     script that merges your port and model config automatically.
@@ -334,7 +334,7 @@ export function LandingPage() {
                     {["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"].map((tool) => (
                       <span
                         key={tool}
-                        className="font-mono text-[11px] px-3 py-1.5 text-white/50 bg-white/[0.04] rounded-sm"
+                        className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground bg-secondary rounded-sm"
                       >
                         {tool}
                       </span>
@@ -343,24 +343,24 @@ export function LandingPage() {
                 </div>
 
                 <div>
-                  <h3 className="font-display text-2xl tracking-tight mb-4 text-white">
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
                     Endpoints
                   </h3>
-                  <div className="space-y-3 text-white/60">
+                  <div className="space-y-3 text-muted-foreground">
                     <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
                         /v1/chat/completions
                       </code>
                       <span>Streaming and non-streaming completions, honors request.model</span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
                         /v1/models
                       </code>
                       <span>Lists downloaded agent models</span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
                         /health
                       </code>
                       <span>Server health check</span>
