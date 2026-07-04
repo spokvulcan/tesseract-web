@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import TesseractViz from "@/components/tesseract-viz";
@@ -26,7 +27,7 @@ import {
 /*  SCROLL PROGRESS                                                    */
 /* ------------------------------------------------------------------ */
 
-function ScrollProgress({ dark }: { dark: boolean }) {
+function ScrollProgress() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -41,10 +42,9 @@ function ScrollProgress({ dark }: { dark: boolean }) {
 
   return (
     <div
-      className="scroll-progress"
+      className="scroll-progress bg-[#111] dark:bg-[#f0f0f0]"
       style={{
         transform: `scaleX(${progress})`,
-        background: dark ? "#f0f0f0" : "#111",
       }}
     />
   );
@@ -74,16 +74,14 @@ function Noise() {
 /*  NAVIGATION                                                         */
 /* ------------------------------------------------------------------ */
 
-function Nav({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }) {
+function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
+
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
       <nav
-        className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl"
-        style={{
-          backgroundColor: dark ? "rgba(20,20,20,0.8)" : "rgba(245,242,237,0.8)",
-          borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
-          boxShadow: dark ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.08)",
-        }}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl bg-[rgba(245,242,237,0.8)] dark:bg-[rgba(20,20,20,0.8)] border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
       >
         <Link href="/" className="flex items-center gap-2.5 px-3 py-1.5">
           <Image
@@ -97,8 +95,7 @@ function Nav({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }
         </Link>
 
         <div
-          className="w-px h-6 mx-1"
-          style={{ backgroundColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" }}
+          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
         />
 
         <div className="flex items-center gap-1">
@@ -114,25 +111,20 @@ function Nav({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }
         </div>
 
         <div
-          className="w-px h-6 mx-1"
-          style={{ backgroundColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)" }}
+          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
         />
 
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full h-9 px-5 text-sm font-mono"
-          style={{
-            borderColor: dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)",
-            backgroundColor: "transparent",
-          }}
+          className="rounded-full h-9 px-5 text-sm font-mono border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.12)] bg-transparent"
           asChild
         >
           <Link href="#download">Download</Link>
         </Button>
 
         <button
-          onClick={() => setDark(!dark)}
+          onClick={() => setTheme(dark ? "light" : "dark")}
           className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
           aria-label="Toggle theme"
         >
@@ -147,7 +139,7 @@ function Nav({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }
 /*  FOOTER                                                             */
 /* ------------------------------------------------------------------ */
 
-function Footer({ dark }: { dark: boolean }) {
+function Footer() {
   return (
     <footer className="px-8 lg:px-16 xl:px-24 py-20">
       <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
@@ -191,14 +183,12 @@ function FeatureCard({
   tags,
   icon: Icon,
   delay = 0,
-  dark,
 }: {
   title: string;
   description: string;
   tags: string[];
   icon: React.ElementType;
   delay?: number;
-  dark: boolean;
 }) {
   return (
     <Reveal delay={delay}>
@@ -232,14 +222,14 @@ function FeatureCard({
 /* ------------------------------------------------------------------ */
 
 export function LandingPage() {
-  const [dark, setDark] = useState(false);
+  const { setTheme } = useTheme();
 
   return (
-    <div className={`relative min-h-screen w-full overflow-hidden ${dark ? "dark bg-[#0a0a0a] text-[#f0f0f0]" : "bg-[#f5f2ed] text-[#111]"}`}>
-      <ScrollProgress dark={dark} />
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <ScrollProgress />
       <Noise />
 
-      <Nav dark={dark} setDark={setDark} />
+      <Nav setTheme={setTheme} />
 
       <main>
         {/* HERO — split layout, no divider */}
@@ -254,7 +244,7 @@ export function LandingPage() {
                     <br />
                     intelligence.
                     <br />
-                    <span className="text-muted">Your machine.</span>
+                    <span className="dark:text-white/60 text-neutral-500">Your machine.</span>
                   </h1>
                 </Reveal>
 
@@ -270,17 +260,7 @@ export function LandingPage() {
                   <div id="download" className="flex items-center gap-5">
                     <Button
                       size="lg"
-                      className="rounded-lg h-12 px-8 text-sm font-mono"
-                      style={{
-                        background: dark ? "#f0f0f0" : "#111",
-                        color: dark ? "#0a0a0a" : "#f5f2ed",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = dark ? "#ddd" : "#333";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = dark ? "#f0f0f0" : "#111";
-                      }}
+                      className="rounded-lg h-12 px-8 text-sm font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
                     >
                       Download on the Mac App Store
                     </Button>
@@ -298,7 +278,7 @@ export function LandingPage() {
 
             {/* Right: tesseract */}
             <div className="flex-1 relative">
-              <TesseractViz dark={dark} />
+              <TesseractViz />
             </div>
           </div>
         </section>
@@ -320,7 +300,6 @@ export function LandingPage() {
               tags={["push-to-talk", "on-device", "global hotkey"]}
               icon={Mic}
               delay={0}
-              dark={dark}
             />
             <FeatureCard
               title="Text-to-Speech"
@@ -328,7 +307,6 @@ export function LandingPage() {
               tags={["natural voice", "real-time", "offline"]}
               icon={Volume2}
               delay={0.08}
-              dark={dark}
             />
             <FeatureCard
               title="AI Agent"
@@ -336,7 +314,6 @@ export function LandingPage() {
               tags={["tool-calling", "sandboxed", "extensible"]}
               icon={Bot}
               delay={0}
-              dark={dark}
             />
             <FeatureCard
               title="Image Generation"
@@ -344,7 +321,6 @@ export function LandingPage() {
               tags={["text-to-image", "diffusion", "unlimited"]}
               icon={ImageIcon}
               delay={0.08}
-              dark={dark}
             />
           </div>
         </section>
@@ -475,17 +451,7 @@ export function LandingPage() {
           <Reveal delay={0.16}>
             <Button
               size="lg"
-              className="rounded-lg h-14 px-10 text-base font-mono"
-              style={{
-                background: dark ? "#f0f0f0" : "#111",
-                color: dark ? "#0a0a0a" : "#f5f2ed",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = dark ? "#ddd" : "#333";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = dark ? "#f0f0f0" : "#111";
-              }}
+              className="rounded-lg h-14 px-10 text-base font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
             >
               Download on the Mac App Store
             </Button>
@@ -493,7 +459,7 @@ export function LandingPage() {
         </section>
       </main>
 
-      <Footer dark={dark} />
+      <Footer />
     </div>
   );
 }

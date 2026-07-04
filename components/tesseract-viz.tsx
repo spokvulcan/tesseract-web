@@ -6,6 +6,24 @@ import { useEffect, useRef, useCallback } from "react";
 /*  4D → 3D → 2D Tesseract (hypercube) wireframe                     */
 /* ------------------------------------------------------------------ */
 
+// Marketing phrases attached to edges, cycled by edge index
+const PHRASES = [
+  "On-device",
+  "No cloud",
+  "Open models",
+  "Offline",
+  "No accounts",
+  "No telemetry",
+  "Sandboxed",
+  "Apple Silicon",
+  "Your intelligence",
+  "Fully local",
+  "Zero traces",
+  "Your machine",
+  "Pure compute",
+  "Private by default",
+];
+
 // 16 vertices of a 4D hypercube: (±1, ±1, ±1, ±1)
 const VERTICES = [
   [-1, -1, -1, -1],
@@ -101,12 +119,21 @@ function project4Dto2D(
   ];
 }
 
-export default function TesseractViz({ dark = false }: { dark?: boolean }) {
+export default function TesseractViz() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const anglesRef = useRef({ xy: 0, zw: 0, xz: 0, yw: 0 });
   const sizeRef = useRef(0);
   const darkRef = useRef(false);
+
+  // Sync theme from DOM (set by next-themes before paint)
+  useEffect(() => {
+    const check = () => document.documentElement.classList.contains("dark");
+    darkRef.current = check();
+    const observer = new MutationObserver(() => { darkRef.current = check(); });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -164,22 +191,33 @@ export default function TesseractViz({ dark = false }: { dark?: boolean }) {
       ctx.stroke();
     }
 
+    // Text labels on nodes — depth-based visibility
+    ctx.font = "bold 13px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
     for (let i = 0; i < projected.length; i++) {
       const depth = depths[i];
+      const opacity = 0.02 + ((depth + 1) / 2) * 0.93;
       const radius = 6 + (depth + 1) * 3;
-      const opacity = 0.8 + (depth + 1) * 0.1;
+
       ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
       ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${opacity * (isDark ? 0.5 : 0.4)})`;
+      ctx.shadowBlur = 6;
       ctx.beginPath();
       ctx.arc(projected[i][0], projected[i][1], radius, 0, Math.PI * 2);
       ctx.fill();
+
+      if (opacity > 0.25) {
+        const phrase = PHRASES[i % PHRASES.length];
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity * 0.95})`;
+        ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${opacity * 0.35})`;
+        ctx.shadowBlur = 5;
+        ctx.fillText(phrase, projected[i][0], projected[i][1] + radius + 14);
+      }
     }
     ctx.shadowBlur = 0;
   }, []);
-
-  useEffect(() => {
-    darkRef.current = dark;
-  }, [dark]);
 
   useEffect(() => {
     let running = true;
