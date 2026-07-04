@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = {
   title: "Support — Tesseract",
@@ -12,34 +13,35 @@ export const metadata: Metadata = {
 export default function SupportPage() {
   return (
     <PageShell>
-      <div className="font-mono text-xs tracking-widest uppercase text-muted-foreground mb-6 flex items-center gap-3">
-        <span className="w-6 h-px bg-muted-foreground" />
-        Help
-      </div>
+      <Reveal>
+        <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl leading-[0.85] tracking-tighter mb-6">
+          Support
+        </h1>
+        <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+          Need help with Tesseract? Find answers below or get in touch.
+        </p>
+      </Reveal>
 
-      <h1 className="font-display text-4xl lg:text-5xl tracking-tight mb-3">
-        Support
-      </h1>
-      <p className="text-muted-foreground text-lg mb-14">
-        Need help with Tesseract? Find answers below or get in touch.
-      </p>
-
-      {/* Contact */}
-      <a
-        href="mailto:support@thetesseract.app"
-        className="flex items-center gap-4 p-5 border border-black/[0.06] hover:border-black/[0.12] hover:bg-black/[0.01] transition-colors mb-16 inline-flex"
-      >
-        <Mail className="w-5 h-5 text-muted-foreground shrink-0" />
-        <div>
-          <div className="text-sm font-medium">Email Support</div>
-          <div className="text-sm text-muted-foreground">support@thetesseract.app</div>
+      <Reveal delay={0.1}>
+        <div className="mt-14 mb-16">
+          <a
+            href="mailto:support@thetesseract.app"
+            className="flex items-center gap-4 p-5 border border-border hover:border-foreground/10 hover:bg-secondary/50 transition-colors inline-flex"
+          >
+            <Mail className="w-5 h-5 text-muted-foreground shrink-0" />
+            <div>
+              <div className="text-base font-medium">Email Support</div>
+              <div className="text-base text-muted-foreground">support@thetesseract.app</div>
+            </div>
+          </a>
         </div>
-      </a>
+      </Reveal>
 
-      {/* FAQ */}
-      <h2 className="font-display text-2xl tracking-tight mb-8">
-        Frequently Asked Questions
-      </h2>
+      <Reveal delay={0.15}>
+        <h2 className="font-display text-4xl tracking-tight mb-12">
+          Frequently Asked Questions
+        </h2>
+      </Reveal>
 
       <div className="space-y-0">
         {[
@@ -86,37 +88,40 @@ export default function SupportPage() {
         ].map((item, i) => (
           <details
             key={i}
-            className="group border-b border-black/[0.06] overflow-hidden"
+            className="group border-b border-border overflow-hidden"
           >
-            <summary className="flex items-center justify-between py-5 cursor-pointer text-sm font-medium hover:text-muted-foreground transition-colors list-none">
+            <summary className="flex items-center justify-between py-5 cursor-pointer text-base font-medium hover:text-muted-foreground transition-colors list-none">
               {item.q}
               <span className="text-muted-foreground group-open:rotate-45 transition-transform text-lg leading-none ml-4 shrink-0">
                 +
               </span>
             </summary>
-            <div className="pb-5 text-sm text-muted-foreground leading-relaxed">
+            <div className="pb-5 text-lg text-muted-foreground leading-relaxed">
               {item.a}
             </div>
           </details>
         ))}
       </div>
 
-      {/* Still need help */}
-      <div className="mt-16 p-10 border border-black/[0.06] text-center">
-        <h3 className="font-display text-xl tracking-tight mb-3">
-          Still need help?
-        </h3>
-        <p className="text-muted-foreground text-sm mb-6 max-w-sm mx-auto">
-          If you couldn&apos;t find what you&apos;re looking for, send us an
-          email and we&apos;ll get back to you as soon as possible.
-        </p>
-        <Button
-          asChild
-          className="rounded-full bg-[#111] text-[#f5f2ed] hover:bg-[#333]"
-        >
-          <a href="mailto:support@thetesseract.app">Contact Support</a>
-        </Button>
-      </div>
+      <Reveal delay={0.1}>
+        <div className="mt-20 text-center">
+          <h3 className="font-display text-4xl sm:text-5xl tracking-tight mb-5">
+            Still need help?
+          </h3>
+          <p className="text-muted-foreground text-lg mb-10 max-w-md mx-auto leading-relaxed">
+            Open an issue on GitHub and we&apos;ll get back to you as soon as possible.
+          </p>
+          <Button
+            size="lg"
+            className="rounded-full h-12 px-8 text-base bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
+            asChild
+          >
+            <a href="https://github.com/spokvulcan/tesseract/issues" target="_blank" rel="noopener noreferrer">
+              Open an Issue
+            </a>
+          </Button>
+        </div>
+      </Reveal>
     </PageShell>
   );
 }
