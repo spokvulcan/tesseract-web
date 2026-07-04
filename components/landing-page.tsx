@@ -289,60 +289,84 @@ export function LandingPage() {
         </section>
 
         {/* INFERENCE SERVER */}
-        <section className="bg-[#0a0a0a] dark:bg-[#050505] text-[#f5f2ed] py-32 lg:py-48">
-          <div className="px-8 lg:px-16 xl:px-24 max-w-5xl mx-auto">
+        <section className="bg-[#0a0a0a] dark:bg-[#050505] py-32 lg:py-48">
+          <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
             <Reveal>
-              <div className="font-mono text-xs tracking-widest uppercase text-[#888] mb-6 flex items-center gap-3">
-                <span className="w-6 h-px bg-[#888]" />
-                For developers
-              </div>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tighter mb-8 max-w-3xl">
+              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-3xl">
                 Your Mac. Your models.
                 <br />
                 Your endpoint.
               </h2>
-              <p className="text-lg text-[#aaa] leading-relaxed max-w-2xl mb-12">
-                Tesseract ships with an OpenAI-compatible inference server.
-                Point any coding agent at localhost and start working with models
-                that never leave your machine. Tiered RAM + SSD prefix caching
-                keeps responses fast.
+              <p className="text-lg text-white/70 leading-relaxed max-w-2xl mb-14">
+                Tesseract ships with an OpenAI-compatible inference server that
+                drives the same MLX-powered LLM used by the agent. Point any
+                coding agent at localhost and get a fully local backend with
+                tiered RAM and SSD prefix caching — repeated prompts skip the
+                prefill entirely.
               </p>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="rounded-lg bg-[#111] border border-[#222] p-6 lg:p-8 mb-12 overflow-x-auto">
-                <div className="font-mono text-sm leading-relaxed">
-                  <div className="text-[#888] mb-2">$ export OPENAI_API_BASE=http://localhost:8080/v1</div>
-                  <div className="text-[#888] mb-2">$ export OPENAI_API_KEY=tesseract</div>
-                  <div className="text-[#f5f2ed] mb-4">$ openclaw</div>
-                  <div className="text-[#666]">{"// Tesseract is now your local AI backend"}</div>
-                  <div className="text-[#666]">{"// All inference runs on Apple Silicon via MLX"}</div>
-                  <div className="text-[#666]">{"// No cloud. No accounts. No telemetry."}</div>
-                </div>
+              <div className="rounded-lg bg-black/40 border border-white/[0.06] p-6 lg:p-8 mb-14 overflow-x-auto">
+                <pre className="font-mono text-sm leading-relaxed text-white/80">
+                  <code>
+                    <span className="text-white/40">$</span> export OPENAI_API_BASE=http://localhost:8080/v1{"\n"}
+                    <span className="text-white/40">$</span> export OPENAI_API_KEY=tesseract{"\n"}
+                    <span className="text-white/40">$</span> openclaw{"\n"}
+                    <span className="text-white/30"># Tesseract is now your local AI backend</span>
+                  </code>
+                </pre>
               </div>
             </Reveal>
 
             <Reveal delay={0.2}>
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-[#888]">
-                <span className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
-                  Works with OpenCode, Aider, Continue, and any OpenAI-compatible client
-                </span>
-                <span className="hidden sm:inline text-[#444]">·</span>
-                <span className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
-                  /v1/chat/completions
-                </span>
-                <span className="hidden sm:inline text-[#444]">·</span>
-                <span className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
-                  Prefix caching
-                </span>
-                <span className="hidden sm:inline text-[#444]">·</span>
-                <span className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
-                  Fully local
-                </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+                <div>
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-white">
+                    Compatible with
+                  </h3>
+                  <p className="text-white/60 leading-relaxed mb-6">
+                    Any OpenAI-compatible client works out of the box. OpenCode
+                    is the first integrated adapter — Tesseract serves a setup
+                    script that merges your port and model config automatically.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"].map((tool) => (
+                      <span
+                        key={tool}
+                        className="font-mono text-[11px] px-3 py-1.5 text-white/50 bg-white/[0.04] rounded-sm"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-white">
+                    Endpoints
+                  </h3>
+                  <div className="space-y-3 text-white/60">
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                        /v1/chat/completions
+                      </code>
+                      <span>Streaming and non-streaming completions, honors request.model</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                        /v1/models
+                      </code>
+                      <span>Lists downloaded agent models</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-white/[0.04] rounded-sm text-white/80 shrink-0">
+                        /health
+                      </code>
+                      <span>Server health check</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Reveal>
           </div>
