@@ -1,363 +1,475 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useTheme } from "next-themes";
+import { Reveal } from "@/components/ui/reveal";
+import { Button } from "@/components/ui/button";
+import TesseractViz from "@/components/tesseract-viz";
 import {
   Mic,
   Volume2,
-  Shield,
-  Apple,
-  Download,
-  HardDrive,
-  Image as ImageIcon,
   Bot,
-  Keyboard,
-  WifiOff,
-  EyeOff,
-  UserX,
+  Image as ImageIcon,
+  ArrowDown,
   Cpu,
+  WifiOff,
+  UserX,
+  EyeOff,
   Eye,
   Lock,
+  Sun,
+  Moon,
+  Server,
 } from "lucide-react";
-import NextImage from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
-const fadeIn = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-100px" },
-  transition: { duration: 0.5, ease: "easeOut" as const },
-};
+/* ------------------------------------------------------------------ */
+/*  SCROLL PROGRESS                                                    */
+/* ------------------------------------------------------------------ */
 
-const staggerContainer = {
-  initial: { opacity: 0 },
-  whileInView: { opacity: 1 },
-  viewport: { once: true, margin: "-100px" },
-  transition: { staggerChildren: 0.1 },
-};
+function ScrollProgress() {
+  const [progress, setProgress] = useState(0);
 
-export function LandingPage() {
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.documentElement;
+      const total = el.scrollHeight - el.clientHeight;
+      setProgress(total > 0 ? el.scrollTop / total : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="relative min-h-screen w-full bg-[#030303] text-zinc-100 overflow-hidden font-sans selection:bg-zinc-800 selection:text-zinc-100">
-      {/* Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[#050505]" />
+    <div
+      className="scroll-progress bg-[#111] dark:bg-[#f0f0f0]"
+      style={{
+        transform: `scaleX(${progress})`,
+      }}
+    />
+  );
+}
 
-      {/* Navigation */}
-      <nav className="relative z-50 flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <NextImage
+/* ------------------------------------------------------------------ */
+/*  NOISE OVERLAY                                                      */
+/* ------------------------------------------------------------------ */
+
+function Noise() {
+  return (
+    <svg className="noise" aria-hidden="true">
+      <filter id="noise">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.85"
+          numOctaves="4"
+          stitchTiles="stitch"
+        />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise)" />
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  NAVIGATION                                                         */
+/* ------------------------------------------------------------------ */
+
+function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
+
+  return (
+    <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
+      <nav
+        className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl bg-[rgba(245,242,237,0.8)] dark:bg-[rgba(20,20,20,0.8)] border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      >
+        <Link href="/" className="flex items-center gap-2.5 px-3 py-1.5">
+          <Image
             src="/icon-64x64.png"
-            alt="Tesseract Agent"
-            width={32}
-            height={32}
-            className="rounded-lg"
+            alt="Tesseract"
+            width={22}
+            height={22}
+            className="rounded-sm"
           />
-          <span className="text-xl font-medium tracking-tight">
-            tesseract
-          </span>
+          <span className="font-display text-base tracking-tight">tesseract</span>
+        </Link>
+
+        <div
+          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
+        />
+
+        <div className="flex items-center gap-1">
+          {["Features", "Privacy", "Support"].map((item) => (
+            <Link
+              key={item}
+              href={item === "Features" ? "#features" : item === "Privacy" ? "#privacy" : `/${item.toLowerCase()}`}
+              className="px-4 py-2 text-sm rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            >
+              {item}
+            </Link>
+          ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-sm text-zinc-400 font-medium">
-          <Link
-            href="#features"
-            className="hover:text-zinc-100 transition-colors"
-          >
-            Features
-          </Link>
-          <Link
-            href="#privacy"
-            className="hover:text-zinc-100 transition-colors"
-          >
+        <div
+          className="w-px h-6 mx-1 bg-[rgba(0,0,0,0.08)] dark:bg-[rgba(255,255,255,0.08)]"
+        />
+
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full h-9 px-5 text-sm font-mono border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.12)] bg-transparent"
+          asChild
+        >
+          <Link href="#download">Download</Link>
+        </Button>
+
+        <button
+          onClick={() => setTheme(dark ? "light" : "dark")}
+          className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
+          aria-label="Toggle theme"
+        >
+          {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
+      </nav>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  FOOTER                                                             */
+/* ------------------------------------------------------------------ */
+
+function Footer() {
+  return (
+    <footer className="px-8 lg:px-16 xl:px-24 py-20">
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
+        <div>
+          <div className="font-display text-4xl tracking-tight mb-3">
+            tesseract
+          </div>
+          <p className="text-muted-foreground text-lg max-w-xs">
+            On-device AI for macOS. No cloud. No accounts. Just you.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-x-12 gap-y-4 text-lg">
+          <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
             Privacy
           </Link>
-          <Link
-            href="#how-it-works"
-            className="hover:text-zinc-100 transition-colors"
-          >
-            How it Works
+          <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+            Terms
           </Link>
-          <Link
-            href="/support"
-            className="hover:text-zinc-100 transition-colors"
-          >
+          <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
             Support
           </Link>
         </div>
+      </div>
 
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            className="text-zinc-400 hover:text-zinc-100 hover:bg-white/5"
-            asChild
-          >
-            <Link href="#download">Download</Link>
-          </Button>
+      <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
+        <span>© {new Date().getFullYear()} Tesseract</span>
+        <span className="font-mono">v1.0.0</span>
+      </div>
+    </footer>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  FEATURE CARD                                                       */
+/* ------------------------------------------------------------------ */
+
+function FeatureCard({
+  title,
+  description,
+  tags,
+  icon: Icon,
+  delay = 0,
+}: {
+  title: string;
+  description: string;
+  tags: string[];
+  icon: React.ElementType;
+  delay?: number;
+}) {
+  return (
+    <Reveal delay={delay}>
+      <div className="group">
+        <Icon className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors mb-6" />
+
+        <h3 className="font-display text-3xl tracking-tight mb-4">
+          {title}
+        </h3>
+        <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
+          {description}
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground group-hover:text-foreground transition-colors"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-      </nav>
+      </div>
+    </Reveal>
+  );
+}
 
-      {/* Main Content */}
-      <main className="relative z-10 flex flex-col items-center">
-        {/* HERO */}
-        <section className="relative flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden w-full pt-10 pb-20">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex flex-col items-center max-w-5xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 text-xs font-medium text-zinc-400 mb-10 backdrop-blur-xl transition-colors hover:bg-white/[0.05]">
-              <Apple className="w-4 h-4" />
-              <span>Built for Apple Silicon</span>
+/* ------------------------------------------------------------------ */
+/*  LANDING PAGE                                                       */
+/* ------------------------------------------------------------------ */
+
+export function LandingPage() {
+  const { setTheme } = useTheme();
+
+  return (
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <ScrollProgress />
+      <Noise />
+
+      <Nav setTheme={setTheme} />
+
+      <main>
+        {/* HERO — split layout, no divider */}
+        <section className="relative min-h-[92vh] overflow-hidden">
+          <div className="flex min-h-[92vh]">
+            {/* Left: text */}
+            <div className="flex-1 flex items-end pb-20 px-8 lg:px-16 xl:px-24">
+              <div className="max-w-2xl">
+                <Reveal delay={0.1}>
+                  <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl leading-[0.85] tracking-tighter mb-8">
+                    Your
+                    <br />
+                    intelligence.
+                    <br />
+                    <span className="dark:text-white/60 text-neutral-500">Your machine.</span>
+                  </h1>
+                </Reveal>
+
+                <Reveal delay={0.2}>
+                  <p className="text-lg text-muted-foreground leading-relaxed max-w-md mb-10">
+                    Dictation, speech synthesis, a local AI agent that remembers
+                    you, and an OpenAI-compatible inference server — powered by
+                    MLX, processed entirely on-device.
+                    No cloud. No accounts. No telemetry.
+                  </p>
+                </Reveal>
+
+                <Reveal delay={0.3}>
+                  <div id="download" className="flex items-center gap-4 flex-wrap">
+                    <Button
+                      size="lg"
+                      className="rounded-lg h-12 px-8 text-sm font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
+                      asChild
+                    >
+                      <a href="https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg" target="_blank" rel="noopener noreferrer">
+                        Download for Mac
+                      </a>
+                    </Button>
+                    <Link
+                      href="#features"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                    >
+                      Explore features
+                      <ArrowDown className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </Reveal>
+              </div>
             </div>
 
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tighter leading-[0.9] mb-8 text-zinc-100">
-              Tesseract
-              <br />
-              <span className="text-zinc-600">Agent.</span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-12 font-light leading-snug">
-              AI that lives on your Mac. Dictation, speech, image generation,
-              and a local AI agent — powered by open models, processed entirely
-              on-device. No cloud. No accounts. Just you.
-            </p>
-
-            <div
-              id="download"
-              className="flex flex-col sm:flex-row items-center gap-6"
-            >
-              <Button
-                size="lg"
-                className="h-14 px-8 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 rounded-full font-semibold text-base transition-all shadow-[0_0_80px_rgba(255,255,255,0.1)] gap-2"
-              >
-                <Download className="w-5 h-5" /> Download on the Mac App Store
-              </Button>
-              <Link
-                href="#features"
-                className="text-zinc-400 hover:text-zinc-100 transition-colors text-sm font-medium underline underline-offset-4"
-              >
-                See what it does
-              </Link>
+            {/* Right: tesseract */}
+            <div className="flex-1 relative">
+              <TesseractViz />
             </div>
-          </motion.div>
-        </section>
-
-        {/* FEATURES */}
-        <section
-          id="features"
-          className="w-full max-w-6xl mx-auto px-6 py-24 md:py-32"
-        >
-          <motion.div {...fadeIn} className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-4">
-              Everything runs on your Mac
-            </h2>
-            <p className="text-zinc-400 text-lg font-light max-w-2xl mx-auto">
-              Open-source AI models, optimized for Apple Silicon. No servers, no
-              API keys, no subscriptions.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Voice Dictation */}
-            <motion.div
-              {...fadeIn}
-              className="flex flex-col p-8 rounded-3xl bg-white/[0.02] border border-white/5"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                <Mic className="w-6 h-6 text-zinc-300" />
-              </div>
-              <h3 className="text-2xl font-medium mb-3 tracking-tight">
-                Voice Dictation
-              </h3>
-              <p className="text-zinc-400 font-light leading-relaxed mb-6">
-                Hold a hotkey, speak, release. Your voice is transcribed and
-                typed directly into whatever app you&apos;re using — a text
-                editor, a browser, a chat window.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-auto">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Keyboard className="w-3.5 h-3.5" /> Push-to-talk
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Cpu className="w-3.5 h-3.5" /> On-device transcription
-                </span>
-              </div>
-            </motion.div>
-
-            {/* Text-to-Speech */}
-            <motion.div
-              {...fadeIn}
-              className="flex flex-col p-8 rounded-3xl bg-white/[0.02] border border-white/5"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                <Volume2 className="w-6 h-6 text-zinc-300" />
-              </div>
-              <h3 className="text-2xl font-medium mb-3 tracking-tight">
-                Text-to-Speech
-              </h3>
-              <p className="text-zinc-400 font-light leading-relaxed mb-6">
-                Hear any text read aloud with natural-sounding voice synthesis.
-                Consistent quality across long-form content, generated in real
-                time on your Mac.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-auto">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Volume2 className="w-3.5 h-3.5" /> Natural voice
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <WifiOff className="w-3.5 h-3.5" /> No internet required
-                </span>
-              </div>
-            </motion.div>
-
-            {/* AI Agent */}
-            <motion.div
-              {...fadeIn}
-              className="flex flex-col p-8 rounded-3xl bg-white/[0.02] border border-white/5"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                <Bot className="w-6 h-6 text-zinc-300" />
-              </div>
-              <h3 className="text-2xl font-medium mb-3 tracking-tight">
-                AI Agent
-              </h3>
-              <p className="text-zinc-400 font-light leading-relaxed mb-6">
-                A local AI agent that can read, write, and edit files on your
-                Mac. Interact by voice or text. Extensible through packages and
-                plugins — all running privately on-device.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-auto">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Bot className="w-3.5 h-3.5" /> Tool-calling
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Lock className="w-3.5 h-3.5" /> Sandboxed
-                </span>
-              </div>
-            </motion.div>
-
-            {/* Image Generation */}
-            <motion.div
-              {...fadeIn}
-              className="flex flex-col p-8 rounded-3xl bg-white/[0.02] border border-white/5"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                <ImageIcon className="w-6 h-6 text-zinc-300" />
-              </div>
-              <h3 className="text-2xl font-medium mb-3 tracking-tight">
-                Image Generation
-              </h3>
-              <p className="text-zinc-400 font-light leading-relaxed mb-6">
-                Create images from text descriptions using on-device diffusion
-                models. No waiting for a server, no usage limits, no content
-                filtering by a third party.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-auto">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <ImageIcon className="w-3.5 h-3.5" /> Text-to-image
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-xs text-zinc-400">
-                  <Eye className="w-3.5 h-3.5" /> No content filters
-                </span>
-              </div>
-            </motion.div>
           </div>
         </section>
 
-        {/* PRIVACY */}
-        <section
-          id="privacy"
-          className="w-full max-w-4xl mx-auto px-6 py-24 md:py-32 flex flex-col items-center text-center"
-        >
-          <motion.div
-            {...fadeIn}
-            className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8"
-          >
-            <Shield className="w-8 h-8 text-zinc-300" />
-          </motion.div>
-          <motion.h2
-            {...fadeIn}
-            className="text-4xl md:text-5xl font-medium mb-6 tracking-tight"
-          >
-            Your data never leaves your Mac
-          </motion.h2>
-          <motion.p
-            {...fadeIn}
-            className="text-zinc-400 text-lg font-light max-w-xl mb-12"
-          >
-            Every model runs locally on Apple Silicon. There are no servers to
-            trust because there are no servers at all.
-          </motion.p>
+        {/* INFERENCE SERVER */}
+        <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
+          <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
+            <Reveal>
+              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-3xl text-foreground">
+                Your Mac. Your models.
+                <br />
+                Your endpoint.
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mb-14">
+                Tesseract ships with an OpenAI-compatible inference server that
+                drives the same MLX-powered LLM used by the agent. Point any
+                coding agent at localhost and get a fully local backend with
+                tiered RAM and SSD prefix caching — repeated prompts skip the
+                prefill entirely.
+              </p>
+            </Reveal>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="whileInView"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full text-left"
-          >
+            <Reveal delay={0.1}>
+              <div className="rounded-lg bg-card border border-border p-6 lg:p-8 mb-14 overflow-x-auto">
+                <pre className="font-mono text-sm leading-relaxed text-foreground/80">
+                  <code>
+                    <span className="text-muted-foreground">$</span> export OPENAI_API_BASE=http://localhost:8080/v1{"\n"}
+                    <span className="text-muted-foreground">$</span> export OPENAI_API_KEY=tesseract{"\n"}
+                    <span className="text-muted-foreground">$</span> openclaw{"\n"}
+                    <span className="text-muted-foreground/60">// Tesseract is now your local AI backend</span>
+                  </code>
+                </pre>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.2}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+                <div>
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
+                    Compatible with
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Any OpenAI-compatible client works out of the box. OpenCode
+                    is the first integrated adapter — Tesseract serves a setup
+                    script that merges your port and model config automatically.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"].map((tool) => (
+                      <span
+                        key={tool}
+                        className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground bg-secondary rounded-sm"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
+                    Endpoints
+                  </h3>
+                  <div className="space-y-3 text-muted-foreground">
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
+                        /v1/chat/completions
+                      </code>
+                      <span>Streaming and non-streaming completions, honors request.model</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
+                        /v1/models
+                      </code>
+                      <span>Lists downloaded agent models</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
+                        /health
+                      </code>
+                      <span>Server health check</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* FEATURES */}
+        <section id="features" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
+          <Reveal>
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-20 lg:mb-32 max-w-3xl">
+              Everything runs
+              <br />
+              on your Mac.
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-24">
+            <FeatureCard
+              title="Voice Dictation"
+              description="Hold a hotkey, speak, release. Whisper transcribes your voice into any app — a text editor, a browser, a chat window — fully offline on Apple Silicon."
+              tags={["push-to-talk", "whisper", "global hotkey"]}
+              icon={Mic}
+              delay={0}
+            />
+            <FeatureCard
+              title="Text-to-Speech"
+              description="Hear any text read aloud with natural long-form voice synthesis. State-of-the-art quality, generated in real time on your Mac."
+              tags={["natural voice", "real-time", "offline"]}
+              icon={Volume2}
+              delay={0.08}
+            />
+            <FeatureCard
+              title="AI Agent"
+              description="A tool-calling assistant that remembers you across conversations. Interact by voice or text, attach images and screenshots, set reminders, goals, and habits."
+              tags={["tool-calling", "memory", "multimodal"]}
+              icon={Bot}
+              delay={0}
+            />
+            <FeatureCard
+              title="Inference Server"
+              description="OpenAI-compatible /v1/chat/completions endpoint with tiered RAM and SSD prefix caching. Plug any coding-agent harness into a fully local backend."
+              tags={["openai-compatible", "prefix caching", "local backend"]}
+              icon={Server}
+              delay={0.08}
+            />
+          </div>
+        </section>
+
+        {/* PRIVACY STATEMENT */}
+        <section id="privacy" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
+          <Reveal delay={0.05}>
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10 max-w-4xl">
+              Your data never
+              <br />
+              leaves your Mac.
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <p className="text-xl text-muted-foreground leading-relaxed max-w-xl mb-20">
+              Every model runs locally on Apple Silicon. There are no servers
+              to trust because there are no servers at all.
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
             {[
-              {
-                icon: Cpu,
-                text: "All AI inference runs on Apple Silicon",
-              },
-              {
-                icon: WifiOff,
-                text: "Works fully offline after initial setup",
-              },
-              {
-                icon: UserX,
-                text: "No accounts, no sign-ups, no telemetry",
-              },
-              {
-                icon: EyeOff,
-                text: "No cloud, no servers, no API calls",
-              },
-              {
-                icon: Eye,
-                text: "Open models you can inspect and replace",
-              },
-              {
-                icon: Lock,
-                text: "Sandboxed — your files stay under your control",
-              },
-            ].map((point, i) => (
-              <motion.div
-                key={i}
-                variants={fadeIn}
-                className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5"
-              >
-                <point.icon className="w-5 h-5 text-zinc-500 shrink-0 mt-0.5" />
-                <span className="text-zinc-300 text-sm leading-relaxed">
-                  {point.text}
-                </span>
-              </motion.div>
+              { icon: Cpu, label: "Local inference", desc: "All AI runs on Apple Silicon" },
+              { icon: WifiOff, label: "Full offline", desc: "Works without internet after setup" },
+              { icon: UserX, label: "No accounts", desc: "No sign-ups, no telemetry" },
+              { icon: EyeOff, label: "No cloud", desc: "No servers, no API calls" },
+              { icon: Eye, label: "MLX-powered", desc: "Open models via Apple's MLX framework" },
+              { icon: Lock, label: "Sandboxed", desc: "Your files stay under your control" },
+            ].map((item, i) => (
+              <Reveal key={i} delay={i * 0.06}>
+                <div className="group">
+                  <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors mb-5" />
+                  <div className="text-lg font-medium mb-2">{item.label}</div>
+                  <div className="text-muted-foreground leading-relaxed">{item.desc}</div>
+                </div>
+              </Reveal>
             ))}
-          </motion.div>
+          </div>
         </section>
 
         {/* HOW IT WORKS + REQUIREMENTS */}
-        <section
-          id="how-it-works"
-          className="w-full max-w-6xl mx-auto px-6 py-24"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* How it works */}
-            <motion.div {...fadeIn} className="flex flex-col">
-              <h2 className="text-3xl font-medium mb-8 tracking-tight">
-                How it works
-              </h2>
+        <section className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 lg:gap-40">
+            <div>
+              <Reveal delay={0.05}>
+                <h2 className="font-display text-5xl sm:text-6xl tracking-tighter mb-16">
+                  How it works
+                </h2>
+              </Reveal>
 
-              <div className="flex flex-col gap-8 relative">
-                <div className="absolute left-[19px] top-4 bottom-4 w-px bg-white/10" />
+              <div className="space-y-10">
                 {[
                   {
                     title: "Download",
-                    desc: "Get Tesseract Agent from the Mac App Store.",
+                    desc: "Grab the signed DMG from GitHub, drag it to Applications, and follow onboarding.",
                   },
                   {
                     title: "First Launch",
-                    desc: "AI models download once on first launch. This is the only time the app needs the internet.",
+                    desc: "AI models download once on first launch via MLX. This is the only time the app needs the internet.",
                   },
                   {
                     title: "Grant Permissions",
@@ -367,105 +479,79 @@ export function LandingPage() {
                     title: "Ready",
                     desc: "Everything runs on-device from that point forward. No internet needed.",
                   },
-                ].map((step, i) => (
-                  <div key={i} className="flex items-start gap-6 relative">
-                    <div className="w-10 h-10 rounded-full bg-[#030303] border border-white/20 flex items-center justify-center shrink-0 relative z-10 font-medium text-zinc-300">
-                      {i + 1}
-                    </div>
-                    <div className="pt-2">
-                      <h3 className="text-zinc-200 font-medium mb-1">
-                        {step.title}
-                      </h3>
-                      <p className="text-zinc-400 text-sm font-light">
-                        {step.desc}
+                ].map((item, i) => (
+                  <Reveal key={i} delay={i * 0.08}>
+                    <div>
+                      <h3 className="text-xl font-medium mb-2">{item.title}</h3>
+                      <p className="text-lg text-muted-foreground leading-relaxed">
+                        {item.desc}
                       </p>
                     </div>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Requirements */}
-            <motion.div {...fadeIn} className="flex flex-col lg:pl-16">
-              <h2 className="text-3xl font-medium mb-8 tracking-tight">
-                Requirements
-              </h2>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-                  <Apple className="w-6 h-6 text-zinc-400" />
-                  <div>
-                    <div className="text-zinc-300 font-medium">
-                      macOS 26 or later
+            <div>
+              <Reveal delay={0.05}>
+                <h2 className="font-display text-5xl sm:text-6xl tracking-tighter mb-16">
+                  System
+                </h2>
+              </Reveal>
+
+              <div className="space-y-8">
+                {[
+                  { label: "Operating system", value: "macOS 26 or later" },
+                  { label: "Chip", value: "Apple Silicon (M1 or later)" },
+                  { label: "Storage", value: "Several GB for models" },
+                  { label: "Internet", value: "One-time download only" },
+                ].map((item, i) => (
+                  <Reveal key={i} delay={i * 0.08}>
+                    <div>
+                      <div className="text-sm text-muted-foreground mb-1">
+                        {item.label}
+                      </div>
+                      <div className="text-xl">
+                        {item.value}
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-                  <HardDrive className="w-6 h-6 text-zinc-400" />
-                  <div>
-                    <div className="text-zinc-300 font-medium">
-                      Apple Silicon
-                    </div>
-                    <div className="text-zinc-500 text-sm font-light">
-                      M1 or later
-                    </div>
-                  </div>
-                </div>
+                  </Reveal>
+                ))}
               </div>
-            </motion.div>
+            </div>
           </div>
+        </section>
+
+        {/* FINAL CTA */}
+        <section className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48 text-center">
+          <Reveal>
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-10">
+              Ready to get started?
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <p className="text-xl text-muted-foreground max-w-lg mx-auto mb-14">
+              Download Tesseract and experience AI that truly belongs to you.
+              Signed DMG, available now.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <Button
+              size="lg"
+              className="rounded-lg h-14 px-10 text-base font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
+              asChild
+            >
+              <a href="https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg" target="_blank" rel="noopener noreferrer">
+                Download for Mac
+              </a>
+            </Button>
+          </Reveal>
         </section>
       </main>
 
-      {/* FOOTER */}
-      <footer className="relative z-10 w-full border-t border-white/5 py-12 px-6 bg-[#030303]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <NextImage
-              src="/icon-64x64.png"
-              alt="Tesseract Agent"
-              width={24}
-              height={24}
-              className="rounded-md"
-            />
-            <span className="text-sm font-medium tracking-tight text-zinc-300">
-              tesseract
-            </span>
-          </div>
-
-          <div className="flex items-center gap-6 text-sm text-zinc-500">
-            <Link
-              href="/privacy"
-              className="hover:text-zinc-300 transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-zinc-300 transition-colors"
-            >
-              Terms of Use
-            </Link>
-            <Link
-              href="/support"
-              className="hover:text-zinc-300 transition-colors"
-            >
-              Support
-            </Link>
-          </div>
-
-          <div>
-            <Button
-              variant="outline"
-              className="rounded-full border-white/10 hover:bg-white/5 gap-2 text-zinc-300 bg-transparent"
-              asChild
-            >
-              <Link href="#download">
-                <Download className="w-4 h-4" /> Mac App Store
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
