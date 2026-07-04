@@ -27,9 +27,9 @@ const mono = Space_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thetesseract.app"),
-  title: "Tesseract Agent — On-Device Intelligence for macOS",
+  title: "Tesseract — On-Device Intelligence for macOS",
   description:
-    "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, image generation, and more — powered by open models, processed entirely on-device.",
+    "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, a local AI agent, and an OpenAI-compatible inference server — powered by MLX, processed entirely on-device.",
   icons: {
     icon: [
       { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -41,25 +41,25 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tesseract Agent — On-Device Intelligence for macOS",
+    title: "Tesseract — On-Device Intelligence for macOS",
     description:
-      "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, image generation, and a local AI agent — powered by open models, processed entirely on-device.",
-    siteName: "Tesseract Agent",
+      "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, a local AI agent, and an OpenAI-compatible inference server — powered by MLX, processed entirely on-device.",
+    siteName: "Tesseract",
     images: [
       {
         url: "/icon-512x512.png",
         width: 512,
         height: 512,
-        alt: "Tesseract Agent",
+        alt: "Tesseract",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Tesseract Agent — On-Device Intelligence for macOS",
+    title: "Tesseract — On-Device Intelligence for macOS",
     description:
-      "A privacy-focused AI assistant for macOS — powered by open models, processed entirely on-device.",
+      "A privacy-focused AI assistant for macOS — powered by MLX, processed entirely on-device.",
     images: ["/icon-512x512.png"],
   },
 };

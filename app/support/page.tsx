@@ -4,9 +4,9 @@ import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Support — Tesseract Agent",
+  title: "Support — Tesseract",
   description:
-    "Get help with Tesseract Agent. Find answers to common questions or contact support.",
+    "Get help with Tesseract. Find answers to common questions or contact support.",
 };
 
 export default function SupportPage() {
@@ -21,7 +21,7 @@ export default function SupportPage() {
         Support
       </h1>
       <p className="text-muted-foreground text-lg mb-14">
-        Need help with Tesseract Agent? Find answers below or get in touch.
+        Need help with Tesseract? Find answers below or get in touch.
       </p>
 
       {/* Contact */}
@@ -45,15 +45,15 @@ export default function SupportPage() {
         {[
           {
             q: "What are the system requirements?",
-            a: "Tesseract Agent requires macOS 26 (Tahoe) or later and an Apple Silicon Mac (M1 or newer). An internet connection is needed only for the one-time model download on first launch.",
+            a: "Tesseract requires macOS 26 or later and an Apple Silicon Mac (M1 or newer). An internet connection is needed only for the one-time model download on first launch.",
           },
           {
             q: "How much disk space do the models need?",
             a: "The initial model download is several gigabytes depending on which features you use. Models are stored locally and only need to be downloaded once.",
           },
           {
-            q: "Does Tesseract Agent work offline?",
-            a: "Yes. After the one-time model download on first launch, Tesseract Agent works entirely offline. No internet connection is required for any of its features.",
+            q: "Does Tesseract work offline?",
+            a: "Yes. After the one-time model download on first launch, Tesseract works entirely offline. No internet connection is required for any of its features.",
           },
           {
             q: "Is my data sent to the cloud?",
@@ -77,11 +77,11 @@ export default function SupportPage() {
           },
           {
             q: "How do I uninstall and remove all data?",
-            a: "Delete Tesseract Agent from your Applications folder. To remove all associated data including downloaded models, delete the app's container from ~/Library (or use a tool like AppCleaner).",
+            a: "Delete Tesseract from your Applications folder. To remove all associated data including downloaded models, delete the app's container from ~/Library (or use a tool like AppCleaner).",
           },
           {
             q: "How do I request a refund?",
-            a: "Purchases are handled through the Mac App Store. To request a refund, visit reportaproblem.apple.com and sign in with your Apple Account.",
+            a: "Please reach out via support@thetesseract.app and we'll help you with your purchase.",
           },
         ].map((item, i) => (
           <details

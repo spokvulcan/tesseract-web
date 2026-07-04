@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Tesseract Agent",
+  title: "Privacy Policy — Tesseract",
   description:
-    "Tesseract Agent privacy policy. No data collection, no tracking, no accounts. Everything runs locally on your Mac.",
+    "Tesseract privacy policy. No data collection, no tracking, no accounts. Everything runs locally on your Mac.",
 };
 
 export default function PrivacyPage() {
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="font-display text-xl tracking-tight mb-3">Overview</h2>
           <p className="text-muted-foreground">
-            Tesseract Agent is designed to be fully private. All AI inference
+            Tesseract is designed to be fully private. All AI inference
             runs locally on your Mac using Apple Silicon. We do not collect,
             transmit, or store any of your personal data. There are no accounts,
             no analytics, and no telemetry.
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
             Data We Collect
           </h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">None.</strong> Tesseract Agent
+            <strong className="text-foreground">None.</strong> Tesseract
             does not collect any personal information. We have no servers that
             receive your data. The app does not contain analytics, crash
             reporting, or tracking of any kind.
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
             Data Stored on Your Device
           </h2>
           <p className="text-muted-foreground mb-4">
-            Tesseract Agent stores the following data locally on your Mac, within
+            Tesseract stores the following data locally on your Mac, within
             its sandboxed application container:
           </p>
           <ul className="space-y-2 text-muted-foreground">
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
             Microphone Access
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent requests microphone access for push-to-talk voice
+            Tesseract requests microphone access for push-to-talk voice
             dictation. Audio is processed entirely on-device using a local
             speech recognition model. Audio recordings are not stored or
             transmitted. The microphone is only active while you hold the
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             Accessibility Access
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent requests accessibility permission to register global
+            Tesseract requests accessibility permission to register global
             hotkeys and to simulate keyboard paste into the active application.
             This permission is used solely for dictation insertion and hotkey
             functionality.
@@ -115,8 +115,8 @@ export default function PrivacyPage() {
           </h2>
           <p className="text-muted-foreground">
             The app requires a one-time internet connection to download AI
-            models on first launch. After models are downloaded, Tesseract
-            Agent functions fully offline. No user data is ever sent over the
+            models on first launch.             After models are downloaded, Tesseract
+            functions fully offline. No user data is ever sent over the
             network.
           </p>
         </section>
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
             Third-Party Services
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent does not integrate with any third-party analytics,
+            Tesseract does not integrate with any third-party analytics,
             advertising, or data-processing services. The only external network
             access is for the one-time initial model download.
           </p>
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
             Children&apos;s Privacy
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent does not collect any data from any user, including
+            Tesseract does not collect any data from any user, including
             children. Because no data is collected, there is no risk of
             children&apos;s data being gathered or shared.
           </p>
@@ -149,7 +149,7 @@ export default function PrivacyPage() {
           </h2>
           <p className="text-muted-foreground">
             If we update this privacy policy, we will post the revised version
-            on this page with an updated date. Because Tesseract Agent collects
+            on this page with an updated date. Because Tesseract collects
             no data, we do not anticipate material changes.
           </p>
         </section>

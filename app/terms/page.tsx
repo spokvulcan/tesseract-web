@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — Tesseract Agent",
-  description: "Terms of use for the Tesseract Agent macOS application.",
+  title: "Terms of Use — Tesseract",
+  description: "Terms of use for the Tesseract macOS application.",
 };
 
 export default function TermsPage() {
@@ -27,7 +27,7 @@ export default function TermsPage() {
             Acceptance of Terms
           </h2>
           <p className="text-muted-foreground">
-            By downloading, installing, or using Tesseract Agent, you agree to
+            By downloading, installing, or using Tesseract, you agree to
             these Terms of Use. If you do not agree, do not use the app.
           </p>
         </section>
@@ -35,7 +35,7 @@ export default function TermsPage() {
         <section>
           <h2 className="font-display text-xl tracking-tight mb-3">License</h2>
           <p className="text-muted-foreground">
-            Tesseract Agent is licensed, not sold. We grant you a limited,
+            Tesseract is licensed, not sold. We grant you a limited,
             non-exclusive, non-transferable, revocable license to use the app on
             any Apple-branded device that you own or control, subject to the
             Apple Media Services Terms and Conditions.
@@ -47,9 +47,9 @@ export default function TermsPage() {
             AI-Generated Content
           </h2>
           <p className="text-muted-foreground mb-4">
-            Tesseract Agent uses open-source AI models that run locally on your
-            device. AI-generated outputs — including text transcriptions,
-            synthesized speech, and generated images — are provided as-is.
+            Tesseract uses open-source AI models that run locally on your
+            device. AI-generated outputs — including text transcriptions and
+            synthesized speech — are provided as-is.
           </p>
           <ul className="space-y-2 text-muted-foreground">
             <li className="flex items-start gap-3">
@@ -72,7 +72,7 @@ export default function TermsPage() {
             Acceptable Use
           </h2>
           <p className="text-muted-foreground mb-4">
-            You agree not to use Tesseract Agent to:
+            You agree not to use Tesseract to:
           </p>
           <ul className="space-y-2 text-muted-foreground">
             <li className="flex items-start gap-3">
@@ -106,7 +106,7 @@ export default function TermsPage() {
             Intellectual Property
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent and its original content, features, and
+            Tesseract and its original content, features, and
             functionality are owned by the developer and protected by copyright
             and other intellectual property laws.
           </p>
@@ -121,7 +121,7 @@ export default function TermsPage() {
             Disclaimer of Warranties
           </h2>
           <p className="text-muted-foreground">
-            Tesseract Agent is provided &quot;as is&quot; and &quot;as
+            Tesseract is provided &quot;as is&quot; and &quot;as
             available&quot; without warranties of any kind, whether express or
             implied.
           </p>
@@ -135,7 +135,7 @@ export default function TermsPage() {
             To the maximum extent permitted by applicable law, the developer
             shall not be liable for any indirect, incidental, special,
             consequential, or punitive damages arising from your use of
-            Tesseract Agent.
+            Tesseract.
           </p>
         </section>
 
@@ -144,7 +144,7 @@ export default function TermsPage() {
             Apple App Store
           </h2>
           <p className="text-muted-foreground">
-            If you downloaded Tesseract Agent from the Apple App Store, these
+            If you downloaded Tesseract from the Apple App Store, these
             terms are between you and the developer, not Apple. Apple has no
             obligation to provide maintenance or support.
           </p>
@@ -156,7 +156,7 @@ export default function TermsPage() {
           </h2>
           <p className="text-muted-foreground">
             We may update these terms from time to time. Continued use of
-            Tesseract Agent after changes constitutes acceptance. Updated terms
+            Tesseract after changes constitutes acceptance. Updated terms
             will be posted with a new effective date.
           </p>
         </section>

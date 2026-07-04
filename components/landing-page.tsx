@@ -21,6 +21,7 @@ import {
   Lock,
   Sun,
   Moon,
+  Server,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -148,7 +149,7 @@ function Footer() {
             tesseract
           </div>
           <p className="text-muted-foreground text-lg max-w-xs">
-            On-device intelligence for macOS. No cloud. No accounts. Just you.
+            On-device AI for macOS. No cloud. No accounts. Just you.
           </p>
         </div>
 
@@ -167,7 +168,7 @@ function Footer() {
 
       <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
         <span>© {new Date().getFullYear()} Tesseract</span>
-        <span className="font-mono">v0.1.0</span>
+        <span className="font-mono">v1.0.0</span>
       </div>
     </footer>
   );
@@ -250,19 +251,23 @@ export function LandingPage() {
 
                 <Reveal delay={0.2}>
                   <p className="text-lg text-muted-foreground leading-relaxed max-w-md mb-10">
-                    Dictation, speech synthesis, image generation, and a local AI
-                    agent — powered by open models, processed entirely on-device.
+                    Dictation, speech synthesis, a local AI agent that remembers
+                    you, and an OpenAI-compatible inference server — powered by
+                    MLX, processed entirely on-device.
                     No cloud. No accounts. No telemetry.
                   </p>
                 </Reveal>
 
                 <Reveal delay={0.3}>
-                  <div id="download" className="flex items-center gap-5">
+                  <div id="download" className="flex items-center gap-4 flex-wrap">
                     <Button
                       size="lg"
                       className="rounded-lg h-12 px-8 text-sm font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
+                      asChild
                     >
-                      Download on the Mac App Store
+                      <a href="https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg" target="_blank" rel="noopener noreferrer">
+                        Download for Mac
+                      </a>
                     </Button>
                     <Link
                       href="#features"
@@ -296,30 +301,30 @@ export function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-24">
             <FeatureCard
               title="Voice Dictation"
-              description="Hold a hotkey, speak, release. Your voice is transcribed and typed directly into whatever app you're using — a text editor, a browser, a chat window."
-              tags={["push-to-talk", "on-device", "global hotkey"]}
+              description="Hold a hotkey, speak, release. Whisper transcribes your voice into any app — a text editor, a browser, a chat window — fully offline on Apple Silicon."
+              tags={["push-to-talk", "whisper", "global hotkey"]}
               icon={Mic}
               delay={0}
             />
             <FeatureCard
               title="Text-to-Speech"
-              description="Hear any text read aloud with natural-sounding voice synthesis. Consistent quality across long-form content, generated in real time on your Mac."
+              description="Hear any text read aloud with natural long-form voice synthesis. State-of-the-art quality, generated in real time on your Mac."
               tags={["natural voice", "real-time", "offline"]}
               icon={Volume2}
               delay={0.08}
             />
             <FeatureCard
               title="AI Agent"
-              description="A local AI agent that can read, write, and edit files on your Mac. Interact by voice or text. Extensible through packages — all running privately on-device."
-              tags={["tool-calling", "sandboxed", "extensible"]}
+              description="A tool-calling assistant that remembers you across conversations. Interact by voice or text, attach images and screenshots, set reminders, goals, and habits."
+              tags={["tool-calling", "memory", "multimodal"]}
               icon={Bot}
               delay={0}
             />
             <FeatureCard
-              title="Image Generation"
-              description="Create images from text descriptions using on-device diffusion models. No waiting for a server, no usage limits, no content filtering by a third party."
-              tags={["text-to-image", "diffusion", "unlimited"]}
-              icon={ImageIcon}
+              title="Inference Server"
+              description="OpenAI-compatible /v1/chat/completions endpoint with tiered RAM and SSD prefix caching. Plug any coding-agent harness into a fully local backend."
+              tags={["openai-compatible", "prefix caching", "local backend"]}
+              icon={Server}
               delay={0.08}
             />
           </div>
@@ -348,7 +353,7 @@ export function LandingPage() {
               { icon: WifiOff, label: "Full offline", desc: "Works without internet after setup" },
               { icon: UserX, label: "No accounts", desc: "No sign-ups, no telemetry" },
               { icon: EyeOff, label: "No cloud", desc: "No servers, no API calls" },
-              { icon: Eye, label: "Open models", desc: "Inspect and replace any model" },
+              { icon: Eye, label: "MLX-powered", desc: "Open models via Apple's MLX framework" },
               { icon: Lock, label: "Sandboxed", desc: "Your files stay under your control" },
             ].map((item, i) => (
               <Reveal key={i} delay={i * 0.06}>
@@ -376,11 +381,11 @@ export function LandingPage() {
                 {[
                   {
                     title: "Download",
-                    desc: "Get Tesseract Agent from the Mac App Store.",
+                    desc: "Grab the signed DMG from GitHub, drag it to Applications, and follow onboarding.",
                   },
                   {
                     title: "First Launch",
-                    desc: "AI models download once on first launch. This is the only time the app needs the internet.",
+                    desc: "AI models download once on first launch via MLX. This is the only time the app needs the internet.",
                   },
                   {
                     title: "Grant Permissions",
@@ -414,7 +419,7 @@ export function LandingPage() {
                 {[
                   { label: "Operating system", value: "macOS 26 or later" },
                   { label: "Chip", value: "Apple Silicon (M1 or later)" },
-                  { label: "Storage", value: "~8 GB for models" },
+                  { label: "Storage", value: "Several GB for models" },
                   { label: "Internet", value: "One-time download only" },
                 ].map((item, i) => (
                   <Reveal key={i} delay={i * 0.08}>
@@ -443,8 +448,8 @@ export function LandingPage() {
 
           <Reveal delay={0.08}>
             <p className="text-xl text-muted-foreground max-w-lg mx-auto mb-14">
-              Download Tesseract Agent from the Mac App Store and experience
-              AI that truly belongs to you.
+              Download Tesseract and experience AI that truly belongs to you.
+              Signed DMG, available now.
             </p>
           </Reveal>
 
@@ -452,8 +457,11 @@ export function LandingPage() {
             <Button
               size="lg"
               className="rounded-lg h-14 px-10 text-base font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
+              asChild
             >
-              Download on the Mac App Store
+              <a href="https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg" target="_blank" rel="noopener noreferrer">
+                Download for Mac
+              </a>
             </Button>
           </Reveal>
         </section>
