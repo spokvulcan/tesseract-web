@@ -288,6 +288,66 @@ export function LandingPage() {
           </div>
         </section>
 
+        {/* INFERENCE SERVER */}
+        <section className="bg-[#0a0a0a] dark:bg-[#050505] text-[#f5f2ed] py-32 lg:py-48">
+          <div className="px-8 lg:px-16 xl:px-24 max-w-5xl mx-auto">
+            <Reveal>
+              <div className="font-mono text-xs tracking-widest uppercase text-[#888] mb-6 flex items-center gap-3">
+                <span className="w-6 h-px bg-[#888]" />
+                For developers
+              </div>
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tighter mb-8 max-w-3xl">
+                Your Mac. Your models.
+                <br />
+                Your endpoint.
+              </h2>
+              <p className="text-lg text-[#aaa] leading-relaxed max-w-2xl mb-12">
+                Tesseract ships with an OpenAI-compatible inference server.
+                Point any coding agent at localhost and start working with models
+                that never leave your machine. Tiered RAM + SSD prefix caching
+                keeps responses fast.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <div className="rounded-lg bg-[#111] border border-[#222] p-6 lg:p-8 mb-12 overflow-x-auto">
+                <div className="font-mono text-sm leading-relaxed">
+                  <div className="text-[#888] mb-2">$ export OPENAI_API_BASE=http://localhost:8080/v1</div>
+                  <div className="text-[#888] mb-2">$ export OPENAI_API_KEY=tesseract</div>
+                  <div className="text-[#f5f2ed] mb-4">$ openclaw</div>
+                  <div className="text-[#666]">{"// Tesseract is now your local AI backend"}</div>
+                  <div className="text-[#666]">{"// All inference runs on Apple Silicon via MLX"}</div>
+                  <div className="text-[#666]">{"// No cloud. No accounts. No telemetry."}</div>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.2}>
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-[#888]">
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
+                  Works with OpenCode, Aider, Continue, and any OpenAI-compatible client
+                </span>
+                <span className="hidden sm:inline text-[#444]">·</span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
+                  /v1/chat/completions
+                </span>
+                <span className="hidden sm:inline text-[#444]">·</span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
+                  Prefix caching
+                </span>
+                <span className="hidden sm:inline text-[#444]">·</span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f5f2ed]" />
+                  Fully local
+                </span>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* FEATURES */}
         <section id="features" className="px-8 lg:px-16 xl:px-24 py-32 lg:py-48">
           <Reveal>
