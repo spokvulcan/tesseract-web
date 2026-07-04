@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
+import { HeroButtons } from "@/components/hero-buttons";
 import TesseractViz from "@/components/tesseract-viz";
 import {
   Mic,
@@ -22,6 +23,7 @@ import {
   Sun,
   Moon,
   Server,
+  Github,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -88,11 +90,11 @@ function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
           <Image
             src="/icon-64x64.png"
             alt="Tesseract"
-            width={22}
-            height={22}
+            width={32}
+            height={32}
             className="rounded-sm"
           />
-          <span className="font-display text-base tracking-tight">tesseract</span>
+          <span className="font-display text-base tracking-tight">Tesseract</span>
         </Link>
 
         <div
@@ -131,6 +133,16 @@ function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
         >
           {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
+
+        <Link
+          href="https://github.com/spokvulcan/tesseract"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
+          aria-label="GitHub repository"
+        >
+          <Github className="w-4 h-4" />
+        </Link>
       </nav>
     </div>
   );
@@ -141,12 +153,21 @@ function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
 /* ------------------------------------------------------------------ */
 
 function Footer() {
+  const [version, setVersion] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/version.json")
+      .then((res) => res.json())
+      .then((data) => setVersion(data.version))
+      .catch(() => setVersion(""));
+  }, []);
+
   return (
     <footer className="px-8 lg:px-16 xl:px-24 py-20">
       <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
         <div>
           <div className="font-display text-4xl tracking-tight mb-3">
-            tesseract
+            Tesseract
           </div>
           <p className="text-muted-foreground text-lg max-w-xs">
             On-device AI for macOS. No cloud. No accounts. Just you.
@@ -163,12 +184,21 @@ function Footer() {
           <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
             Support
           </Link>
+          <Link
+            href="https://github.com/spokvulcan/tesseract"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+          >
+            <Github className="w-4 h-4" />
+            GitHub
+          </Link>
         </div>
       </div>
 
       <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
         <span>© {new Date().getFullYear()} Tesseract</span>
-        <span className="font-mono">v1.0.0</span>
+        <span className="font-mono">{version ? `v${version}` : ""}</span>
       </div>
     </footer>
   );
@@ -259,24 +289,7 @@ export function LandingPage() {
                 </Reveal>
 
                 <Reveal delay={0.3}>
-                  <div id="download" className="flex items-center gap-4 flex-wrap">
-                    <Button
-                      size="lg"
-                      className="rounded-lg h-12 px-8 text-sm font-mono bg-[#111] dark:bg-[#f0f0f0] text-[#f5f2ed] dark:text-[#0a0a0a] hover:bg-[#333] dark:hover:bg-[#ddd]"
-                      asChild
-                    >
-                      <a href="https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg" target="_blank" rel="noopener noreferrer">
-                        Download for Mac
-                      </a>
-                    </Button>
-                    <Link
-                      href="#features"
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-                    >
-                      Explore features
-                      <ArrowDown className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+                  <HeroButtons />
                 </Reveal>
               </div>
             </div>
