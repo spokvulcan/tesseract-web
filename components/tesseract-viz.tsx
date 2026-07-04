@@ -156,7 +156,7 @@ export default function TesseractViz() {
 
     ctx.clearRect(0, 0, width, height);
 
-    const scale = Math.min(width, height) * 1.2;
+    const scale = Math.min(width, height) * 1.6;
     const dist4D = 3;
     const dist3D = 3;
 
@@ -192,7 +192,7 @@ export default function TesseractViz() {
     }
 
     // Text labels on nodes — depth-based visibility
-    ctx.font = "bold 13px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.font = "bold 16px ui-monospace, SFMono-Regular, Menlo, monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -213,7 +213,7 @@ export default function TesseractViz() {
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity * 0.95})`;
         ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${opacity * 0.35})`;
         ctx.shadowBlur = 5;
-        ctx.fillText(phrase, projected[i][0], projected[i][1] + radius + 14);
+        ctx.fillText(phrase, projected[i][0], projected[i][1] + radius + 18);
       }
     }
     ctx.shadowBlur = 0;
