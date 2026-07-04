@@ -79,7 +79,10 @@ function Noise() {
 
 function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const dark = resolvedTheme === "dark";
+
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
@@ -131,7 +134,7 @@ function Nav({ setTheme }: { setTheme: (theme: string) => void }) {
           className="p-2 rounded-full hover:bg-muted transition-colors ml-1"
           aria-label="Toggle theme"
         >
-          {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {mounted ? (dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />) : <Moon className="w-4 h-4" />}
         </button>
 
         <Link
