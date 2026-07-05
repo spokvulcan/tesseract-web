@@ -24,8 +24,8 @@ export function Navigation({ children }: { children: React.ReactNode }) {
   const dark = resolvedTheme === "dark";
 
   return (
-    <>
-      {/* Navigation */}
+    <div className="relative min-h-screen w-full bg-background text-foreground">
+      {/* Nav */}
       <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
         <nav
           className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl bg-[rgba(245,242,237,0.8)] dark:bg-[rgba(20,20,20,0.8)] border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
@@ -91,9 +91,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Content */}
-      <main className="pt-36 pb-20 px-8 lg:px-16 xl:px-24">
-        {children}
-      </main>
+      <main>{children}</main>
 
       {/* Footer */}
       <footer className="px-8 lg:px-16 xl:px-24 py-20 border-t border-border">
@@ -134,6 +132,6 @@ export function Navigation({ children }: { children: React.ReactNode }) {
           <span className="font-mono">{version ? `v${version}` : ""}</span>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
