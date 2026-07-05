@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { HeroButtons } from "@/components/hero-buttons";
 import TesseractViz from "@/components/tesseract-viz";
-import { Header, Footer } from "@/components/header";
+import { Navigation } from "@/components/navigation";
 import {
   Mic,
   Volume2,
@@ -223,9 +223,7 @@ export function LandingPage() {
       <ScrollProgress />
       <Noise />
 
-      <Header />
-
-      <main>
+      <Navigation>
         {/* HERO — split layout, no divider */}
         <section className="relative min-h-[92vh] overflow-hidden">
           <div className="flex min-h-[92vh]">
@@ -444,9 +442,7 @@ export function LandingPage() {
             </Button>
           </Reveal>
         </section>
-      </main>
-
-      <Footer />
+      </Navigation>
     </div>
   );
 }

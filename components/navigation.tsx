@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 
-export function Header() {
+export function Navigation({ children }: { children: React.ReactNode }) {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [version, setVersion] = useState<string>("");
@@ -25,6 +25,7 @@ export function Header() {
 
   return (
     <>
+      {/* Navigation */}
       <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6">
         <nav
           className="flex items-center gap-2 px-4 py-2.5 rounded-full border backdrop-blur-xl bg-[rgba(245,242,237,0.8)] dark:bg-[rgba(20,20,20,0.8)] border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
@@ -88,58 +89,51 @@ export function Header() {
           </Link>
         </nav>
       </div>
-    </>
-  );
-}
 
-export function Footer() {
-  const [version, setVersion] = useState<string>("");
+      {/* Content */}
+      <main className="pt-36 pb-20 px-8 lg:px-16 xl:px-24">
+        {children}
+      </main>
 
-  useEffect(() => {
-    fetch("/version.json")
-      .then((res) => res.json())
-      .then((data) => setVersion(data.version))
-      .catch(() => setVersion(""));
-  }, []);
-
-  return (
-    <footer className="px-8 lg:px-16 xl:px-24 py-20 border-t border-border">
-      <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
-        <div>
-          <div className="font-display text-4xl tracking-tight mb-3">
-            Tesseract
+      {/* Footer */}
+      <footer className="px-8 lg:px-16 xl:px-24 py-20 border-t border-border">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
+          <div>
+            <div className="font-display text-4xl tracking-tight mb-3">
+              Tesseract
+            </div>
+            <p className="text-muted-foreground text-lg max-w-xs">
+              On-device AI for macOS. No cloud. No accounts. Just you.
+            </p>
           </div>
-          <p className="text-muted-foreground text-lg max-w-xs">
-            On-device AI for macOS. No cloud. No accounts. Just you.
-          </p>
+
+          <div className="flex flex-wrap gap-x-12 gap-y-4 text-lg">
+            <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+              Terms
+            </Link>
+            <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
+              Support
+            </Link>
+            <Link
+              href="https://github.com/spokvulcan/tesseract"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </Link>
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-x-12 gap-y-4 text-lg">
-          <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-            Privacy
-          </Link>
-          <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-            Terms
-          </Link>
-          <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
-            Support
-          </Link>
-          <Link
-            href="https://github.com/spokvulcan/tesseract"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-          >
-            <Github className="w-4 h-4" />
-            GitHub
-          </Link>
+        <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
+          <span>© {new Date().getFullYear()} Tesseract</span>
+          <span className="font-mono">{version ? `v${version}` : ""}</span>
         </div>
-      </div>
-
-      <div className="mt-20 flex items-center justify-between text-sm text-muted-foreground">
-        <span>© {new Date().getFullYear()} Tesseract</span>
-        <span className="font-mono">{version ? `v${version}` : ""}</span>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }
