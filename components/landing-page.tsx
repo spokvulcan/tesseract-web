@@ -25,6 +25,12 @@ import {
   Layers,
   Plug,
 } from "lucide-react";
+import {
+  InferenceServerVersionA,
+  InferenceServerVersionB,
+  InferenceServerVersionC,
+  InferenceServerVersionD,
+} from "@/components/inference-server-versions";
 
 /* ------------------------------------------------------------------ */
 /*  SCROLL PROGRESS                                                    */
@@ -118,98 +124,59 @@ function FeatureCard({
 }
 
 /* ------------------------------------------------------------------ */
-/*  INFERENCE SERVER                                                   */
+/*  INFERENCE SERVER — VERSION SELECTOR                                */
 /* ------------------------------------------------------------------ */
 
 function InferenceServerSection() {
-  const tools = ["OpenCode", "Aider", "Continue", "Claude Code", "Cursor"];
-  const endpoints = [
-    { code: "/v1/chat/completions", desc: "Streaming and non-streaming completions, honors request.model" },
-    { code: "/v1/models", desc: "Lists downloaded agent models" },
-    { code: "/health", desc: "Server health check" },
-  ];
+  const [version, setVersion] = useState<"a" | "b" | "c" | "d">("a");
 
-  const featureStrips = [
-    { icon: Plug, title: "OpenAI Compatible", desc: "Works with any OpenAI SDK or compatible client" },
-    { icon: Zap, title: "Prefix Caching", desc: "Tiered RAM and SSD caching skips prefill for repeated prompts" },
-    { icon: Layers, title: "MLX Powered", desc: "Same model drives the agent and the server" },
-  ];
+  useEffect(() => {
+    const saved = localStorage.getItem("tesseract-version");
+    if (saved === "b" || saved === "c" || saved === "d") {
+      setVersion(saved);
+    }
+  }, []);
+
+  const renderVersion = () => {
+    switch (version) {
+      case "a":
+        return <InferenceServerVersionA />;
+      case "b":
+        return <InferenceServerVersionB />;
+      case "c":
+        return <InferenceServerVersionC />;
+      case "d":
+        return <InferenceServerVersionD />;
+    }
+  };
 
   return (
-    <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
-      <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
-        <Reveal>
-          <div className="text-center mb-20">
-            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter mb-8 text-foreground">
-              Your Mac. Your models.
-              <br />
-              Your endpoint.
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Tesseract ships with an OpenAI-compatible inference server that
-              drives the same MLX-powered LLM used by the agent. Point any
-              coding agent at localhost and get a fully local backend with
-              tiered RAM and SSD prefix caching.
-            </p>
-          </div>
-        </Reveal>
+    <>
+      {renderVersion()}
 
-        <Reveal delay={0.1}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
-            {featureStrips.map((f, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-border p-6 lg:p-8 text-center"
-              >
-                <f.icon className="w-6 h-6 text-muted-foreground mx-auto mb-5" />
-                <h3 className="font-display text-xl tracking-tight mb-3 text-foreground">
-                  {f.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {f.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.2}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
-            <div>
-              <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
-                Compatible with
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {tools.map((tool) => (
-                  <span
-                    key={tool}
-                    className="font-mono text-[11px] px-3 py-1.5 text-muted-foreground bg-secondary rounded-sm"
-                  >
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-display text-2xl tracking-tight mb-4 text-foreground">
-                Endpoints
-              </h3>
-              <div className="space-y-3 text-muted-foreground">
-                {endpoints.map((ep) => (
-                  <div key={ep.code} className="flex items-start gap-3">
-                    <code className="font-mono text-[11px] px-2 py-1 bg-secondary rounded-sm text-foreground shrink-0">
-                      {ep.code}
-                    </code>
-                    <span className="text-sm leading-relaxed">{ep.desc}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Reveal>
+      {/* Version switcher */}
+      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-full border border-border bg-background/80 backdrop-blur-xl shadow-lg">
+        <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
+          Layout:
+        </span>
+        {(["a", "b", "c", "d"] as const).map((v) => (
+          <button
+            key={v}
+            onClick={() => {
+              setVersion(v);
+              localStorage.setItem("tesseract-version", v);
+            }}
+            className={`w-6 h-6 rounded-full text-xs font-mono flex items-center justify-center transition-all ${
+              version === v
+                ? "bg-foreground text-background"
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {v.toUpperCase()}
+          </button>
+        ))}
       </div>
-    </section>
+    </>
   );
 }
 
