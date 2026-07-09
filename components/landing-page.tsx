@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
@@ -24,13 +24,12 @@ import {
   Zap,
   Layers,
   Plug,
+  Terminal,
+  Network,
+  Globe,
+  Key,
+  Code2,
 } from "lucide-react";
-import {
-  InferenceServerVersionA,
-  InferenceServerVersionB,
-  InferenceServerVersionC,
-  InferenceServerVersionD,
-} from "@/components/inference-server-versions";
 
 /* ------------------------------------------------------------------ */
 /*  SCROLL PROGRESS                                                    */
@@ -124,59 +123,246 @@ function FeatureCard({
 }
 
 /* ------------------------------------------------------------------ */
-/*  INFERENCE SERVER — VERSION SELECTOR                                */
+/*  INFERENCE SERVER                                                    */
 /* ------------------------------------------------------------------ */
 
 function InferenceServerSection() {
-  const [version, setVersion] = useState<"a" | "b" | "c" | "d">("a");
+  return (
+    <section className="bg-background dark:bg-[#0a0a0a] py-32 lg:py-48">
+      <div className="px-8 lg:px-16 xl:px-24 max-w-6xl mx-auto">
+        <Reveal>
+          <div className="mb-16">
+            <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[0.9] tracking-tighter text-foreground">
+              Your models.
+              <br />
+              Your endpoint.
+            </h2>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+            {/* HERO CARD — Server network visualization (2x2) */}
+            <div className="md:col-span-2 md:row-span-2 rounded-2xl border border-border bg-secondary/30 p-8 lg:p-10 min-h-[400px] flex flex-col">
+              <div className="flex items-center gap-3 mb-4">
+                <Server className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
+                  Inference Server
+                </span>
+              </div>
+              <ServerNetwork />
+            </div>
+
+            {/* Main endpoint */}
+            <div className="md:col-span-2 rounded-2xl border border-border bg-secondary/30 p-8 lg:p-10 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Terminal className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Primary Endpoint</span>
+              </div>
+              <div>
+                <code className="font-mono text-xl tracking-tight text-foreground">
+                  /v1/chat/completions
+                </code>
+                <p className="text-muted-foreground text-sm mt-2 leading-relaxed">
+                  Streaming &amp; non-streaming completions. Honors request.model.
+                  Point any OpenAI SDK at localhost and go.
+                </p>
+              </div>
+            </div>
+
+            {/* Endpoint: models */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Network className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Registry</span>
+              </div>
+              <div>
+                <code className="font-mono text-lg text-foreground">/v1/models</code>
+                <p className="text-muted-foreground text-xs mt-2">Lists downloaded agent models</p>
+              </div>
+            </div>
+
+            {/* Endpoint: health */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Health</span>
+              </div>
+              <div>
+                <code className="font-mono text-lg text-foreground">/health</code>
+                <p className="text-muted-foreground text-xs mt-2">Server health check</p>
+              </div>
+            </div>
+
+            {/* Feature: Prefix caching */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Zap className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Speed</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Tiered RAM &amp; SSD prefix caching. Repeated prompts skip prefill entirely — lightning fast responses.
+              </p>
+            </div>
+
+            {/* Feature: MLX */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Cpu className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Engine</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Apple's MLX framework. Same model drives both the agent and the server — zero cloud dependency.
+              </p>
+            </div>
+
+            {/* Feature: Privacy */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Key className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Privacy</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                No accounts. No telemetry. No API calls. Your data never leaves your Mac.
+              </p>
+            </div>
+
+            {/* Feature: Offline */}
+            <div className="md:col-span-1 rounded-2xl border border-border bg-secondary/30 p-6 flex flex-col justify-between min-h-[160px]">
+              <div className="flex items-center gap-3 mb-4">
+                <Globe className="w-5 h-5 text-muted-foreground" />
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Offline</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Full offline operation after initial model download. Works without internet.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* Animated server network visualization */
+function ServerNetwork() {
+  const clients = [
+    { name: "OpenCode", desc: "Tool-calling IDE" },
+    { name: "Aider", desc: "Git-aware pair programming" },
+    { name: "Continue", desc: "VS Code & JetBrains" },
+    { name: "Claude Code", desc: "CLI agent" },
+    { name: "Cursor", desc: "AI-first editor" },
+  ];
+
+  const radius = 130;
+  const iconOffset = 36;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [center, setCenter] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const saved = localStorage.getItem("tesseract-version");
-    if (saved === "b" || saved === "c" || saved === "d") {
-      setVersion(saved);
-    }
+    const update = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setCenter({ x: rect.width / 2, y: rect.height / 2 });
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
-  const renderVersion = () => {
-    switch (version) {
-      case "a":
-        return <InferenceServerVersionA />;
-      case "b":
-        return <InferenceServerVersionB />;
-      case "c":
-        return <InferenceServerVersionC />;
-      case "d":
-        return <InferenceServerVersionD />;
-    }
-  };
-
   return (
-    <>
-      {renderVersion()}
+    <div ref={containerRef} className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 320 }}>
+      <style>{`
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.06), 0 0 40px rgba(255,255,255,0.03); }
+          50% { box-shadow: 0 0 30px rgba(255,255,255,0.12), 0 0 60px rgba(255,255,255,0.06); }
+        }
+        @keyframes rotate-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes dash-flow {
+          to { stroke-dashoffset: -24; }
+        }
+        .server-pulse {
+          animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .network-rotate {
+          animation: rotate-slow 60s linear infinite;
+        }
+        .network-rotate-reverse {
+          animation: rotate-slow 80s linear infinite reverse;
+        }
+        .dash-flow {
+          animation: dash-flow 2s linear infinite;
+        }
+      `}</style>
 
-      {/* Version switcher */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-full border border-border bg-background/80 backdrop-blur-xl shadow-lg">
-        <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-          Layout:
-        </span>
-        {(["a", "b", "c", "d"] as const).map((v) => (
-          <button
-            key={v}
-            onClick={() => {
-              setVersion(v);
-              localStorage.setItem("tesseract-version", v);
-            }}
-            className={`w-6 h-6 rounded-full text-xs font-mono flex items-center justify-center transition-all ${
-              version === v
-                ? "bg-foreground text-background"
-                : "bg-secondary text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {v.toUpperCase()}
-          </button>
-        ))}
+      <div className="absolute w-[280px] h-[280px] rounded-full border border-border/30 network-rotate" />
+      <div className="absolute w-[200px] h-[200px] rounded-full border border-border/20 network-rotate-reverse" />
+
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox={`0 0 ${center.x * 2} ${center.y * 2}`}
+        preserveAspectRatio="xMidYMid meet"
+        fill="none"
+      >
+        {clients.map((_, i) => {
+          const angle = (i / clients.length) * Math.PI * 2 - Math.PI / 2;
+          const x = center.x + Math.cos(angle) * radius;
+          const y = center.y + Math.sin(angle) * radius - iconOffset;
+          return (
+            <line
+              key={i}
+              x1={center.x}
+              y1={center.y}
+              x2={x}
+              y2={y}
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-muted-foreground/25 dash-flow"
+              strokeDasharray="4 8"
+              style={{ animationDelay: `${i * 0.3}s` }}
+            />
+          );
+        })}
+      </svg>
+
+      <div className="relative z-10 w-20 h-20 rounded-2xl border border-border/60 bg-background flex items-center justify-center server-pulse">
+        <Server className="w-8 h-8 text-foreground" />
       </div>
-    </>
+
+      {clients.map((client, i) => {
+        const angle = (i / clients.length) * Math.PI * 2 - Math.PI / 2;
+        const x = center.x + Math.cos(angle) * radius;
+        const y = center.y + Math.sin(angle) * radius;
+
+        return (
+          <div
+            key={client.name}
+            className="absolute flex flex-col items-center"
+            style={{
+              left: x,
+              top: y,
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <div className="w-12 h-12 rounded-xl border border-border/60 bg-background flex items-center justify-center">
+              <Code2 className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <div className="mt-3 text-center">
+              <span className="block font-mono text-[10px] text-foreground tracking-tight">
+                {client.name}
+              </span>
+              <span className="block font-mono text-[9px] text-muted-foreground/60 mt-0.5">
+                {client.desc}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
