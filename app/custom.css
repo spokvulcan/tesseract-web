@@ -69,3 +69,21 @@ html {
   background: color-mix(in srgb, var(--foreground) 12%, transparent);
   border-radius: 3px;
 }
+
+/* Ticker / marquee animation */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-strip {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 35s linear infinite;
+}
+
+.ticker-text {
+  flex-shrink: 0;
+  padding-right: 4rem;
+  white-space: nowrap;
+}

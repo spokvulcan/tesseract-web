@@ -367,6 +367,43 @@ function ServerNetwork() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  BANNER — continuous scrolling ticker                              */
+/* ------------------------------------------------------------------ */
+
+function BuiltWithBanner() {
+  const message =
+    "Built entirely with Tesseract — the local inference server · Powered by the Qwen 3.6 model family (35B-A3B, 27B, and specialized post-training variants) · Every line of code proves it works.";
+
+  return (
+    <section className="relative overflow-hidden py-5 lg:py-6 bg-[#111] dark:bg-[#f0f0f0]">
+      <div className="flex items-center gap-4">
+        {/* Left accent dot */}
+        <div
+          className="shrink-0 w-1.5 h-1.5 rounded-full"
+          style={{
+            backgroundColor: "rgba(245, 242, 237, 0.6)",
+          }}
+        />
+        {/* Scrolling text */}
+        <div className="flex-1 overflow-hidden">
+          <div className="ticker-strip">
+            <span className="ticker-text text-[#f5f2ed] dark:text-[#0a0a0a] text-lg">
+              {message}
+            </span>
+            <span
+              className="ticker-text text-[#f5f2ed] dark:text-[#0a0a0a] text-lg"
+              aria-hidden="true"
+            >
+              {message}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  LANDING PAGE                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -414,6 +451,9 @@ export function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* BANNER */}
+        <BuiltWithBanner />
 
         {/* INFERENCE SERVER */}
         <InferenceServerSection />
