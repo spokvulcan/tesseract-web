@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Serif, Space_Mono, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./custom.css";
@@ -27,9 +27,9 @@ const mono = Space_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thetesseract.app"),
-  title: "Tesseract — On-Device Intelligence for macOS",
+  title: "Tesseract: a mind that happens to live in your Mac",
   description:
-    "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, a local AI agent, and an OpenAI-compatible inference server — powered by MLX, processed entirely on-device.",
+    "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that watches the day with you, filters the noise, and keeps only the signal.",
   icons: {
     icon: [
       { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tesseract — On-Device Intelligence for macOS",
+    title: "Tesseract: a mind that happens to live in your Mac",
     description:
-      "A privacy-focused AI assistant for macOS. Dictation, text-to-speech, a local AI agent, and an OpenAI-compatible inference server — powered by MLX, processed entirely on-device.",
+      "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that filters the noise of your day down to the signal.",
     siteName: "Tesseract",
     images: [
       {
@@ -57,11 +57,18 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Tesseract — On-Device Intelligence for macOS",
+    title: "Tesseract: a mind that happens to live in your Mac",
     description:
-      "A privacy-focused AI assistant for macOS — powered by MLX, processed entirely on-device.",
+      "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that filters the noise of your day down to the signal.",
     images: ["/icon-512x512.png"],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f6f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
 
 export default function RootLayout({

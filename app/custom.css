@@ -2,49 +2,25 @@
 /*  Custom styles — safe to modify, won't be overwritten by shadcn    */
 /* ------------------------------------------------------------------ */
 
-/* Scroll progress bar */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: var(--foreground);
-  z-index: 9999;
-  transform-origin: left;
-  will-change: transform;
+/* The working paper's palette. Light is cream paper; dark is the void.
+   Every landing component references these variables, so the whole
+   page inverts with the .dark class. */
+:root {
+  --paper: #f7f6f2;
+  --ink: #15150f;
+  --body: #4a4941;
+  --gray: #83817a;
+  --faint: #b5b3aa;
+  --blue: #2b4fd8;
 }
 
-/* Noise texture */
-.noise {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  opacity: 0.025;
-}
-
-/* Grid background */
-.grid-bg {
-  background-size: 72px 72px;
-  background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.025) 1px, transparent 1px);
-}
-
-/* Dark grid background */
-.dark-grid {
-  background-size: 72px 72px;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-/* Text gradient utility */
-.text-gradient {
-  background: linear-gradient(135deg, var(--foreground) 0%, color-mix(in srgb, var(--foreground) 50%, transparent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.dark {
+  --paper: #000000;
+  --ink: #f2f1eb;
+  --body: #bdbcb2;
+  --gray: #8a8980;
+  --faint: #565550;
+  --blue: #8b9eff;
 }
 
 /* Selection */
@@ -68,22 +44,4 @@ html {
 ::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--foreground) 12%, transparent);
   border-radius: 3px;
-}
-
-/* Ticker / marquee animation */
-@keyframes ticker-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.ticker-strip {
-  display: flex;
-  width: max-content;
-  animation: ticker-scroll 35s linear infinite;
-}
-
-.ticker-text {
-  flex-shrink: 0;
-  padding-right: 4rem;
-  white-space: nowrap;
 }
