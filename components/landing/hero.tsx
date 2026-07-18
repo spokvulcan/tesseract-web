@@ -14,31 +14,30 @@ const CANVAS_COLORS = {
   dark: { ink: [242, 241, 235], blue: [139, 158, 255] },
 };
 
-/* The mind's vocabulary lives on the vertices. Every word here is
-   explained somewhere further down the page. */
-const WORDS = [
-  "memories",
-  "beliefs",
-  "wakes",
-  "keystone",
-  "recall",
-  "voice",
-  "dictation",
-  "mission control",
-  "screenshots",
-  "flight recorder",
-  "standing instructions",
-  "quiet hours",
-  "promises",
-  "sleep pass",
-  "digest",
-  "owner's veto",
-];
+/* A tesseract is two cubes: the w=+1 shell projects larger, the w=-1
+   shell nests inside it. The figure gives that structure a meaning —
+   the outer shell is the instrument, the inner core is the Companion —
+   and each shell carries its own vocabulary on its vertices. Every
+   word glosses itself, and is explained further down the page. */
+const SHELL_WORDS = [
+  { vertex: 9, shell: "outer", word: "voice", gloss: "answers in 123 ms" },
+  { vertex: 12, shell: "outer", word: "dictation", gloss: "hears 99 languages" },
+  { vertex: 14, shell: "outer", word: "screenshots", gloss: "sees what you show it" },
+  { vertex: 1, shell: "inner", word: "beliefs", gloss: "what it holds true" },
+  { vertex: 4, shell: "inner", word: "sleep pass", gloss: "the night's review" },
+  { vertex: 6, shell: "inner", word: "veto", gloss: "your final word" },
+] as const;
 
 const VERTICES: number[][] = [];
 for (let i = 0; i < 16; i++) {
   VERTICES.push([i & 1 ? 1 : -1, i & 2 ? 1 : -1, i & 4 ? 1 : -1, i & 8 ? 1 : -1]);
 }
+
+/* The two shells: vertices whose w coordinate is +1 form the outer
+   cube, -1 the inner core. */
+const OUTER = VERTICES.map((v, i) => (v[3] === 1 ? i : -1)).filter((i) => i >= 0);
+const INNER = VERTICES.map((v, i) => (v[3] === -1 ? i : -1)).filter((i) => i >= 0);
+const IS_OUTER = new Set(OUTER);
 
 const EDGES: [number, number][] = [];
 for (let i = 0; i < 16; i++) {
@@ -75,8 +74,17 @@ function rotate4D(v: number[], a: Planes) {
 
 function HypercubeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const anglesRef = useRef<Planes>({ xy: 0.4, zw: 0.9, xz: 0.15, yw: 0.6 });
-  const velRef = useRef<Planes>({ xy: 0.06, zw: 0.1, xz: 0.04, yw: 0.07 });
+  const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const widthsRef = useRef<(number | undefined)[]>([]);
+  const calloutRefs = useRef<(HTMLDivElement | null)[]>([]);
+  /* Leader attach points in canvas coordinates, measured from the actual
+     callout boxes: right edge, exact vertical center, same gap for both. */
+  const anchorsRef = useRef<number[][]>([]);
+  /* Rotation stays in the xy/xz planes: those never touch a vertex's w,
+     so the two cubes can never trade places and the inner core always
+     stays the small one. zw/yw remain zero. */
+  const anglesRef = useRef<Planes>({ xy: 0.4, zw: 0, xz: 0.15, yw: 0 });
+  const velRef = useRef<Planes>({ xy: 0.06, zw: 0, xz: 0.04, yw: 0 });
   const dragRef = useRef<{ x: number; y: number } | null>(null);
   const reduced = usePrefersReducedMotion();
   const reducedRef = useRef(reduced);
@@ -91,6 +99,30 @@ function HypercubeCanvas() {
     colorsRef.current =
       resolvedTheme === "dark" ? CANVAS_COLORS.dark : CANVAS_COLORS.light;
   }, [resolvedTheme]);
+
+  /* Measure the callout boxes so each leader attaches at the box's right
+     edge, vertically centered, with a consistent gap. Re-measures on any
+     layout change (resize, font swap). */
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const GAP = 10;
+    const measure = () => {
+      const crect = canvas.getBoundingClientRect();
+      anchorsRef.current = calloutRefs.current.map((el) => {
+        if (!el) return [0, 0];
+        const r = el.getBoundingClientRect();
+        return [r.right - crect.left + GAP, r.top - crect.top + r.height / 2];
+      });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(canvas);
+    calloutRefs.current.forEach((el) => {
+      if (el) ro.observe(el);
+    });
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -110,13 +142,9 @@ function HypercubeCanvas() {
       if (!dragRef.current && !reducedRef.current) {
         const v = velRef.current;
         v.xy += (0.06 - v.xy) * 0.01;
-        v.zw += (0.1 - v.zw) * 0.01;
         v.xz += (0.04 - v.xz) * 0.01;
-        v.yw += (0.07 - v.yw) * 0.01;
         anglesRef.current.xy += v.xy * dt;
-        anglesRef.current.zw += v.zw * dt;
         anglesRef.current.xz += v.xz * dt;
-        anglesRef.current.yw += v.yw * dt;
       }
 
       const dpr = window.devicePixelRatio || 1;
@@ -131,6 +159,8 @@ function HypercubeCanvas() {
       ctx.clearRect(0, 0, w, h);
 
       const { ink, blue } = colorsRef.current;
+      const rgba = (c: number[], a: number) =>
+        `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${a})`;
 
       const scale = Math.min(w, h) * 1.5;
       const projected = VERTICES.map((v) => {
@@ -140,44 +170,86 @@ function HypercubeCanvas() {
         const y3 = y * wp;
         const z3 = z * wp;
         const zp = 1 / (3 - z3);
-        return [w / 2 + x3 * zp * scale, h / 2 + y3 * zp * scale, ww];
+        return [w / 2 + x3 * zp * scale, h / 2 + y3 * zp * scale, ww, z3];
       });
 
-      // edges
+      // edges: outer shell in ink, inner core in blue, connectors faint
       ctx.lineWidth = 1.6;
       ctx.lineCap = "round";
       for (const [i, j] of EDGES) {
-        const depth = (projected[i][2] + projected[j][2]) / 2;
-        const o = 0.35 + ((depth + 1) / 2) * 0.6;
-        ctx.strokeStyle = `rgba(${ink[0]}, ${ink[1]}, ${ink[2]}, ${o})`;
+        ctx.strokeStyle =
+          VERTICES[i][3] !== VERTICES[j][3]
+            ? rgba(ink, 0.14)
+            : IS_OUTER.has(i)
+              ? rgba(ink, 0.9)
+              : rgba(blue, 0.55);
         ctx.beginPath();
         ctx.moveTo(projected[i][0], projected[i][1]);
         ctx.lineTo(projected[j][0], projected[j][1]);
         ctx.stroke();
       }
 
-      // vertices + words
-      ctx.font = "500 11px var(--font-mono), ui-monospace, monospace";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      // vertices
       for (let i = 0; i < projected.length; i++) {
-        const depth = projected[i][2];
-        const o = 0.08 + ((depth + 1) / 2) * 0.92;
-        const r = 2.5 + ((depth + 1) / 2) * 3;
-        ctx.fillStyle = `rgba(${ink[0]}, ${ink[1]}, ${ink[2]}, ${o})`;
+        const outer = IS_OUTER.has(i);
+        ctx.fillStyle = outer ? rgba(ink, 0.95) : rgba(blue, 0.9);
         ctx.beginPath();
-        ctx.arc(projected[i][0], projected[i][1], r, 0, Math.PI * 2);
+        ctx.arc(projected[i][0], projected[i][1], outer ? 5 : 3.5, 0, Math.PI * 2);
         ctx.fill();
-        if (o > 0.62) {
-          const px = projected[i][0];
-          const py = projected[i][1];
-          // keep labels off the edges: a clipped word is worse than none
-          if (px > 56 && px < w - 56 && py > 36 && py < h - 64) {
-            ctx.fillStyle = `rgba(${blue[0]}, ${blue[1]}, ${blue[2]}, ${o * 0.85})`;
-            ctx.fillText(WORDS[i], px, py + r + 13);
-          }
-        }
       }
+
+      // leader lines: from each callout's measured attach point to the
+      // nearest vertex of its shell
+      const nearest = (idxs: number[], ax: number, ay: number) =>
+        idxs.reduce((a, b) =>
+          Math.hypot(projected[a][0] - ax, projected[a][1] - ay) <
+          Math.hypot(projected[b][0] - ax, projected[b][1] - ay)
+            ? a
+            : b
+        );
+      const shells = [OUTER, INNER];
+      ctx.lineWidth = 1;
+      for (let s = 0; s < shells.length; s++) {
+        const anchor = anchorsRef.current[s];
+        if (!anchor) continue;
+        const [ax, ay] = anchor;
+        const vi = nearest(shells[s], ax, ay);
+        ctx.strokeStyle = rgba(ink, 0.4);
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(projected[vi][0], projected[vi][1]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = rgba(ink, 0.6);
+        ctx.beginPath();
+        ctx.arc(ax, ay, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // the vocabulary pills: visibility follows 3D depth (projected[i][3]),
+      // not the frozen w — front of the shape fades in, back fades out
+      SHELL_WORDS.forEach((g, k) => {
+        const el = labelRefs.current[k];
+        if (!el) return;
+        const pvx = projected[g.vertex][0];
+        const pvy = projected[g.vertex][1];
+        const zMax = g.shell === "outer" ? 0.7 : 0.35;
+        const norm = projected[g.vertex][3] / zMax;
+        let alpha = Math.max(0, Math.min(1, (norm - 0.15) / 0.35));
+        // never label a vertex that has drifted off the panel
+        if (pvx < 0 || pvx > w) alpha = 0;
+        // clamp by the pill's measured half-width so it is never clipped
+        const half = (widthsRef.current[k] ??= el.offsetWidth / 2 + 8);
+        const x = Math.max(half, Math.min(w - half, pvx));
+        // keep pills clear of the fixed callouts on the right
+        if (x > w * 0.72) alpha *= Math.max(0, 1 - (x - w * 0.72) / (w * 0.14));
+        const below = pvy < h - 90;
+        const r = g.shell === "outer" ? 5 : 3.5;
+        const y = below ? pvy + r + 12 : pvy - r - 38;
+        el.style.transform = `translate(-50%, 0) translate(${x}px, ${y}px)`;
+        el.style.opacity = String(alpha);
+      });
     };
 
     const loop = (t: number) => {
@@ -197,10 +269,10 @@ function HypercubeCanvas() {
       const dx = e.clientX - dragRef.current.x;
       const dy = e.clientY - dragRef.current.y;
       dragRef.current = { x: e.clientX, y: e.clientY };
-      anglesRef.current.zw += dx * 0.008;
-      anglesRef.current.xy += dy * 0.008;
-      velRef.current.zw = dx * 0.25;
-      velRef.current.xy = dy * 0.25;
+      anglesRef.current.xy += dx * 0.008;
+      anglesRef.current.xz += dy * 0.008;
+      velRef.current.xy = dx * 0.25;
+      velRef.current.xz = dy * 0.25;
     };
     const onUp = () => {
       dragRef.current = null;
@@ -223,13 +295,59 @@ function HypercubeCanvas() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full touch-none"
-      style={{ cursor: "grab" }}
-      aria-label="A four-dimensional shape that you can drag to turn"
-      role="img"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full touch-none"
+        style={{ cursor: "grab" }}
+        aria-label="Two nested cubes with their vocabulary labeled: the instrument outside, the mind inside"
+        role="img"
+      />
+      <div
+        ref={(el) => {
+          calloutRefs.current[0] = el;
+        }}
+        className="pointer-events-none absolute right-[16%] top-[12%] border border-[var(--ink)]/10 bg-[var(--paper)]/85 px-3 py-2 text-right backdrop-blur-sm"
+      >
+        <p className="font-mono text-[13px] font-medium text-[var(--ink)]">Tesseract</p>
+        <p className="mt-0.5 font-mono text-[11px] text-[var(--gray)]">
+          the instrument that sees the day
+        </p>
+      </div>
+      <div
+        ref={(el) => {
+          calloutRefs.current[1] = el;
+        }}
+        className="pointer-events-none absolute right-[16%] bottom-[14%] border border-[var(--ink)]/10 bg-[var(--paper)]/85 px-3 py-2 text-right backdrop-blur-sm"
+      >
+        <p className="font-mono text-[13px] font-medium text-[var(--blue)]">the Companion</p>
+        <p className="mt-0.5 font-mono text-[11px] text-[var(--gray)]">
+          the mind that remembers it
+        </p>
+      </div>
+      {/* the vocabulary pills need room — below sm the shells and
+          callouts carry the figure on their own */}
+      <div className="pointer-events-none absolute inset-0 hidden sm:block">
+        {SHELL_WORDS.map((g, k) => (
+          <div
+            key={g.word}
+            ref={(el) => {
+              labelRefs.current[k] = el;
+            }}
+            className="absolute left-0 top-0 whitespace-nowrap rounded-full border border-[var(--ink)]/15 bg-[var(--paper)]/90 px-2.5 py-1 font-mono text-[12px] opacity-0 backdrop-blur-sm"
+          >
+            <span
+              className={
+                g.shell === "outer" ? "text-[var(--ink)]" : "text-[var(--blue)]"
+              }
+            >
+              {g.word}
+            </span>
+            <span className="text-[var(--gray)]"> — {g.gloss}</span>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -241,11 +359,8 @@ export function Hero() {
         <div className="relative order-2 h-[52vh] border-t border-[var(--ink)]/10 lg:order-1 lg:h-auto lg:border-t-0 lg:border-r">
           <HypercubeCanvas />
           <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--ink)]/10 bg-[var(--paper)]/85 px-5 py-3 font-mono text-[11px] text-[var(--gray)] backdrop-blur-sm">
-            a four-dimensional shape, drawn flat
-          </div>
-          <span className="absolute left-5 top-24 font-mono text-[11px] text-[var(--gray)] lg:top-28">
             fig. 01: a mind, projected
-          </span>
+          </div>
         </div>
 
         {/* copy */}
