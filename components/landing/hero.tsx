@@ -372,7 +372,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
-              A mind that
+              Tesseract —
             </motion.span>
             <motion.span
               className={`block ${serif.className} italic`}
@@ -380,7 +380,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
             >
-              happens to live
+              your AI Agent
             </motion.span>
             <motion.span
               className="block"
@@ -388,7 +388,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
             >
-              in your Mac.
+              on your Mac.
             </motion.span>
           </h1>
 
@@ -398,10 +398,13 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg"
           >
-            Tesseract is a personal intelligence that runs entirely on your
-            Mac. The Companion is the mind on top of it: it watches the day
-            with you, filters the noise, and keeps only the signal. It is
-            experimental, and it is getting better every week.
+            Tesseract is a native Mac app with local LLM inference and a
+            local agent — the Companion — that lives the day beside you:
+            it types what you say in 99 languages, answers out loud in 123
+            milliseconds, and, with your permission, watches your screen.
+            Each night it decides what the day meant and keeps it as
+            beliefs you can read, trace, and veto. Nothing it learns ever
+            leaves the machine.
           </motion.p>
 
           <motion.div
