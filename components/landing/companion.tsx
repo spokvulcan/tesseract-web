@@ -123,8 +123,8 @@ export function CompanionSection() {
         <In delay={0.1} className="mt-12">
           <MemoryFigure />
           <FigCaption>
-            fig. 04: what mattered is decided in hindsight. Nothing useful is
-            ever deleted, only set aside.
+            fig. 04: anatomy of one belief. Every claim carries its sources;
+            a changed mind supersedes, never erases.
           </FigCaption>
         </In>
       </div>
