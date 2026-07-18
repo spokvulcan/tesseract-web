@@ -372,7 +372,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
-              Tesseract —
+              Tesseract
             </motion.span>
             <motion.span
               className={`block ${serif.className} italic`}
@@ -399,12 +399,12 @@ export function Hero() {
             className="mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg"
           >
             Tesseract is a native Mac app with local LLM inference and a
-            local agent — the Companion — that lives the day beside you:
-            it types what you say in 99 languages, answers out loud in 123
-            milliseconds, and, with your permission, watches your screen.
-            Each night it decides what the day meant and keeps it as
-            beliefs you can read, trace, and veto. Nothing it learns ever
-            leaves the machine.
+            local agent called the Companion that lives the day beside
+            you: it types what you say in 99 languages, answers out loud
+            in 123 milliseconds, and, with your permission, watches your
+            screen. Each night it decides what the day meant and keeps it
+            as beliefs you can read, trace, and veto. Nothing it learns
+            ever leaves the machine.
           </motion.p>
 
           <motion.div
