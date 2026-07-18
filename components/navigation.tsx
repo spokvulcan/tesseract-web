@@ -61,9 +61,6 @@ export function SiteHeader() {
           <span className="text-base font-bold tracking-[-0.02em] text-[var(--ink)]">
             Tesseract
           </span>
-          <span className="hidden font-mono text-[10px] text-[var(--gray)] sm:inline">
-            a working paper
-          </span>
         </Link>
         <nav className="flex items-center gap-5 font-mono text-[11px] text-[var(--body)] sm:gap-7">
           <Link href="/#companion" className="transition-colors hover:text-[var(--blue)]">
