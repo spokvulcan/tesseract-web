@@ -99,7 +99,7 @@ export function SiteHeader() {
     >
       <div className="flex items-center justify-between px-6 py-4 sm:px-12 lg:px-16">
         <Link href="/" className="flex items-center gap-2.5">
-          <TesseractMark className="h-[19px] w-[19px] text-[var(--ink)]" />
+          <TesseractMark className="h-10 w-10 text-[var(--ink)]" />
           <span className="text-base font-bold tracking-[-0.02em] text-[var(--ink)]">
             Tesseract
           </span>
