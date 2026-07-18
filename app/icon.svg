@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#000000"/>
-  <g fill="none" stroke-linejoin="round">
-    <!-- outer shell: the instrument -->
-    <path d="M32 6L54.5 19V45L32 58L9.5 45V19L32 6Z" stroke="#f2f1eb" stroke-width="4"/>
-    <path d="M9.5 19L32 32L54.5 19M32 32V58" stroke="#f2f1eb" stroke-width="4"/>
-    <!-- inner mind: occludes the shell's edges, like the app icon's floating cube -->
-    <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" fill="#000000"/>
-    <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" stroke="#8b9eff" stroke-width="4"/>
-    <path d="M22.5 22.5L32 28L41.5 22.5M32 28V39" stroke="#8b9eff" stroke-width="4"/>
-  </g>
+  <!-- the frame: six flat faces, light falling from the top -->
+  <path d="M32 7L9.5 20L18.1 25L32 17Z" fill="#f2f1eb"/>
+  <path d="M32 7L54.5 20L45.9 25L32 17Z" fill="#f2f1eb" fill-opacity="0.86"/>
+  <path d="M9.5 20L9.5 46L18.1 41L18.1 25Z" fill="#f2f1eb" fill-opacity="0.7"/>
+  <path d="M54.5 20L54.5 46L45.9 41L45.9 25Z" fill="#f2f1eb" fill-opacity="0.58"/>
+  <path d="M9.5 46L32 59L32 49L18.1 41Z" fill="#f2f1eb" fill-opacity="0.44"/>
+  <path d="M54.5 46L32 59L32 49L45.9 41Z" fill="#f2f1eb" fill-opacity="0.36"/>
+  <!-- the mind, floating in the frame -->
+  <path d="M32 19.5L41.1 24.8L32 30L22.9 24.8Z" fill="#8b9eff"/>
+  <path d="M22.9 24.8L32 30L32 40.5L22.9 35.3Z" fill="#8b9eff" fill-opacity="0.72"/>
+  <path d="M41.1 24.8L41.1 35.3L32 40.5L32 30Z" fill="#8b9eff" fill-opacity="0.5"/>
 </svg>

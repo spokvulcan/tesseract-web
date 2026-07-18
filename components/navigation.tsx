@@ -50,25 +50,21 @@ function ThemeToggle() {
   );
 }
 
-/* The mark: the app icon redrawn as monoline line art — the outer
-   cube (the instrument) in ink, the inner cube (the mind) in blue,
-   occluding the shell's edges exactly like fig. 01. */
+/* The mark: the macOS app icon redrawn flat — the hexagonal frame
+   (the instrument) in stepped ink tones, the cube (the mind) floating
+   in its hole in stepped blues. Same geometry as app/icon.svg. */
 function TesseractMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M32 6L54.5 19V45L32 58L9.5 45V19L32 6Z M9.5 19L32 32L54.5 19M32 32V58"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-      <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" fill="var(--paper)" />
-      <path
-        d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z M22.5 22.5L32 28L41.5 22.5M32 28V39"
-        stroke="var(--blue)"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
+      <path d="M32 7L9.5 20L18.1 25L32 17Z" fill="currentColor" />
+      <path d="M32 7L54.5 20L45.9 25L32 17Z" fill="currentColor" fillOpacity="0.86" />
+      <path d="M9.5 20L9.5 46L18.1 41L18.1 25Z" fill="currentColor" fillOpacity="0.7" />
+      <path d="M54.5 20L54.5 46L45.9 41L45.9 25Z" fill="currentColor" fillOpacity="0.58" />
+      <path d="M9.5 46L32 59L32 49L18.1 41Z" fill="currentColor" fillOpacity="0.44" />
+      <path d="M54.5 46L32 59L32 49L45.9 41Z" fill="currentColor" fillOpacity="0.36" />
+      <path d="M32 19.5L41.1 24.8L32 30L22.9 24.8Z" fill="var(--blue)" />
+      <path d="M22.9 24.8L32 30L32 40.5L22.9 35.3Z" fill="var(--blue)" fillOpacity="0.72" />
+      <path d="M41.1 24.8L41.1 35.3L32 40.5L32 30Z" fill="var(--blue)" fillOpacity="0.5" />
     </svg>
   );
 }
