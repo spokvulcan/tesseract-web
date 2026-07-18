@@ -50,6 +50,29 @@ function ThemeToggle() {
   );
 }
 
+/* The mark: the app icon redrawn as monoline line art — the outer
+   cube (the instrument) in ink, the inner cube (the mind) in blue,
+   occluding the shell's edges exactly like fig. 01. */
+function TesseractMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M32 6L54.5 19V45L32 58L9.5 45V19L32 6Z M9.5 19L32 32L54.5 19M32 32V58"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinejoin="round"
+      />
+      <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" fill="var(--paper)" />
+      <path
+        d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z M22.5 22.5L32 28L41.5 22.5M32 28V39"
+        stroke="var(--blue)"
+        strokeWidth="3"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function SiteHeader() {
   return (
     <header
@@ -57,7 +80,8 @@ export function SiteHeader() {
       style={{ fontFamily: "var(--landing-grotesk), system-ui, sans-serif" }}
     >
       <div className="flex items-center justify-between px-6 py-4 sm:px-12 lg:px-16">
-        <Link href="/" className="flex items-baseline gap-3">
+        <Link href="/" className="flex items-center gap-2.5">
+          <TesseractMark className="h-[19px] w-[19px] text-[var(--ink)]" />
           <span className="text-base font-bold tracking-[-0.02em] text-[var(--ink)]">
             Tesseract
           </span>

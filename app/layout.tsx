@@ -31,11 +31,8 @@ export const metadata: Metadata = {
   description:
     "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that watches the day with you, filters the noise, and keeps only the signal.",
   icons: {
-    icon: [
-      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon-64x64.png", sizes: "64x64", type: "image/png" },
-      { url: "/icon-128x128.png", sizes: "128x128", type: "image/png" },
-    ],
+    // the favicon is app/icon.svg (file convention); PNGs remain only
+    // where SVG can't go — apple-touch-icon and the og card
     apple: [
       { url: "/icon-256x256.png", sizes: "256x256", type: "image/png" },
     ],

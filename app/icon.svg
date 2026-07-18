@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#000000"/>
+  <g fill="none" stroke-linejoin="round">
+    <!-- outer shell: the instrument -->
+    <path d="M32 6L54.5 19V45L32 58L9.5 45V19L32 6Z" stroke="#f2f1eb" stroke-width="4"/>
+    <path d="M9.5 19L32 32L54.5 19M32 32V58" stroke="#f2f1eb" stroke-width="4"/>
+    <!-- inner mind: occludes the shell's edges, like the app icon's floating cube -->
+    <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" fill="#000000"/>
+    <path d="M32 17L41.5 22.5V33.5L32 39L22.5 33.5V22.5L32 17Z" stroke="#8b9eff" stroke-width="4"/>
+    <path d="M22.5 22.5L32 28L41.5 22.5M32 28V39" stroke="#8b9eff" stroke-width="4"/>
+  </g>
+</svg>
