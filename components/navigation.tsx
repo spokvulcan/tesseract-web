@@ -50,21 +50,43 @@ function ThemeToggle() {
   );
 }
 
-/* The mark: the macOS app icon redrawn flat — the hexagonal frame
-   (the instrument) in stepped ink tones, the cube (the mind) floating
-   in its hole in stepped blues. Same geometry as app/icon.svg. */
+/* The mark: the macOS app icon redrawn truly flat — the hexagonal
+   frame (the instrument) in one ink tone, the cube (the mind) in one
+   blue, centered; faces separated by hairline gaps. Same geometry
+   as app/icon.svg. */
 function TesseractMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
-      <path d="M32 7L9.5 20L18.1 25L32 17Z" fill="currentColor" />
-      <path d="M32 7L54.5 20L45.9 25L32 17Z" fill="currentColor" fillOpacity="0.86" />
-      <path d="M9.5 20L9.5 46L18.1 41L18.1 25Z" fill="currentColor" fillOpacity="0.7" />
-      <path d="M54.5 20L54.5 46L45.9 41L45.9 25Z" fill="currentColor" fillOpacity="0.58" />
-      <path d="M9.5 46L32 59L32 49L18.1 41Z" fill="currentColor" fillOpacity="0.44" />
-      <path d="M54.5 46L32 59L32 49L45.9 41Z" fill="currentColor" fillOpacity="0.36" />
-      <path d="M32 19.5L41.1 24.8L32 30L22.9 24.8Z" fill="var(--blue)" />
-      <path d="M22.9 24.8L32 30L32 40.5L22.9 35.3Z" fill="var(--blue)" fillOpacity="0.72" />
-      <path d="M41.1 24.8L41.1 35.3L32 40.5L32 30Z" fill="var(--blue)" fillOpacity="0.5" />
+      <mask id="mark-frame-gaps">
+        <rect width="64" height="64" fill="#fff" />
+        <g stroke="#000" strokeWidth="1">
+          <path d="M32 6L32 16" />
+          <path d="M54.5 19L45.9 24" />
+          <path d="M54.5 45L45.9 40" />
+          <path d="M32 58L32 48" />
+          <path d="M9.5 45L18.1 40" />
+          <path d="M9.5 19L18.1 24" />
+        </g>
+      </mask>
+      <mask id="mark-cube-gaps">
+        <rect width="64" height="64" fill="#fff" />
+        <g stroke="#000" strokeWidth="1">
+          <path d="M32 32L22.9 26.8" />
+          <path d="M32 32L41.1 26.8" />
+          <path d="M32 32L32 42.5" />
+        </g>
+      </mask>
+      <path
+        mask="url(#mark-frame-gaps)"
+        fillRule="evenodd"
+        fill="currentColor"
+        d="M32 6L54.5 19L54.5 45L32 58L9.5 45L9.5 19L32 6Z M32 16L45.9 24L45.9 40L32 48L18.1 40L18.1 24L32 16Z"
+      />
+      <path
+        mask="url(#mark-cube-gaps)"
+        fill="var(--blue)"
+        d="M32 21.5L41.1 26.8L41.1 37.3L32 42.5L22.9 37.3L22.9 26.8L32 21.5Z"
+      />
     </svg>
   );
 }

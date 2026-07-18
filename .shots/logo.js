@@ -20,13 +20,18 @@ const puppeteer = require("puppeteer-core");
     await header.screenshot({ path: `.shots/logo-header-${theme}.png` });
   }
 
-  // the favicon file itself, blown up and at tab size
-  await page.setViewport({ width: 400, height: 400, deviceScaleFactor: 2 });
-  await page.goto("http://localhost:3100/icon.svg", { waitUntil: "networkidle0" });
-  await page.screenshot({ path: ".shots/logo-favicon-large.png" });
-  await page.setViewport({ width: 64, height: 64, deviceScaleFactor: 1 });
-  await page.goto("http://localhost:3100/icon.svg", { waitUntil: "networkidle0" });
-  await page.screenshot({ path: ".shots/logo-favicon-small.png" });
+  // the favicon file itself, blown up and at tab size, both color schemes
+  for (const scheme of ["light", "dark"]) {
+    await page.emulateMediaFeatures([
+      { name: "prefers-color-scheme", value: scheme },
+    ]);
+    await page.setViewport({ width: 400, height: 400, deviceScaleFactor: 2 });
+    await page.goto("http://localhost:3100/icon.svg", { waitUntil: "networkidle0" });
+    await page.screenshot({ path: `.shots/logo-favicon-large-${scheme}.png` });
+    await page.setViewport({ width: 64, height: 64, deviceScaleFactor: 1 });
+    await page.goto("http://localhost:3100/icon.svg", { waitUntil: "networkidle0" });
+    await page.screenshot({ path: `.shots/logo-favicon-small-${scheme}.png` });
+  }
 
   await browser.close();
 })();
