@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { INK, BLUE, GRAY, FAINT, MONO, useFig, useNow } from "./shared";
+import { serif } from "./fonts";
 
 /* ------------------------------------------------------------------ */
 /*  Deterministic PRNG: figures must render identically on server     */
@@ -230,75 +231,82 @@ export function DayFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 04: what mattered is decided in hindsight. The day's         */
-/*  memories settle into beliefs overnight.                           */
+/*  fig. 04: anatomy of one belief. Every claim carries its sources;  */
+/*  a changed mind supersedes, never erases.                          */
 /* ------------------------------------------------------------------ */
 
-const EPISODES = [70, 120, 180, 235, 300, 355, 405, 470, 530, 585, 640, 700, 760, 815, 865, 920];
-const BELIEFS = [200, 420, 640, 830];
-const SETTLE: [number, number][] = [
-  [180, 200], [235, 200], [405, 420], [470, 420],
-  [585, 640], [700, 640], [815, 830], [865, 830],
+const BELIEF_SOURCES = [
+  { x: 200, quote: "shipped the spec before lunch", when: "jul 3 · 12:40" },
+  { x: 400, quote: "let’s move reviews to mornings", when: "jul 7 · 09:15" },
+  { x: 600, quote: "up at six, deep work till ten", when: "jul 9 · 10:02" },
+  { x: 800, quote: "done by noon, again", when: "jul 11 · 13:20" },
 ];
+const FAN = [350, 443, 537, 630];
 
 export function MemoryFigure() {
   const { draw, fade } = useFig();
   return (
     <svg
-      viewBox="0 0 1000 220"
+      viewBox="0 0 1000 300"
       className="h-auto w-full"
       role="img"
-      aria-label="Two lines: the day's memories below as an untouched record, beliefs above. Dashed curves show selected memories settling into beliefs overnight."
+      aria-label="A belief card reading 'I've noticed Bohdan does his hardest work before noon' with four dashed threads fanning down to the verbatim episodes it cites, and an older struck-through claim to the side marked superseded but kept"
     >
       <motion.text x={48} y={28} fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(0.2)}>
-        beliefs: what it holds true, and why
+        one belief — and the evidence it carries
       </motion.text>
 
-      {/* belief line */}
-      <motion.line
-        x1={48} y1={55} x2={952} y2={55}
-        stroke={INK} strokeOpacity={0.5}
-        {...draw(0.1)}
-      />
-      {BELIEFS.map((bx, i) => (
-        <motion.circle key={bx} cx={bx} cy={55} r={4.5} fill={BLUE} {...fade(0.9 + i * 0.12)} />
-      ))}
-      <motion.text x={214} y={59} fill={GRAY} fontSize="9" fontFamily={MONO} {...fade(1.1)}>
-        you told it
-      </motion.text>
-      <motion.text x={654} y={59} fill={GRAY} fontSize="9" fontFamily={MONO} {...fade(1.2)}>
-        it concluded
-      </motion.text>
+      {/* the belief card */}
+      <motion.rect x={270} y={48} width={440} height={62} fill="none" stroke={INK} strokeOpacity={0.45} {...draw(0.3)} />
+      <motion.rect x={270} y={48} width={2.5} height={62} fill={BLUE} {...fade(0.5)} />
+      <motion.g {...fade(0.6)}>
+        <text x={490} y={73} textAnchor="middle" fill={INK} fontSize="15.5" className={`${serif.className} italic`}>
+          I’ve noticed Bohdan does his hardest work before noon.
+        </text>
+        <text x={490} y={94} textAnchor="middle" fill={GRAY} fontSize="8.5" fontFamily={MONO}>
+          belief · inferred · since jul 3 · confirmed 4× · cites 4 episodes
+        </text>
+      </motion.g>
 
-      {/* the settling */}
-      {SETTLE.map(([ex, bx], i) => (
+      {/* the superseded predecessor */}
+      <motion.g {...fade(1.2)}>
+        <text x={845} y={58} textAnchor="middle" fill={GRAY} fontSize="11.5" className={`${serif.className} italic`}>
+          evenings are my focus time
+        </text>
+        <line x1={772} y1={58} x2={918} y2={58} stroke={GRAY} strokeOpacity={0.6} />
+        <text x={845} y={78} textAnchor="middle" fill={GRAY} fontSize="8" fontFamily={MONO}>
+          superseded jul 10 — kept, not deleted
+        </text>
+        <line x1={768} y1={64} x2={712} y2={72} stroke={GRAY} strokeOpacity={0.45} strokeDasharray="2 3" />
+      </motion.g>
+
+      {/* the citation fan */}
+      {FAN.map((cx, i) => (
         <motion.path
-          key={`${ex}-${bx}`}
-          d={`M${ex},168 Q${(ex + bx) / 2},${(168 + 55) / 2 - 18} ${bx},58`}
-          fill="none"
-          stroke={BLUE} strokeOpacity={0.45} strokeDasharray="2 4"
-          {...draw(0.5 + i * 0.08)}
+          key={cx}
+          d={`M${cx},110 C${cx},148 ${BELIEF_SOURCES[i].x},150 ${BELIEF_SOURCES[i].x},186`}
+          fill="none" stroke={BLUE} strokeOpacity={0.45} strokeDasharray="2 4"
+          {...draw(0.7 + i * 0.1)}
         />
       ))}
 
-      {/* memory line */}
-      <motion.line
-        x1={48} y1={170} x2={952} y2={170}
-        stroke={GRAY} strokeOpacity={0.5}
-        {...draw(0.1)}
-      />
-      {EPISODES.map((ex, i) => (
-        <motion.circle
-          key={ex} cx={ex} cy={170} r={2.5}
-          fill={GRAY} fillOpacity={0.55} {...fade(0.3 + i * 0.03)}
-        />
+      {/* the verbatim sources */}
+      {BELIEF_SOURCES.map((s, i) => (
+        <g key={s.x}>
+          <motion.line x1={s.x} y1={186} x2={s.x} y2={196} stroke={INK} strokeOpacity={0.55} {...fade(0.9 + i * 0.1)} />
+          <motion.g {...fade(1.0 + i * 0.1)}>
+            <text x={s.x} y={213} textAnchor="middle" fill={GRAY} fontSize="10.5" className={`${serif.className} italic`}>
+              {s.quote}
+            </text>
+            <text x={s.x} y={229} textAnchor="middle" fill={FAINT} fontSize="8.5" fontFamily={MONO}>
+              {s.when}
+            </text>
+          </motion.g>
+        </g>
       ))}
-      <motion.text x={48} y={200} fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(0.2)}>
-        memories: the record, never edited
-      </motion.text>
 
-      <motion.text x={952} y={115} textAnchor="end" fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(1.3)}>
-        importance is decided overnight
+      <motion.text x={48} y={278} fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(1.3)}>
+        ask why — it shows its sources
       </motion.text>
     </svg>
   );

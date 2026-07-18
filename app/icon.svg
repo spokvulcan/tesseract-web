@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .frame { fill: #15150f; }
+    .cube { fill: #2b4fd8; }
+    @media (prefers-color-scheme: dark) {
+      .frame { fill: #f2f1eb; }
+      .cube { fill: #8b9eff; }
+    }
+  </style>
+  <mask id="frame-gaps">
+    <rect width="64" height="64" fill="#fff"/>
+    <g stroke="#000" stroke-width="1.2">
+      <path d="M32 1L32 14"/>
+      <path d="M58.9 16.5L47.6 23"/>
+      <path d="M58.9 47.5L47.6 41"/>
+      <path d="M32 63L32 50"/>
+      <path d="M5.1 47.5L16.4 41"/>
+      <path d="M5.1 16.5L16.4 23"/>
+    </g>
+  </mask>
+  <mask id="cube-gaps">
+    <rect width="64" height="64" fill="#fff"/>
+    <g stroke="#000" stroke-width="1.2">
+      <path d="M32 32L20.3 25.3"/>
+      <path d="M32 32L43.7 25.3"/>
+      <path d="M32 32L32 45.5"/>
+    </g>
+  </mask>
+  <!-- the frame: one flat tone, faces separated by hairline gaps -->
+  <path class="frame" mask="url(#frame-gaps)" fill-rule="evenodd"
+        d="M32 1L58.9 16.5L58.9 47.5L32 63L5.1 47.5L5.1 16.5L32 1Z M32 14L47.6 23L47.6 41L32 50L16.4 41L16.4 23L32 14Z"/>
+  <!-- the mind: one flat blue, centered in the frame -->
+  <path class="cube" mask="url(#cube-gaps)"
+        d="M32 18.5L43.7 25.3L43.7 38.8L32 45.5L20.3 38.8L20.3 25.3L32 18.5Z"/>
+</svg>
