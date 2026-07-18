@@ -60,32 +60,32 @@ function TesseractMark({ className }: { className?: string }) {
       <mask id="mark-frame-gaps">
         <rect width="64" height="64" fill="#fff" />
         <g stroke="#000" strokeWidth="1">
-          <path d="M32 6L32 16" />
-          <path d="M54.5 19L45.9 24" />
-          <path d="M54.5 45L45.9 40" />
-          <path d="M32 58L32 48" />
-          <path d="M9.5 45L18.1 40" />
-          <path d="M9.5 19L18.1 24" />
+          <path d="M32 2L32 13.5" />
+          <path d="M58 17L48 22.8" />
+          <path d="M58 47L48 41.3" />
+          <path d="M32 62L32 50.5" />
+          <path d="M6 47L16 41.3" />
+          <path d="M6 17L16 22.8" />
         </g>
       </mask>
       <mask id="mark-cube-gaps">
         <rect width="64" height="64" fill="#fff" />
         <g stroke="#000" strokeWidth="1">
-          <path d="M32 32L22.9 26.8" />
-          <path d="M32 32L41.1 26.8" />
-          <path d="M32 32L32 42.5" />
+          <path d="M32 32L21.6 26" />
+          <path d="M32 32L42.4 26" />
+          <path d="M32 32L32 44" />
         </g>
       </mask>
       <path
         mask="url(#mark-frame-gaps)"
         fillRule="evenodd"
         fill="currentColor"
-        d="M32 6L54.5 19L54.5 45L32 58L9.5 45L9.5 19L32 6Z M32 16L45.9 24L45.9 40L32 48L18.1 40L18.1 24L32 16Z"
+        d="M32 2L58 17L58 47L32 62L6 47L6 17L32 2Z M32 13.5L48 22.8L48 41.3L32 50.5L16 41.3L16 22.8L32 13.5Z"
       />
       <path
         mask="url(#mark-cube-gaps)"
         fill="var(--blue)"
-        d="M32 21.5L41.1 26.8L41.1 37.3L32 42.5L22.9 37.3L22.9 26.8L32 21.5Z"
+        d="M32 20L42.4 26L42.4 38L32 44L21.6 38L21.6 26L32 20Z"
       />
     </svg>
   );
