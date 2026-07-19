@@ -164,7 +164,7 @@ export function SiteFooter() {
             github
           </a>
         </nav>
-        <span>© 2026 · set in space grotesk &amp; instrument serif</span>
+        <span>© 2026 · a mind is the sum of what it remembers</span>
       </div>
     </footer>
   );
