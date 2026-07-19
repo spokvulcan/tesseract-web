@@ -5,8 +5,8 @@ import { grotesk } from "./landing/fonts";
 import { In } from "./landing/shared";
 import { Hero } from "./landing/hero";
 import { NoiseSection } from "./landing/noise";
-import { CompanionSection } from "./landing/companion";
-import { InstrumentSection } from "./landing/instrument";
+import { CompanionBrief } from "./landing/companion-brief";
+import { FeaturesSection } from "./landing/features";
 import { PhilosophySection } from "./landing/philosophy";
 import { ClosingSections } from "./landing/closing";
 
@@ -20,15 +20,17 @@ function Abstract() {
           </p>
           <p className="max-w-2xl text-lg font-light leading-relaxed text-[var(--body)] lg:col-span-7">
             Tesseract is two things in one Mac app. The first you can use
-            today: dictation that types what you say into any app, a
-            natural voice that answers out loud, and a chat assistant like
-            the ones you know, except everything runs on your own Mac, so
-            nothing you say or show it is ever sent anywhere. The second is
-            the Companion: a new kind of AI that does not wait to be asked.
-            It lives the day beside you, notices what happens, remembers
-            what matters, and speaks up only when something is worth your
-            attention. It is young and evolving fast, and it is the reason
-            Tesseract exists.
+            today: dictation that types what you say into any app, a voice
+            that reads anything aloud, a chat assistant like the ones you
+            know, and a gesture that shows it whatever window you are
+            looking at. Everything runs on your own Mac, so nothing you say
+            or show it is ever sent anywhere. The second is the Companion:
+            a new kind of AI that does not wait to be asked. It lives the
+            day beside you, notices what happens, remembers what matters,
+            and speaks up only when something is worth your attention. It
+            is young and evolving fast, and it is the reason Tesseract
+            exists. Each capability has a paper of its own on this site;
+            this page is the survey.
           </p>
           <p className="font-mono text-[11px] leading-relaxed text-[var(--gray)] lg:col-span-3">
             keywords: private by design · living memory · a companion, not a
@@ -50,8 +52,8 @@ export function LandingPage() {
       <Hero />
       <Abstract />
       <NoiseSection />
-      <CompanionSection />
-      <InstrumentSection />
+      <CompanionBrief />
+      <FeaturesSection />
       <PhilosophySection />
       <ClosingSections />
       <SiteFooter />

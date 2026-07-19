@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { grotesk } from "./landing/fonts";
 import { DOWNLOAD_URL, GITHUB_URL } from "./landing/shared";
+import { PAPERS } from "./papers/list";
 
 /* ------------------------------------------------------------------ */
 /*  The paper's masthead — a table-of-contents header with footnoted  */
@@ -105,14 +106,11 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="flex items-center gap-5 font-mono text-[11px] text-[var(--body)] sm:gap-7">
-          <Link href="/#companion" className="transition-colors hover:text-[var(--blue)]">
+          <Link href="/companion" className="transition-colors hover:text-[var(--blue)]">
             companion<sup className="ml-0.5 text-[9px] text-[var(--blue)]">1</sup>
           </Link>
-          <Link href="/#instrument" className="hidden transition-colors hover:text-[var(--blue)] sm:inline">
-            instrument<sup className="ml-0.5 text-[9px] text-[var(--blue)]">2</sup>
-          </Link>
-          <Link href="/#philosophy" className="hidden transition-colors hover:text-[var(--blue)] sm:inline">
-            thesis<sup className="ml-0.5 text-[9px] text-[var(--blue)]">3</sup>
+          <Link href="/#features" className="hidden transition-colors hover:text-[var(--blue)] sm:inline">
+            features<sup className="ml-0.5 text-[9px] text-[var(--blue)]">2</sup>
           </Link>
           <a
             href={GITHUB_URL}
@@ -120,7 +118,7 @@ export function SiteHeader() {
             rel="noopener noreferrer"
             className="hidden transition-colors hover:text-[var(--blue)] sm:inline"
           >
-            github<sup className="ml-0.5 text-[9px] text-[var(--blue)]">4</sup>
+            github<sup className="ml-0.5 text-[9px] text-[var(--blue)]">3</sup>
           </a>
           <a
             href={DOWNLOAD_URL}
@@ -147,7 +145,21 @@ export function SiteFooter() {
       className={`${grotesk.variable} border-t border-[var(--ink)]/10 bg-[var(--paper)] px-6 py-10 sm:px-12 lg:px-16`}
       style={{ fontFamily: "var(--landing-grotesk), system-ui, sans-serif" }}
     >
-      <div className="flex flex-col gap-6 font-mono text-[11px] text-[var(--gray)] sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-[var(--ink)]/10 pb-8 font-mono text-[11px] sm:flex-row sm:items-baseline sm:justify-between">
+        <span className="text-[var(--gray)]">the papers</span>
+        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-[var(--body)]">
+          {PAPERS.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/${p.slug}`}
+              className="transition-colors hover:text-[var(--blue)]"
+            >
+              <span className="text-[var(--blue)]">{p.no}</span> {p.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+      <div className="mt-8 flex flex-col gap-6 font-mono text-[11px] text-[var(--gray)] sm:flex-row sm:items-center sm:justify-between">
         <span className="text-[var(--ink)]">
           Tesseract, a working paper on personal intelligence
         </span>
