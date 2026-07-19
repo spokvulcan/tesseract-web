@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — Tesseract",
+  title: "Terms of Use · Tesseract",
   description: "Terms of use for the Tesseract macOS application.",
 };
 
@@ -51,8 +51,8 @@ export default function TermsPage() {
             </h2>
             <p className="text-muted-foreground mb-5">
               Tesseract uses open-source AI models that run locally on your
-              device. AI-generated outputs — including text transcriptions and
-              synthesized speech — are provided as-is.
+              device. AI-generated outputs, including text transcriptions and
+              synthesized speech, are provided as-is.
             </p>
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-start gap-3">

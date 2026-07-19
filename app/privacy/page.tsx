@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Tesseract",
+  title: "Privacy Policy · Tesseract",
   description:
     "Tesseract privacy policy. No data collection, no tracking, no accounts. Everything runs locally on your Mac.",
 };
@@ -53,14 +53,14 @@ export default function PrivacyPage() {
               Data Stored on Your Device
             </h2>
             <p className="text-muted-foreground mb-5">
-              Tesseract stores the following data locally on your Mac, within
-              its sandboxed application container:
+              Tesseract stores the following data locally on your Mac, in
+              its private application folder:
             </p>
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
                 <span>
-                  <strong className="text-foreground">User preferences</strong> —
+                  <strong className="text-foreground">User preferences</strong>:
                   stored via UserDefaults (hotkey configuration, model selection,
                   display settings).
                 </span>
@@ -68,14 +68,14 @@ export default function PrivacyPage() {
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
                 <span>
-                  <strong className="text-foreground">AI models</strong> — downloaded
+                  <strong className="text-foreground">AI models</strong>: downloaded
                   once on first launch and stored locally for offline use.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
                 <span>
-                  <strong className="text-foreground">Conversation history</strong> —
+                  <strong className="text-foreground">Conversation history</strong>:
                   agent conversations are stored locally on your device. They are
                   never transmitted anywhere.
                 </span>

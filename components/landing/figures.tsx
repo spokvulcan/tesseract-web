@@ -253,7 +253,7 @@ export function MemoryFigure() {
       aria-label="A belief card reading 'I've noticed Bohdan does his hardest work before noon' with four dashed threads fanning down to the verbatim episodes it cites, and an older struck-through claim to the side marked superseded but kept"
     >
       <motion.text x={48} y={28} fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(0.2)}>
-        one belief — and the evidence it carries
+        one belief, and the evidence it carries
       </motion.text>
 
       {/* the belief card */}
@@ -275,7 +275,7 @@ export function MemoryFigure() {
         </text>
         <line x1={772} y1={58} x2={918} y2={58} stroke={GRAY} strokeOpacity={0.6} />
         <text x={845} y={78} textAnchor="middle" fill={GRAY} fontSize="8" fontFamily={MONO}>
-          superseded jul 10 — kept, not deleted
+          superseded jul 10 · kept, not deleted
         </text>
         <line x1={768} y1={64} x2={712} y2={72} stroke={GRAY} strokeOpacity={0.45} strokeDasharray="2 3" />
       </motion.g>
@@ -306,7 +306,7 @@ export function MemoryFigure() {
       ))}
 
       <motion.text x={48} y={278} fill={GRAY} fontSize="10" fontFamily={MONO} {...fade(1.3)}>
-        ask why — it shows its sources
+        ask why, and it shows its sources
       </motion.text>
     </svg>
   );

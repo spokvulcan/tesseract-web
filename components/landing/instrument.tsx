@@ -15,26 +15,26 @@ const THEOREMS = [
   {
     n: "3.2",
     name: "voice",
-    stmt: "It answers out loud in 123 milliseconds.",
+    stmt: "It answers out loud, in a voice made on your Mac.",
     proof:
-      "The voice is generated on your Mac and stays natural even for long answers. Measured from question to first sound: 123 milliseconds, faster than the pause before a person replies.",
-    cor: ["123 ms to first sound", "natural long answers", "generated on your mac"],
+      "Ask by voice or by text, and it speaks its answer in a natural voice that stays steady through long answers, generated entirely on your machine. No cloud voice, no robot monotone.",
+    cor: ["speaks its answers", "natural long answers", "generated on your mac"],
   },
   {
     n: "3.3",
-    name: "agent",
+    name: "chat",
     stmt: "It remembers what you told it in March.",
     proof:
-      "Speak or type, show it a screenshot, give it a goal. It uses its tools, keeps what matters in living memory, and picks up where you left off.",
-    cor: ["uses its tools", "living memory", "sees screenshots"],
+      "Underneath everything is a full chat assistant, like the AI apps you already know, except it runs on your Mac. Speak or type, paste a screenshot, hand it a task. What matters from every conversation joins its living memory, so it picks up where you left off, even weeks or months later.",
+    cor: ["chat, voice, screenshots", "living memory", "everything stays local"],
   },
   {
     n: "3.4",
     name: "for developers",
     stmt: "Your tools will think it is the cloud.",
     proof:
-      "Any app that knows how to talk to OpenAI can talk to Tesseract instead, just by pointing at your own machine. The same mind that powers the Companion answers, and nothing leaves the Mac.",
-    cor: ["works with openai tools", "the same mind answers", "nothing leaves the mac"],
+      "Tesseract runs an OpenAI-compatible server on your Mac: point any OpenAI API client at localhost and the same local models answer. A tiered RAM + SSD prefix cache makes reused context ~50× cheaper than re-prefilling, rehydrating from disk at up to 0.87 GB/s. Nothing leaves the machine.",
+    cor: ["openai-compatible api", "~50× cheaper context reuse", "up to 0.87 GB/s reload"],
   },
 ];
 
@@ -94,9 +94,9 @@ export function InstrumentSection() {
       {/* measured values */}
       <div className="mt-20 grid gap-12 sm:grid-cols-3 sm:gap-8">
         {[
-          ["200,000", "words held in mind at once, entirely on your Mac"],
-          ["0.87 GB/s", "measured speed of reloading its memory from disk"],
-          ["~50×", "cheaper to reuse a memory than to rebuild it"],
+          ["99", "languages it understands when you speak"],
+          ["16 GB", "of memory is all your Mac needs to start"],
+          ["0", "bytes of your life sent anywhere, ever"],
         ].map(([v, l], i) => (
           <In key={v} delay={i * 0.08}>
             <p className="text-[clamp(2.6rem,4.4vw,4rem)] font-light leading-none tracking-[-0.03em]">
@@ -112,9 +112,10 @@ export function InstrumentSection() {
       <In delay={0.15}>
         <p className="mt-16 max-w-3xl border-t border-[var(--ink)]/10 pt-6 text-[15px] font-light leading-relaxed text-[var(--body)]">
           <span className="font-mono text-[12px] text-[var(--blue)]">lemma 3.5 </span>
-          When the Mac needs room, the oldest memories step aside to disk.
-          They are never lost, and they come back at up to 0.87 GB every
-          second.
+          When your Mac needs room for other work, Tesseract steps aside:
+          the oldest memories move quietly to disk, and return the moment
+          they are needed. It shares the machine the way a good guest
+          shares a house.
         </p>
       </In>
     </section>

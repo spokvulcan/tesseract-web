@@ -33,20 +33,20 @@ const GLYPH_STATES = [
 
 const DEFS = [
   [
-    "def. 2.1: entity and harness",
-    "Every judgment belongs to the model. The code only provides what judgment needs: time to think, memory that lasts, and a record it cannot edit.",
+    "def. 2.1: it decides for itself",
+    "The Companion makes its own judgments: what matters, when to speak, what to remember. Nothing about it is scripted. The app around it only provides what a mind needs: time to think, memory that lasts, and a record it cannot edit.",
   ],
   [
     "def. 2.2: silence, recorded",
-    "It speaks when it has something worth saying, never because a timer went off. Every silence is a decision, and every decision is on the record.",
+    "It speaks when it has something worth saying, never because a timer went off. Every silence is a decision too, and every decision, spoken or silent, goes on the record.",
   ],
   [
     "def. 2.3: promises",
-    "It makes its own commitments, and each one either happens or is visibly rescheduled. A dropped promise is a defect we stop everything to fix.",
+    "When it says it will check on something at five, that is a promise. Every promise either happens or is visibly rescheduled. A promise that quietly vanishes is treated as a serious bug. We stop everything to fix it.",
   ],
   [
     "def. 2.4: the flight recorder",
-    "Everything it thinks, says, and decides goes into a log that only grows. The Companion can read its own history. It can never rewrite it.",
+    "Everything it thinks, says, and decides is written to a log that only grows. The Companion can read its own history, but it can never rewrite it. So you can always check what it did, and why.",
   ],
 ];
 
@@ -60,7 +60,7 @@ const STATUS_ROWS = [
 export function CompanionSection() {
   return (
     <section id="companion" className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-32">
-      <SectionMark no="§ 02" title="the companion" note="experimental" />
+      <SectionMark no="§ 02" title="the companion" note="evolving" />
 
       <In delay={0.05}>
         <h2 className="mt-14 max-w-4xl text-[clamp(2.4rem,4.6vw,4.2rem)] font-light leading-[1.02] tracking-[-0.03em]">
@@ -71,11 +71,12 @@ export function CompanionSection() {
 
       <In delay={0.12}>
         <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-          The Companion is not a reminder app with generated strings, and not
-          a chatbot waiting to be asked. It wakes on its own, books its own
-          day around yours, decides when to speak and when to stay silent, and
-          writes down everything it decides. Its goal is your success: your
-          health, your mind, your work.
+          The Companion is not a reminder app, and not a chatbot waiting
+          for a prompt. It is closer to a colleague who shares your Mac:
+          it wakes up on its own, plans its own day around yours, decides
+          for itself when to speak and when to stay quiet, and writes
+          down every decision it makes. Its one job is your success:
+          your health, your mind, your work.
         </p>
       </In>
 
@@ -111,13 +112,16 @@ export function CompanionSection() {
         </In>
         <In delay={0.08}>
           <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-            During the night, the day&apos;s memories settle into lasting
-            beliefs, much as they do for you. What deserved remembering is
-            decided with hindsight, when the day&apos;s consequences are
-            visible. Every morning opens with one specific, true callback to
-            your life: a generic line is a disappointment, an invented one a
-            betrayal. You can inspect anything it believes, and you can veto
-            it. You are the authority on your own life.
+            While you sleep, the Companion goes back over the day and
+            decides what deserved remembering. It decides with hindsight,
+            once the day&apos;s consequences are visible, the same way
+            your own memory works. What it keeps becomes a belief: a short
+            sentence about your life, with the exact moments that support
+            it attached. Every morning opens with one specific, true
+            callback to your life. A generic line is a disappointment; an
+            invented one, a betrayal. And you can open any belief, see
+            exactly why it holds it, and veto it. You are the authority on
+            your own life.
           </p>
         </In>
         <In delay={0.1} className="mt-12">
@@ -139,10 +143,13 @@ export function CompanionSection() {
         </In>
         <In delay={0.08}>
           <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-            How loud it may get is its judgment. Whether it may get loud at
-            all is yours: quiet hours are something you tell it, not a curfew
-            we coded, and every dismissal you make is a recorded fact it
-            learns from.
+            When something is worth your attention, the Companion chooses
+            how loudly to say so: a small mark in the menu bar, a
+            notification, a spoken line, or a full conversation. How loud
+            to get is its judgment. Whether it may get loud at all is
+            yours: quiet hours are something you tell it in plain words,
+            and every dismissal you make is a recorded fact it has to
+            answer to.
           </p>
         </In>
         <In delay={0.1} className="mt-12">
@@ -181,18 +188,21 @@ export function CompanionSection() {
         </In>
         <In delay={0.08}>
           <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-            Every signal becomes exactly one event, and every event lands in
-            one standing conversation called Mission Control. That conversation
-            is the Companion&apos;s whole mind: the thought at 14:00 builds on
-            what it noticed at 09:00. Each night it writes a digest of its own
-            history, so the mind stays fast on your Mac for years.
+            Everything the Companion notices, whether a notification, an
+            app you settled into, or the morning itself, lands in one continuous
+            conversation it holds with itself, called Mission Control.
+            That one conversation is its whole mind: the thought it has at
+            two in the afternoon builds on what it saw at nine. And each
+            night it condenses its own history into a short digest, so
+            years of living beside you still fit in a mind that stays
+            fast.
           </p>
         </In>
         <In delay={0.1} className="mt-12">
           <FoldFigure />
           <FigCaption>
-            fig. 06: the event fold. The same loop that makes a human human,
-            with every judgment left to the Companion.
+            fig. 06: the event fold. Notice, think, remember: the same
+            loop a person runs, with every judgment left to the Companion.
           </FigCaption>
         </In>
       </div>
@@ -201,15 +211,16 @@ export function CompanionSection() {
       <In delay={0.05}>
         <div className="mt-24 border border-[var(--ink)]/15 p-8 sm:p-10">
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--blue)]">
-            honest status: proof of concept
+            honest status: evolving
           </p>
           <p className="mt-5 max-w-2xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-            The Companion ships today behind an experimental switch, off by
-            default. The loop works: promises happen, silence is earned, and
-            its author has worn it daily since July 2026. It is also young. We
-            are refining it quickly: one identity across voice and chat, ears
-            that hear tone instead of transcripts, a filter that forwards only
-            what you would. What you download is the seed, not the tree.
+            The Companion ships today behind one switch in Settings, off by
+            default. The core works: promises are kept, silence is earned,
+            and its author has worn it every day since July 2026. It is
+            also young, and we are rebuilding it layer by layer, in the
+            open: one identity across voice and chat, ears that hear your
+            tone instead of a transcript, eyes that read the screen when it
+            wakes. What you download is the seed, not the tree.
           </p>
           <div className="mt-8 grid grid-cols-2 gap-6 border-t border-[var(--ink)]/10 pt-6 sm:grid-cols-4">
             {STATUS_ROWS.map(([k, v]) => (

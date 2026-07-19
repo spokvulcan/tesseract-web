@@ -20,7 +20,7 @@ const CANVAS_COLORS = {
    and each shell carries its own vocabulary on its vertices. Every
    word glosses itself, and is explained further down the page. */
 const SHELL_WORDS = [
-  { vertex: 9, shell: "outer", word: "voice", gloss: "answers in 123 ms" },
+  { vertex: 9, shell: "outer", word: "voice", gloss: "answers out loud" },
   { vertex: 12, shell: "outer", word: "dictation", gloss: "hears 99 languages" },
   { vertex: 14, shell: "outer", word: "screenshots", gloss: "sees what you show it" },
   { vertex: 1, shell: "inner", word: "beliefs", gloss: "what it holds true" },
@@ -343,7 +343,7 @@ function HypercubeCanvas() {
             >
               {g.word}
             </span>
-            <span className="text-[var(--gray)]"> — {g.gloss}</span>
+            <span className="text-[var(--gray)]"> · {g.gloss}</span>
           </div>
         ))}
       </div>
@@ -372,7 +372,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
-              Tesseract
+              The first AI
             </motion.span>
             <motion.span
               className={`block ${serif.className} italic`}
@@ -380,7 +380,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
             >
-              your AI Agent
+              you can tell
             </motion.span>
             <motion.span
               className="block"
@@ -388,7 +388,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
             >
-              on your Mac.
+              everything.
             </motion.span>
           </h1>
 
@@ -398,13 +398,14 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg"
           >
-            Tesseract is a native Mac app with local LLM inference and a
-            local agent called the Companion that lives the day beside
-            you: it types what you say in 99 languages, answers out loud
-            in 123 milliseconds, and, with your permission, watches your
-            screen. Each night it decides what the day meant and keeps it
-            as beliefs you can read, trace, and veto. Nothing it learns
-            ever leaves the machine.
+            Tesseract is a companion that lives on your Mac. Not a
+            chatbot you visit, but a presence that spends the day with
+            you: it notices your notifications, knows which app
+            you&apos;re in, reads your calendar, and looks at whatever
+            you show it. Each night it thinks over what the day meant
+            and keeps what mattered, as beliefs you can read, question,
+            and veto. And because all of it runs on your Mac&apos;s own
+            chip, nothing you tell it ever leaves the machine.
           </motion.p>
 
           <motion.div

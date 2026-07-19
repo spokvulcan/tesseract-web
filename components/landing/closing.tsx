@@ -25,10 +25,12 @@ function PrivacySection() {
             <span className={`${serif.className} italic text-[var(--ink)]`}>
               Proof.{" "}
             </span>
-            Every model lives on your disk. Every thought is computed on your
-            chip. There is nowhere to upload to, because there is no server
-            to trust. A companion to your whole life is only possible if your
-            whole life stays yours.{" "}
+            The mind itself is a file on your disk. Every thought is
+            computed on your own chip. None of your words, screenshots, or
+            memories is ever uploaded, because there is nothing to upload
+            to: no account, no server of ours, no analytics. An AI you can
+            tell everything is only possible when your everything stays
+            yours.{" "}
             <span className="text-[var(--blue)]">∎</span>
           </p>
         </In>
@@ -67,7 +69,7 @@ function MachineSection() {
             {[
               ["system", "macOS 26 or later"],
               ["chip", "Apple silicon, M1 or later"],
-              ["memory", "48 GB or more recommended for the Companion"],
+              ["memory", "16 GB for dictation, voice, and chat · 48 GB or more for the Companion"],
               ["network", "needed once, to download the models"],
             ].map(([k, v]) => (
               <div
@@ -87,9 +89,9 @@ function MachineSection() {
           </p>
           <ol className="mt-5">
             {[
-              "Download the signed, notarized app.",
-              "The first launch downloads the models. That is the only time it needs the internet.",
-              "Grant microphone and accessibility access.",
+              "Download the app.",
+              "On first launch it downloads its models. That is the only time it needs the internet.",
+              "Grant the permissions it asks for: the microphone so it can hear you, accessibility so it can type into your apps.",
               "From then on, everything happens on your Mac.",
             ].map((s, i) => (
               <li
@@ -128,8 +130,9 @@ function DownloadSection() {
       </In>
       <In delay={0.14}>
         <p className="mx-auto mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-          Free. Signed and notarized. The Companion waits behind one
-          experimental switch in Settings.
+          Everything above runs on your Mac, today. The Companion waits
+          behind one switch in Settings. It is young, evolving, and worth
+          meeting.
         </p>
       </In>
       <In delay={0.2}>

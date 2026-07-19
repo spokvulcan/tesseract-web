@@ -19,17 +19,20 @@ function Abstract() {
             abstract
           </p>
           <p className="max-w-2xl text-lg font-light leading-relaxed text-[var(--body)] lg:col-span-7">
-            Tesseract is a mind that lives entirely on your Mac: ears that
-            hear ninety-nine languages, a voice that answers in 123
-            milliseconds, and a memory that keeps what matters. On top of it
-            we are building the Companion, which watches the day with you,
-            keeps what is worth keeping, and lets the rest go. Its goal is
-            your success. Its promises are on the record. Nothing it learns
-            ever leaves the machine.
+            Tesseract is two things in one Mac app. The first you can use
+            today: dictation that types what you say into any app, a
+            natural voice that answers out loud, and a chat assistant like
+            the ones you know, except everything runs on your own Mac, so
+            nothing you say or show it is ever sent anywhere. The second is
+            the Companion: a new kind of AI that does not wait to be asked.
+            It lives the day beside you, notices what happens, remembers
+            what matters, and speaks up only when something is worth your
+            attention. It is young and evolving fast, and it is the reason
+            Tesseract exists.
           </p>
           <p className="font-mono text-[11px] leading-relaxed text-[var(--gray)] lg:col-span-3">
             keywords: private by design · living memory · a companion, not a
-            tool
+            chatbot
           </p>
         </div>
       </In>

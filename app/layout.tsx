@@ -27,9 +27,9 @@ const mono = Space_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thetesseract.app"),
-  title: "Tesseract: a mind that happens to live in your Mac",
+  title: "Tesseract: the first AI you can tell everything",
   description:
-    "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that watches the day with you, filters the noise, and keeps only the signal.",
+    "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
   icons: {
     // the mark: svg with a png fallback for browsers without svg favicons
     icon: [
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tesseract: a mind that happens to live in your Mac",
+    title: "Tesseract: the first AI you can tell everything",
     description:
-      "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that filters the noise of your day down to the signal.",
+      "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
     siteName: "Tesseract",
     images: [
       {
@@ -57,9 +57,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Tesseract: a mind that happens to live in your Mac",
+    title: "Tesseract: the first AI you can tell everything",
     description:
-      "A personal intelligence that runs entirely on your Mac, and the Companion: an experimental mind that filters the noise of your day down to the signal.",
+      "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
     images: ["/icon-512x512.png"],
   },
 };

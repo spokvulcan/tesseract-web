@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = {
-  title: "Support — Tesseract",
+  title: "Support · Tesseract",
   description:
     "Get help with Tesseract. Find answers to common questions or contact support.",
 };
