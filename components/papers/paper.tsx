@@ -152,6 +152,26 @@ export function Theorem({
   );
 }
 
+/** The "in practice" facts: a full-width two-column grid, one bordered
+    cell per fact, so the section fills the row instead of hugging the
+    left edge. */
+export function Practice({ items }: { items: string[][] }) {
+  return (
+    <div className="mt-12 grid gap-x-16 gap-y-10 sm:grid-cols-2">
+      {items.map(([k, v], i) => (
+        <In key={k} delay={0.04 * i}>
+          <div className={`border-t ${HAIR} pt-4`}>
+            <p className="font-mono text-[12px] text-[var(--gray)]">{k}</p>
+            <p className="mt-2 max-w-md text-[15px] font-light leading-relaxed text-[var(--ink)]">
+              {v}
+            </p>
+          </div>
+        </In>
+      ))}
+    </div>
+  );
+}
+
 /** The paper's closing: one plain requirement line, the download, and
     a pointer to the next paper in the series. */
 export function PaperClose({

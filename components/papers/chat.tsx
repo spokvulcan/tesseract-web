@@ -1,9 +1,9 @@
 "use client";
 
 import { serif } from "@/components/landing/fonts";
-import { In, SectionMark, FigCaption, HAIR } from "@/components/landing/shared";
+import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
-import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Theorem } from "./paper";
+import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
 import { RecallFigure } from "./figures";
 
 const PAPER = PAPERS[3];
@@ -83,19 +83,7 @@ export function ChatPaper() {
 
       <section className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-28">
         <SectionMark no="§ 03" title="in practice" />
-        <In delay={0.05}>
-          <dl className="mt-10 max-w-2xl">
-            {PRACTICE.map(([k, v]) => (
-              <div
-                key={k}
-                className={`flex flex-col gap-1 border-b ${HAIR} py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6`}
-              >
-                <dt className="font-mono text-[12px] text-[var(--gray)]">{k}</dt>
-                <dd className="text-[15px] font-light sm:text-right">{v}</dd>
-              </div>
-            ))}
-          </dl>
-        </In>
+        <Practice items={PRACTICE} />
       </section>
 
       <PaperClose

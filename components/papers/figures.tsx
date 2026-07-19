@@ -220,10 +220,10 @@ export function RecallFigure() {
       {/* the remark */}
       <motion.circle cx={160} cy={170} r={4.5} fill={BLUE} {...fade(0.7)} />
       <motion.g {...fade(0.8)}>
-        <text x={160} y={135} textAnchor="middle" fill={INK} fontSize="13" className={`${serif.className} italic`}>
+        <text x={160} y={122} textAnchor="middle" fill={INK} fontSize="13" className={`${serif.className} italic`}>
           &ldquo;my rent is due on the 3rd&rdquo;
         </text>
-        <text x={160} y={152} textAnchor="middle" fill={FAINT} fontSize="8.5" fontFamily={MONO}>
+        <text x={160} y={139} textAnchor="middle" fill={FAINT} fontSize="8.5" fontFamily={MONO}>
           said once, in march
         </text>
       </motion.g>
