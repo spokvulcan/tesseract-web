@@ -7,11 +7,11 @@ import { DOWNLOAD_URL, GITHUB_URL, In, SectionMark } from "./shared";
 function PrivacySection() {
   return (
     <section id="privacy" className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-32">
-      <SectionMark no="§ 06" title="privacy" />
+      <SectionMark no="§ 05" title="privacy" />
 
       <div className="mx-auto max-w-3xl py-20 text-center lg:py-28">
         <In>
-          <p className="font-mono text-[11px] text-[var(--blue)]">theorem 6.1</p>
+          <p className="font-mono text-[11px] text-[var(--blue)]">theorem 5.1</p>
         </In>
         <In delay={0.08}>
           <h2 className="mt-6 text-[clamp(2.6rem,5.2vw,4.8rem)] font-light leading-[1.02] tracking-[-0.03em]">
@@ -58,7 +58,7 @@ function PrivacySection() {
 function MachineSection() {
   return (
     <section className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-32">
-      <SectionMark no="§ 07" title="what you need" />
+      <SectionMark no="§ 06" title="what you need" />
 
       <div className="mt-14 grid gap-16 lg:grid-cols-2">
         <In>
@@ -118,7 +118,7 @@ function DownloadSection() {
     <section id="download" className="px-6 py-28 text-center sm:px-12 lg:py-40">
       <In>
         <p className="font-mono text-[11px] uppercase tracking-[0.3em]">
-          <span className="text-[var(--blue)]">§ 08</span>
+          <span className="text-[var(--blue)]">§ 07</span>
           <span className="ml-4 text-[var(--gray)]">see for yourself</span>
         </p>
       </In>

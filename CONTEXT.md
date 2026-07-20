@@ -20,8 +20,30 @@ Known internally as Jarvis; the site says "the Companion."
 
 ## The Instrument
 
-The shipped foundation the Companion stands on: dictation, voice, the
-agent/chat, and the OpenAI-compatible local server.
+The shipped foundation the Companion stands on: dictation, voice, chat,
+Appshot, and the OpenAI-compatible local server. Each piece has a paper
+of its own (see The Papers).
+
+## The Papers
+
+The site's structure. The landing page is the survey; each capability
+has its own page written as a short working paper, numbered in reading
+order: 01 the companion, 02 dictation, 03 voice, 04 chat, 05 appshot,
+06 the server. Theorem numbers carry the paper number (theorem 4.2
+lives in paper no. 04). Every paper ends by pointing at the next.
+
+## Chat
+
+The public name for the assistant. Internally it is the Agent; the site
+says "chat" and frames it as the familiar part, "like the AI apps you
+already know". Never "the agent" in public copy.
+
+## Appshot
+
+The public name (matching the app's own UI) for the double-tap-⌘
+capture of the frontmost window into the chat. Always "Appshot", one
+word, capital A. Never "screenshot": an Appshot is the frontmost
+window specifically, captured as an image and nothing more.
 
 ## Status marks
 
