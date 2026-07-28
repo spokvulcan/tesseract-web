@@ -11,7 +11,7 @@ export const GITHUB_URL = "https://github.com/spokvulcan/tesseract";
 export const X_URL = "https://x.com/spok_vulkan";
 
 /* The paper's palette. These resolve through CSS variables, so every
-   figure and canvas follows the active theme (see custom.css). */
+   figure follows the active theme (see custom.css). */
 export const INK = "var(--ink)";
 export const BLUE = "var(--blue)";
 export const GRAY = "var(--gray)";
@@ -77,22 +77,35 @@ export function In({
   );
 }
 
-/** Draw/fade motion props for figure strokes, honoring reduced motion. */
-export function useFig() {
+/** Draw/fade motion props for figure strokes, honoring reduced motion.
+    Figures reveal on scroll by default; pass `{ onMount: true }` for one
+    that is already on screen when the page loads. Under reduced motion
+    both the duration and the delay collapse, so nothing sits invisible
+    waiting for a stagger that will never animate. */
+export function useFig(opts?: { onMount?: boolean }) {
   const reduced = usePrefersReducedMotion();
+  const to = (target: { opacity: number; pathLength?: number }) =>
+    opts?.onMount
+      ? { animate: target }
+      : { whileInView: target, viewport: { once: true, margin: "-15% 0px" } };
   return {
     reduced,
-    draw: (delay: number) => ({
+    draw: (delay: number, duration = 1) => ({
       initial: { pathLength: reduced ? 1 : 0, opacity: reduced ? 1 : 0 },
-      whileInView: { pathLength: 1, opacity: 1 },
-      viewport: { once: true, margin: "-15% 0px" },
-      transition: { duration: reduced ? 0 : 1, delay, ease: EASE },
+      ...to({ pathLength: 1, opacity: 1 }),
+      transition: {
+        duration: reduced ? 0 : duration,
+        delay: reduced ? 0 : delay,
+        ease: EASE,
+      },
     }),
-    fade: (delay: number) => ({
-      initial: { opacity: 0 },
-      whileInView: { opacity: 1 },
-      viewport: { once: true, margin: "-15% 0px" },
-      transition: { duration: reduced ? 0 : 0.6, delay },
+    fade: (delay: number, duration = 0.6) => ({
+      initial: { opacity: reduced ? 1 : 0 },
+      ...to({ opacity: 1 }),
+      transition: {
+        duration: reduced ? 0 : duration,
+        delay: reduced ? 0 : delay,
+      },
     }),
   };
 }

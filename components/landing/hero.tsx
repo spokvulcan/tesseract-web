@@ -3,16 +3,8 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { useTheme } from "next-themes";
 import { serif } from "./fonts";
-import { DOWNLOAD_URL, EASE, usePrefersReducedMotion } from "./shared";
-
-/* Canvas pixels can't read CSS variables, so the drawing colors are
-   mirrored here as RGB triplets, one set per theme. */
-const CANVAS_COLORS = {
-  light: { ink: [21, 21, 15], blue: [43, 79, 216] },
-  dark: { ink: [242, 241, 235], blue: [139, 158, 255] },
-};
+import { BLUE, DOWNLOAD_URL, EASE, INK, useFig, usePrefersReducedMotion } from "./shared";
 
 /* A tesseract is two cubes: the w=+1 shell projects larger, the w=-1
    shell nests inside it. The figure gives that structure a meaning —
@@ -48,6 +40,68 @@ for (let i = 0; i < 16; i++) {
   }
 }
 
+/* Vertex dot size. Read by the circles and, a hundred lines away, by the
+   pill that has to clear one. */
+const dotRadius = (i: number) => (IS_OUTER.has(i) ? 5 : 3.5);
+
+/* Elements park off-panel until the first frame places them, so nothing
+   flashes in the top-left corner between commit and the first rAF. */
+const PARKED = -100;
+
+/* The three stroke groups, in paint order: the struts between the shells
+   first, then the instrument, then the core. Each is drawn as a single
+   path, so a frame rewrites three `d` attributes rather than four
+   coordinates on each of 32 lines. */
+const STROKES = [
+  {
+    label: "struts",
+    edges: EDGES.filter(([i, j]) => IS_OUTER.has(i) !== IS_OUTER.has(j)),
+    stroke: INK,
+    opacity: 0.14,
+    delay: 0.75,
+    duration: 1,
+  },
+  {
+    label: "instrument",
+    edges: EDGES.filter(([i, j]) => IS_OUTER.has(i) && IS_OUTER.has(j)),
+    stroke: INK,
+    opacity: 0.9,
+    delay: 0.2,
+    duration: 1.3,
+  },
+  {
+    label: "companion",
+    edges: EDGES.filter(([i, j]) => !IS_OUTER.has(i) && !IS_OUTER.has(j)),
+    stroke: BLUE,
+    opacity: 0.55,
+    delay: 0.6,
+    duration: 1.2,
+  },
+];
+
+/* Each shell and the callout that names it. Everything that pairs a
+   callout with a cube (the box, its leader line, its attach point) reads
+   from this one table, so the pairing is never a matter of two lists
+   happening to be in the same order. */
+const SHELLS = [
+  {
+    idxs: OUTER,
+    title: "Tesseract",
+    gloss: "the instrument that sees the day",
+    tone: "text-[var(--ink)]",
+    place: "top-[12%]",
+    delay: 1.4,
+  },
+  {
+    idxs: INNER,
+    title: "the Companion",
+    gloss: "the mind that remembers it",
+    tone: "text-[var(--blue)]",
+    place: "bottom-[14%]",
+    delay: 1.55,
+  },
+];
+
 type Planes = { xy: number; zw: number; xz: number; yw: number };
 
 function rotate4D(v: number[], a: Planes) {
@@ -72,14 +126,64 @@ function rotate4D(v: number[], a: Planes) {
   return [x, y, z, w];
 }
 
-function HypercubeCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+/* 4D to 3D to the panel. Returns [x, y, depth] per vertex in CSS pixels;
+   depth decides which vocabulary pills are readable. */
+function project(a: Planes, w: number, h: number) {
+  const scale = Math.min(w, h) * 1.5;
+  return VERTICES.map((v) => {
+    const [x, y, z, ww] = rotate4D(v, a);
+    const wp = 1 / (3 - ww);
+    const x3 = x * wp;
+    const y3 = y * wp;
+    const z3 = z * wp;
+    const zp = 1 / (3 - z3);
+    return [w / 2 + x3 * zp * scale, h / 2 + y3 * zp * scale, z3];
+  });
+}
+
+/* One subpath per edge. */
+function pathFor(edges: [number, number][], p: number[][]) {
+  let d = "";
+  for (const [i, j] of edges) {
+    d += `M${p[i][0].toFixed(1)} ${p[i][1].toFixed(1)}`;
+    d += `L${p[j][0].toFixed(1)} ${p[j][1].toFixed(1)}`;
+  }
+  return d;
+}
+
+function nearest(idxs: number[], p: number[][], ax: number, ay: number) {
+  return idxs.reduce((a, b) =>
+    Math.hypot(p[a][0] - ax, p[a][1] - ay) < Math.hypot(p[b][0] - ax, p[b][1] - ay)
+      ? a
+      : b
+  );
+}
+
+/** Collects a mapped list of elements into a ref array. */
+const at =
+  <T,>(refs: { current: (T | null)[] }, i: number) =>
+  (el: T | null) => {
+    refs.current[i] = el;
+  };
+
+function HypercubeFigure() {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const pathRefs = useRef<(SVGPathElement | null)[]>([]);
+  const dotRefs = useRef<(SVGCircleElement | null)[]>([]);
+  const leaderRefs = useRef<(SVGLineElement | null)[]>([]);
+  const anchorRefs = useRef<(SVGCircleElement | null)[]>([]);
   const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const widthsRef = useRef<(number | undefined)[]>([]);
   const calloutRefs = useRef<(HTMLDivElement | null)[]>([]);
-  /* Leader attach points in canvas coordinates, measured from the actual
-     callout boxes: right edge, exact vertical center, same gap for both. */
+  /* Panel size and the leader attach points, both measured off the DOM
+     and refreshed only when something actually resizes. The SVG carries
+     no viewBox, so one user unit is one CSS pixel and the measured
+     numbers drop straight in. */
+  const sizeRef = useRef({ w: 0, h: 0 });
   const anchorsRef = useRef<number[][]>([]);
+  /* Bumped by every measure, so the frame loop can tell "nothing moved"
+     from "the callouts moved but the cube did not". */
+  const measuredRef = useRef(0);
   /* Rotation stays in the xy/xz planes: those never touch a vertex's w,
      so the two cubes can never trade places and the inner core always
      stays the small one. zw/yw remain zero. */
@@ -88,36 +192,43 @@ function HypercubeCanvas() {
   const dragRef = useRef<{ x: number; y: number } | null>(null);
   const reduced = usePrefersReducedMotion();
   const reducedRef = useRef(reduced);
-  const { resolvedTheme } = useTheme();
-  const colorsRef = useRef(CANVAS_COLORS.light);
+  /* The figure builds itself once on load: struts, shell, core, then the
+     vertices and their labels. framer-motion normalizes pathLength (it
+     writes pathLength="1" onto the element), so the draw stays correct
+     even though the loop rewrites every `d` on the next frame. */
+  const { draw, fade } = useFig({ onMount: true });
 
   useEffect(() => {
     reducedRef.current = reduced;
   }, [reduced]);
 
+  /* Measure the panel and the callout boxes, so each leader attaches at
+     its box's right edge, vertically centered, with a consistent gap.
+     The attach end of each leader never moves between measures, so it is
+     written here rather than in the frame loop. */
   useEffect(() => {
-    colorsRef.current =
-      resolvedTheme === "dark" ? CANVAS_COLORS.dark : CANVAS_COLORS.light;
-  }, [resolvedTheme]);
-
-  /* Measure the callout boxes so each leader attaches at the box's right
-     edge, vertically centered, with a consistent gap. Re-measures on any
-     layout change (resize, font swap). */
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const svg = svgRef.current;
+    if (!svg) return;
     const GAP = 10;
     const measure = () => {
-      const crect = canvas.getBoundingClientRect();
-      anchorsRef.current = calloutRefs.current.map((el) => {
+      const srect = svg.getBoundingClientRect();
+      sizeRef.current = { w: srect.width, h: srect.height };
+      anchorsRef.current = calloutRefs.current.map((el, s) => {
         if (!el) return [0, 0];
         const r = el.getBoundingClientRect();
-        return [r.right - crect.left + GAP, r.top - crect.top + r.height / 2];
+        const ax = r.right - srect.left + GAP;
+        const ay = r.top - srect.top + r.height / 2;
+        leaderRefs.current[s]?.setAttribute("x1", ax.toFixed(1));
+        leaderRefs.current[s]?.setAttribute("y1", ay.toFixed(1));
+        anchorRefs.current[s]?.setAttribute("cx", ax.toFixed(1));
+        anchorRefs.current[s]?.setAttribute("cy", ay.toFixed(1));
+        return [ax, ay];
       });
+      measuredRef.current++;
     };
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(canvas);
+    ro.observe(svg);
     calloutRefs.current.forEach((el) => {
       if (el) ro.observe(el);
     });
@@ -125,16 +236,16 @@ function HypercubeCanvas() {
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const svg = svgRef.current;
+    if (!svg) return;
 
     let raf = 0;
     let running = true;
     let lastT = performance.now();
+    /* NaN never equals itself, so the first frame always draws. */
+    let last = { xy: NaN, xz: NaN, w: NaN, h: NaN, measured: NaN };
 
-    const draw = (t: number) => {
+    const frame = (t: number) => {
       const dt = Math.min((t - lastT) / 1000, 0.05);
       lastT = t;
 
@@ -147,95 +258,59 @@ function HypercubeCanvas() {
         anglesRef.current.xz += v.xz * dt;
       }
 
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const { w, h } = sizeRef.current;
+      if (!w || !h) return;
+
+      /* Under reduced motion the angles hold still, so most frames would
+         rewrite the same 47 attributes. Skip them. */
+      const a = anglesRef.current;
+      const now = { xy: a.xy, xz: a.xz, w, h, measured: measuredRef.current };
+      if (
+        now.xy === last.xy &&
+        now.xz === last.xz &&
+        now.w === last.w &&
+        now.h === last.h &&
+        now.measured === last.measured
+      ) {
+        return;
       }
-      ctx.clearRect(0, 0, w, h);
+      last = now;
 
-      const { ink, blue } = colorsRef.current;
-      const rgba = (c: number[], a: number) =>
-        `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${a})`;
+      const p = project(a, w, h);
 
-      const scale = Math.min(w, h) * 1.5;
-      const projected = VERTICES.map((v) => {
-        const [x, y, z, ww] = rotate4D(v, anglesRef.current);
-        const wp = 1 / (3 - ww);
-        const x3 = x * wp;
-        const y3 = y * wp;
-        const z3 = z * wp;
-        const zp = 1 / (3 - z3);
-        return [w / 2 + x3 * zp * scale, h / 2 + y3 * zp * scale, ww, z3];
+      // edges
+      STROKES.forEach((s, i) => {
+        pathRefs.current[i]?.setAttribute("d", pathFor(s.edges, p));
       });
 
-      // edges: outer shell in ink, inner core in blue, connectors faint
-      ctx.lineWidth = 1.6;
-      ctx.lineCap = "round";
-      for (const [i, j] of EDGES) {
-        ctx.strokeStyle =
-          VERTICES[i][3] !== VERTICES[j][3]
-            ? rgba(ink, 0.14)
-            : IS_OUTER.has(i)
-              ? rgba(ink, 0.9)
-              : rgba(blue, 0.55);
-        ctx.beginPath();
-        ctx.moveTo(projected[i][0], projected[i][1]);
-        ctx.lineTo(projected[j][0], projected[j][1]);
-        ctx.stroke();
-      }
-
       // vertices
-      for (let i = 0; i < projected.length; i++) {
-        const outer = IS_OUTER.has(i);
-        ctx.fillStyle = outer ? rgba(ink, 0.95) : rgba(blue, 0.9);
-        ctx.beginPath();
-        ctx.arc(projected[i][0], projected[i][1], outer ? 5 : 3.5, 0, Math.PI * 2);
-        ctx.fill();
+      for (let i = 0; i < p.length; i++) {
+        const dot = dotRefs.current[i];
+        if (!dot) continue;
+        dot.setAttribute("cx", p[i][0].toFixed(1));
+        dot.setAttribute("cy", p[i][1].toFixed(1));
       }
 
-      // leader lines: from each callout's measured attach point to the
-      // nearest vertex of its shell
-      const nearest = (idxs: number[], ax: number, ay: number) =>
-        idxs.reduce((a, b) =>
-          Math.hypot(projected[a][0] - ax, projected[a][1] - ay) <
-          Math.hypot(projected[b][0] - ax, projected[b][1] - ay)
-            ? a
-            : b
-        );
-      const shells = [OUTER, INNER];
-      ctx.lineWidth = 1;
-      for (let s = 0; s < shells.length; s++) {
-        const anchor = anchorsRef.current[s];
-        if (!anchor) continue;
-        const [ax, ay] = anchor;
-        const vi = nearest(shells[s], ax, ay);
-        ctx.strokeStyle = rgba(ink, 0.4);
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(ax, ay);
-        ctx.lineTo(projected[vi][0], projected[vi][1]);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = rgba(ink, 0.6);
-        ctx.beginPath();
-        ctx.arc(ax, ay, 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      // leader lines: the attach end is already placed, so only the end
+      // that chases the nearest vertex of its shell moves here
+      SHELLS.forEach((s, i) => {
+        const anchor = anchorsRef.current[i];
+        const line = leaderRefs.current[i];
+        if (!anchor || !line) return;
+        const vi = nearest(s.idxs, p, anchor[0], anchor[1]);
+        line.setAttribute("x2", p[vi][0].toFixed(1));
+        line.setAttribute("y2", p[vi][1].toFixed(1));
+      });
 
-      // the vocabulary pills: visibility follows 3D depth (projected[i][3]),
-      // not the frozen w — front of the shape fades in, back fades out
+      // the vocabulary pills: visibility follows 3D depth (p[i][2]), not
+      // the frozen w — front of the shape fades in, back fades out
       SHELL_WORDS.forEach((g, k) => {
         const el = labelRefs.current[k];
         if (!el) return;
-        const pvx = projected[g.vertex][0];
-        const pvy = projected[g.vertex][1];
+        const pvx = p[g.vertex][0];
+        const pvy = p[g.vertex][1];
         const zMax = g.shell === "outer" ? 0.7 : 0.35;
-        const norm = projected[g.vertex][3] / zMax;
+        const norm = p[g.vertex][2] / zMax;
         let alpha = Math.max(0, Math.min(1, (norm - 0.15) / 0.35));
         // never label a vertex that has drifted off the panel
         if (pvx < 0 || pvx > w) alpha = 0;
@@ -245,24 +320,41 @@ function HypercubeCanvas() {
         // keep pills clear of the fixed callouts on the right
         if (x > w * 0.72) alpha *= Math.max(0, 1 - (x - w * 0.72) / (w * 0.14));
         const below = pvy < h - 90;
-        const r = g.shell === "outer" ? 5 : 3.5;
-        const y = below ? pvy + r + 12 : pvy - r - 38;
+        const y = below
+          ? pvy + dotRadius(g.vertex) + 12
+          : pvy - dotRadius(g.vertex) - 38;
         el.style.transform = `translate(-50%, 0) translate(${x}px, ${y}px)`;
         el.style.opacity = String(alpha);
       });
     };
 
     const loop = (t: number) => {
+      raf = 0;
       if (!running) return;
-      draw(t);
+      frame(t);
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    /* rAF already pauses on a hidden tab, but not on a hero that has been
+       scrolled past, and the rest of the page is long. */
+    const start = () => {
+      if (raf || !running) return;
+      lastT = performance.now();
+      raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      if (!raf) return;
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    const io = new IntersectionObserver(([e]) =>
+      e.isIntersecting ? start() : stop()
+    );
+    io.observe(svg);
 
     const onDown = (e: PointerEvent) => {
       dragRef.current = { x: e.clientX, y: e.clientY };
-      canvas.setPointerCapture(e.pointerId);
-      canvas.style.cursor = "grabbing";
+      svg.setPointerCapture(e.pointerId);
+      svg.style.cursor = "grabbing";
     };
     const onMove = (e: PointerEvent) => {
       if (!dragRef.current) return;
@@ -276,64 +368,123 @@ function HypercubeCanvas() {
     };
     const onUp = () => {
       dragRef.current = null;
-      canvas.style.cursor = "grab";
+      svg.style.cursor = "grab";
     };
 
-    canvas.addEventListener("pointerdown", onDown);
-    canvas.addEventListener("pointermove", onMove);
-    canvas.addEventListener("pointerup", onUp);
-    canvas.addEventListener("pointercancel", onUp);
+    svg.addEventListener("pointerdown", onDown);
+    svg.addEventListener("pointermove", onMove);
+    svg.addEventListener("pointerup", onUp);
+    svg.addEventListener("pointercancel", onUp);
 
     return () => {
       running = false;
-      cancelAnimationFrame(raf);
-      canvas.removeEventListener("pointerdown", onDown);
-      canvas.removeEventListener("pointermove", onMove);
-      canvas.removeEventListener("pointerup", onUp);
-      canvas.removeEventListener("pointercancel", onUp);
+      stop();
+      io.disconnect();
+      svg.removeEventListener("pointerdown", onDown);
+      svg.removeEventListener("pointermove", onMove);
+      svg.removeEventListener("pointerup", onUp);
+      svg.removeEventListener("pointercancel", onUp);
     };
   }, []);
 
   return (
     <>
-      <canvas
-        ref={canvasRef}
+      <svg
+        ref={svgRef}
         className="absolute inset-0 h-full w-full touch-none"
         style={{ cursor: "grab" }}
         aria-label="Two nested cubes with their vocabulary labeled: the instrument outside, the mind inside"
         role="img"
-      />
-      <div
-        ref={(el) => {
-          calloutRefs.current[0] = el;
-        }}
-        className="pointer-events-none absolute right-[16%] top-[12%] border border-[var(--ink)]/10 bg-[var(--paper)]/85 px-3 py-2 text-right backdrop-blur-sm"
       >
-        <p className="font-mono text-[13px] font-medium text-[var(--ink)]">Tesseract</p>
-        <p className="mt-0.5 font-mono text-[11px] text-[var(--gray)]">
-          the instrument that sees the day
-        </p>
-      </div>
-      <div
-        ref={(el) => {
-          calloutRefs.current[1] = el;
-        }}
-        className="pointer-events-none absolute right-[16%] bottom-[14%] border border-[var(--ink)]/10 bg-[var(--paper)]/85 px-3 py-2 text-right backdrop-blur-sm"
-      >
-        <p className="font-mono text-[13px] font-medium text-[var(--blue)]">the Companion</p>
-        <p className="mt-0.5 font-mono text-[11px] text-[var(--gray)]">
-          the mind that remembers it
-        </p>
-      </div>
+        {/* strokes only paint where they are drawn, so an unpainted rect
+            gives the drag gesture the whole panel to work with */}
+        <rect width="100%" height="100%" fill="none" pointerEvents="all" />
+
+        {STROKES.map((s, i) => (
+          <motion.path
+            key={s.label}
+            ref={at(pathRefs, i)}
+            fill="none"
+            stroke={s.stroke}
+            strokeOpacity={s.opacity}
+            strokeWidth={1.6}
+            strokeLinecap="round"
+            {...draw(s.delay, s.duration)}
+            /* the draw leaves a normalized dash on the path; once it is
+               done, drop it so the per-frame `d` rewrite strokes plainly */
+            onAnimationComplete={() => {
+              const el = pathRefs.current[i];
+              if (!el) return;
+              el.removeAttribute("pathLength");
+              el.removeAttribute("stroke-dasharray");
+              el.removeAttribute("stroke-dashoffset");
+            }}
+          />
+        ))}
+
+        <motion.g {...fade(1.2)}>
+          {VERTICES.map((_, i) => (
+            <circle
+              key={i}
+              ref={at(dotRefs, i)}
+              cx={PARKED}
+              cy={PARKED}
+              r={dotRadius(i)}
+              fill={IS_OUTER.has(i) ? INK : BLUE}
+              fillOpacity={IS_OUTER.has(i) ? 0.95 : 0.9}
+            />
+          ))}
+        </motion.g>
+
+        <motion.g {...fade(1.5)}>
+          {SHELLS.map((s, i) => (
+            <g key={s.title}>
+              <line
+                ref={at(leaderRefs, i)}
+                x1={PARKED}
+                y1={PARKED}
+                x2={PARKED}
+                y2={PARKED}
+                stroke={INK}
+                strokeOpacity={0.4}
+                strokeWidth={1}
+                strokeDasharray="3 3"
+              />
+              <circle
+                ref={at(anchorRefs, i)}
+                cx={PARKED}
+                cy={PARKED}
+                r={2}
+                fill={INK}
+                fillOpacity={0.6}
+              />
+            </g>
+          ))}
+        </motion.g>
+      </svg>
+
+      {SHELLS.map((s, i) => (
+        <motion.div
+          key={s.title}
+          ref={at(calloutRefs, i)}
+          {...fade(s.delay)}
+          className={`pointer-events-none absolute right-[16%] ${s.place} border border-[var(--ink)]/10 bg-[var(--paper)]/85 px-3 py-2 text-right backdrop-blur-sm`}
+        >
+          <p className={`font-mono text-[13px] font-medium ${s.tone}`}>{s.title}</p>
+          <p className="mt-0.5 font-mono text-[11px] text-[var(--gray)]">{s.gloss}</p>
+        </motion.div>
+      ))}
+
       {/* the vocabulary pills need room — below sm the shells and
           callouts carry the figure on their own */}
-      <div className="pointer-events-none absolute inset-0 hidden sm:block">
+      <motion.div
+        {...fade(1.7)}
+        className="pointer-events-none absolute inset-0 hidden sm:block"
+      >
         {SHELL_WORDS.map((g, k) => (
           <div
             key={g.word}
-            ref={(el) => {
-              labelRefs.current[k] = el;
-            }}
+            ref={at(labelRefs, k)}
             className="absolute left-0 top-0 whitespace-nowrap rounded-full border border-[var(--ink)]/15 bg-[var(--paper)]/90 px-2.5 py-1 font-mono text-[12px] opacity-0 backdrop-blur-sm"
           >
             <span
@@ -346,7 +497,7 @@ function HypercubeCanvas() {
             <span className="text-[var(--gray)]"> · {g.gloss}</span>
           </div>
         ))}
-      </div>
+      </motion.div>
     </>
   );
 }
@@ -357,7 +508,7 @@ export function Hero() {
       <div className="grid min-h-screen lg:grid-cols-2">
         {/* figure */}
         <div className="relative order-2 h-[52vh] border-t border-[var(--ink)]/10 lg:order-1 lg:h-auto lg:border-t-0 lg:border-r">
-          <HypercubeCanvas />
+          <HypercubeFigure />
           <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--ink)]/10 bg-[var(--paper)]/85 px-5 py-3 font-mono text-[11px] text-[var(--gray)] backdrop-blur-sm">
             fig. 01: a mind, projected
           </div>
