@@ -20,9 +20,12 @@ Known internally as Jarvis; the site says "the Companion."
 
 ## The Instrument
 
-The shipped foundation the Companion stands on: dictation, voice, chat,
-Appshot, and the OpenAI-compatible local server. Each piece has a paper
-of its own (see The Papers).
+The shipped foundation the Companion stands on: dictation, chat, Appshot,
+skills, voice, and the OpenAI-compatible local server. "The instrument" is
+the paper's own word for it and stays in the hero figure and here; on the
+landing the section is titled "what works today", sits directly under the
+hero, and shows each capability as a drawn scene, not a theorem. Each
+piece has a paper of its own (see The Papers).
 
 ## The Papers
 
@@ -45,14 +48,23 @@ capture of the frontmost window into the chat. Always "Appshot", one
 word, capital A. Never "screenshot": an Appshot is the frontmost
 window specifically, captured as an image and nothing more.
 
+## Skills
+
+The public name for the one-tap actions above the chat composer. A ✦
+button fans out into pills (proofread, reply, summarize, explain,
+translate); tapping one sends whatever is in the composer, text or an
+Appshot, through it. Users add their own as a folder holding a markdown
+file. Always "skills", lowercase, never "slash commands" or "prompts".
+
 ## Status marks
 
 Every capability claim on the site carries exactly one status:
 
 - **shipped** — usable today; present tense.
-- **evolving** — built and usable (possibly behind a switch), actively
-  being reworked; present tense + the mark. ("Refining" was considered
-  and rejected as the label; the §02 Companion chip reads "evolving".)
+- **alpha** — built and usable (possibly behind a switch), in active
+  development; present tense + the mark. The chip reads "alpha", and
+  prose says "in alpha, in active development". ("Refining" and
+  "evolving" were both considered and rejected as the label.)
 - **planned** — design locked, not yet built; future tense, appears only
   in vision / work-ahead sections, never in feature copy.
 

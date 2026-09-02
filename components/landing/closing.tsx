@@ -116,12 +116,7 @@ function MachineSection() {
 function DownloadSection() {
   return (
     <section id="download" className="px-6 py-28 text-center sm:px-12 lg:py-40">
-      <In>
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em]">
-          <span className="text-[var(--blue)]">§ 07</span>
-          <span className="ml-4 text-[var(--gray)]">see for yourself</span>
-        </p>
-      </In>
+      <SectionMark no="§ 07" title="see for yourself" centered />
       <In delay={0.08}>
         <h2 className="mt-8 text-[clamp(2.6rem,5.2vw,4.8rem)] font-light leading-[1.02] tracking-[-0.03em]">
           Download{" "}
@@ -131,8 +126,8 @@ function DownloadSection() {
       <In delay={0.14}>
         <p className="mx-auto mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
           Everything above runs on your Mac, today. The Companion waits
-          behind one switch in Settings. It is young, evolving, and worth
-          meeting.
+          behind one switch in Settings. It is in alpha, in active
+          development, and worth meeting.
         </p>
       </In>
       <In delay={0.2}>

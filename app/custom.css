@@ -45,3 +45,23 @@ html {
   background: color-mix(in srgb, var(--foreground) 12%, transparent);
   border-radius: 3px;
 }
+
+/* The dictation vignette's waveform. Bars scale on the compositor from
+   one CSS animation; the class is toggled once when the scene scrolls
+   into view. */
+.wave rect {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleY(0.15);
+}
+.wave-on rect {
+  animation: wave-bar 1.1s ease-in-out 3 both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+.wave-still rect {
+  transform: none;
+}
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.15); }
+  50% { transform: scaleY(1); }
+}

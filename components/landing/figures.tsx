@@ -20,7 +20,7 @@ function mulberry32(seed: number) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 02: the filter. Everything is sensed, almost nothing is      */
+/*  the filter. Everything is sensed, almost nothing is               */
 /*  forwarded. Noise decays across a threshold; one signal continues. */
 /* ------------------------------------------------------------------ */
 
@@ -97,7 +97,7 @@ export function NoiseFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 03: a day the Companion booked for itself. Three beats it    */
+/*  a day the Companion booked for itself. Three beats it             */
 /*  chose, one keystone it kept, and a live "now" marker.             */
 /* ------------------------------------------------------------------ */
 
@@ -231,7 +231,7 @@ export function DayFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 04: anatomy of one belief. Every claim carries its sources;  */
+/*  anatomy of one belief. Every claim carries its sources;           */
 /*  a changed mind supersedes, never erases.                          */
 /* ------------------------------------------------------------------ */
 
@@ -313,7 +313,7 @@ export function MemoryFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 05: how loud it is allowed to get. Five steps, quietest to   */
+/*  how loud it is allowed to get. Five steps, quietest to            */
 /*  loudest; the owner's veto above them all.                         */
 /* ------------------------------------------------------------------ */
 
@@ -395,7 +395,7 @@ export function LadderFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 06: the event fold. Every signal becomes exactly one event;  */
+/*  the event fold. Every signal becomes exactly one event;           */
 /*  every event lands in one standing conversation.                   */
 /* ------------------------------------------------------------------ */
 
@@ -489,7 +489,7 @@ export function FoldFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 07: the merge. Two streams converge; neither is replaced.    */
+/*  the merge. Two streams converge; neither is replaced.             */
 /* ------------------------------------------------------------------ */
 
 export function MergeFigure() {

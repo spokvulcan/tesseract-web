@@ -29,7 +29,7 @@ export function PhilosophySection() {
       <In delay={0.1} className="mt-16">
         <MergeFigure />
         <FigCaption>
-          fig. 03: the merge. Neither side is replaced. Both are amplified.
+          fig. 04: the merge. Neither side is replaced. Both are amplified.
         </FigCaption>
       </In>
 

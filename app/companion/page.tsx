@@ -4,7 +4,7 @@ import { CompanionPaper } from "@/components/papers/companion";
 export const metadata: Metadata = {
   title: "The Companion · Tesseract",
   description:
-    "An entity, not a feature. An AI that lives the day beside you, remembers what matters, and interrupts only when it is worth your time. Young, evolving, in the open.",
+    "An entity, not a feature. An AI that lives the day beside you, remembers what matters, and interrupts only when it is worth your time. In alpha, in active development, in the open.",
 };
 
 export default function Page() {
