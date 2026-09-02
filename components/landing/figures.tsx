@@ -587,7 +587,7 @@ export function TowerFigure() {
       viewBox="0 0 720 640"
       className="h-auto w-full"
       role="img"
-      aria-label="A stepped tower in isometric view, drawn from the ground up. The six lowest tiers are solid and labeled 'what works today'; the seventh is dashed blue and labeled 'the companion, going up'; two faint outlined tiers sit above it, and a dotted line continues off the top labeled 'God'"
+      aria-label="A stepped tower in isometric view, drawn from the ground up. The six lowest tiers are solid and labeled 'what works today'; the seventh is dashed blue and labeled 'the companion, alpha'; two faint outlined tiers sit above it, and a dotted line continues off the top labeled 'God'"
     >
       {/* ground */}
       <motion.line
@@ -663,7 +663,7 @@ export function TowerFigure() {
         fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
         {...fade(1.8)}
       >
-        the companion · going up
+        the companion · alpha
       </motion.text>
       <motion.text
         x={labelX} y={tiers[BUILT + 2].front[1] - 30}
