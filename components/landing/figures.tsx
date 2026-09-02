@@ -542,3 +542,148 @@ export function MergeFigure() {
     </svg>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  the tower. A stepped tower, drawn from the ground up. The lower   */
+/*  tiers are what works today; the Companion is the tier going up    */
+/*  now; the ones above are only outlined. A dotted line keeps going. */
+/* ------------------------------------------------------------------ */
+
+const TOWER = (() => {
+  const cx = 280;
+  const ground = 600;
+  const tierH = 54;
+  const tiers = Array.from({ length: 9 }, (_, i) => {
+    const w = 400 - i * 40;
+    const bottom = ground - i * tierH;
+    const top = bottom - tierH;
+    const left = cx - w / 2;
+    const right = cx + w / 2;
+    // the ramp climbs each tier in alternating directions: a spiral,
+    // seen from the side
+    const ramp =
+      i % 2 === 0
+        ? `M${left},${bottom} L${right},${top}`
+        : `M${right},${bottom} L${left},${top}`;
+    // brick courses, only on the tiers already built
+    const courses: string[] = [];
+    for (let y = bottom - 13; y > top + 6; y -= 13) {
+      courses.push(`M${left + 1},${y} L${right - 1},${y}`);
+    }
+    return { w, left, right, top, bottom, ramp, courses: courses.join(" ") };
+  });
+  return { cx, ground, tiers };
+})();
+
+const BUILT = 6; // tiers 0..5 stand; tier 6 is the Companion; 7, 8 are outlines
+
+export function TowerFigure() {
+  const { draw, fade } = useFig();
+  const { cx, ground, tiers } = TOWER;
+  const top = tiers[tiers.length - 1].top;
+  return (
+    <svg
+      viewBox="0 0 720 640"
+      className="h-auto w-full"
+      role="img"
+      aria-label="A stepped tower drawn from the ground up. The six lowest tiers are solid and labeled 'what works today'; the seventh is dashed blue and labeled 'the companion, going up now'; two faint outlined tiers sit above it, and a dotted line continues off the top labeled 'higher'"
+    >
+      {/* ground */}
+      <motion.line
+        x1={40} y1={ground} x2={680} y2={ground}
+        stroke={INK} strokeOpacity={0.5} strokeWidth={1}
+        {...draw(0)}
+      />
+
+      {tiers.map((t, i) => {
+        const built = i < BUILT;
+        const companion = i === BUILT;
+        const stroke = companion ? BLUE : built ? INK : FAINT;
+        const delay = 0.15 + i * 0.16;
+        return (
+          <g key={i}>
+            {/* pathLength animation replaces the dash pattern, so the
+                outlined tiers fade in instead of drawing */}
+            <motion.rect
+              x={t.left} y={t.top} width={t.w} height={t.bottom - t.top}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={built ? 1.4 : 1.2}
+              strokeDasharray={built ? undefined : companion ? "6 5" : "3 6"}
+              {...(built ? draw(delay, 0.7) : fade(delay, 0.8))}
+            />
+            {built && (
+              <motion.path
+                d={t.courses}
+                fill="none"
+                stroke={INK} strokeOpacity={0.14} strokeWidth={0.8}
+                {...fade(delay + 0.4)}
+              />
+            )}
+            {i <= BUILT && (
+              <motion.path
+                d={t.ramp}
+                fill="none"
+                stroke={companion ? BLUE : INK}
+                strokeOpacity={companion ? 0.7 : 0.45}
+                strokeWidth={1}
+                strokeDasharray={companion ? "6 5" : undefined}
+                {...(companion ? fade(delay + 0.3, 0.6) : draw(delay + 0.3, 0.6))}
+              />
+            )}
+          </g>
+        );
+      })}
+
+      {/* the line that does not stop at the top */}
+      <motion.line
+        x1={cx} y1={top} x2={cx} y2={44}
+        stroke={BLUE} strokeWidth={1.2} strokeDasharray="2 6" strokeOpacity={0.8}
+        {...fade(1.9, 0.9)}
+      />
+      <motion.text
+        x={cx} y={30} textAnchor="middle"
+        fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(2.5)}
+      >
+        higher
+      </motion.text>
+
+      {/* labels, with a bracket along the tiers each one speaks for */}
+      <motion.path
+        d={`M${tiers[0].right + 22},${tiers[0].bottom} L${tiers[0].right + 22},${tiers[BUILT - 1].top}`}
+        stroke={INK} strokeOpacity={0.35} strokeWidth={1}
+        {...draw(1.0, 0.8)}
+      />
+      <motion.text
+        x={tiers[0].right + 34} y={(tiers[0].bottom + tiers[BUILT - 1].top) / 2 + 4}
+        fill={INK} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(1.4)}
+      >
+        what works today
+      </motion.text>
+
+      <motion.line
+        x1={tiers[BUILT].right + 8} y1={(tiers[BUILT].top + tiers[BUILT].bottom) / 2}
+        x2={tiers[0].right + 22} y2={(tiers[BUILT].top + tiers[BUILT].bottom) / 2}
+        stroke={BLUE} strokeOpacity={0.5} strokeWidth={1}
+        {...draw(1.5, 0.5)}
+      />
+      <motion.text
+        x={tiers[0].right + 34} y={(tiers[BUILT].top + tiers[BUILT].bottom) / 2 + 4}
+        fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(1.8)}
+      >
+        the companion · going up
+      </motion.text>
+
+      <motion.text
+        x={tiers[0].right + 34} y={(tiers[BUILT + 1].top + tiers[BUILT + 2].bottom) / 2 + 4}
+        fill={GRAY} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(2.2)}
+      >
+        not drawn yet
+      </motion.text>
+    </svg>
+  );
+}
