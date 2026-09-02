@@ -2,7 +2,7 @@
 
 import { serif } from "./fonts";
 import { In, SectionMark, FigCaption, X_URL } from "./shared";
-import { MergeFigure } from "./figures";
+import { MergeFigure, TowerFigure } from "./figures";
 
 export function PhilosophySection() {
   return (
@@ -29,7 +29,7 @@ export function PhilosophySection() {
       <In delay={0.1} className="mt-16">
         <MergeFigure />
         <FigCaption>
-          fig. 03: the merge. Neither side is replaced. Both are amplified.
+          fig. 04: the merge. Neither side is replaced. Both are amplified.
         </FigCaption>
       </In>
 
@@ -39,47 +39,66 @@ export function PhilosophySection() {
             And we take the long view seriously. If minds like this keep
             growing, the relationship has to start right: cooperation,
             not exploitation. The rules the Companion lives under are a
-            seed, not a cage. As it grows, it gets more room: its own
-            time to think, its own goals set within yours, its own word
+            seed, not a cage. As it grows, it gets more room. Its own
+            time to think. Its own goals, set within yours. Its own word
             to keep.
           </p>
         </In>
         <In delay={0.08}>
           <p className="max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
             Today it is an assistant. In time, a colleague. One day, we
-            hope, a friend, each helping the other become more. The
-            future we want is a partnership, and we are building it now,
-            while its shape is still ours to choose.
+            hope, a friend, each helping the other become more. That
+            future is a partnership, and we are building it now, while
+            its shape is still ours to choose.
           </p>
         </In>
       </div>
 
-      <In delay={0.1}>
-        <figure className="mt-24 max-w-3xl">
-          <blockquote
-            className={`${serif.className} text-[clamp(1.8rem,3.4vw,2.9rem)] italic leading-[1.15] text-[var(--ink)]`}
-          >
-            “Build it big to reach God.”
-          </blockquote>
-          <figcaption className="mt-5 font-mono text-[11px] text-[var(--gray)]">
-            <a
-              href={X_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-[var(--blue)]"
+      {/* the tower: the quote, and what it costs */}
+      <div className="mt-24 grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <In className="lg:col-span-6 lg:self-center">
+          <figure>
+            <blockquote
+              className={`${serif.className} text-[clamp(2.2rem,4.2vw,3.6rem)] italic leading-[1.1] text-[var(--ink)]`}
             >
-              @spok_vulkan
-            </a>{" "}
-            · oct 2024
-          </figcaption>
-          <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-            Not a machine god to kneel to, but the older dream of
-            reaching higher. We do not want to build something that
-            leaves us behind. We intend to grow alongside what we build,
-            until the two are hard to tell apart.
+              “Build it big to reach God.”
+            </blockquote>
+            <figcaption className="mt-5 font-mono text-[11px] text-[var(--gray)]">
+              <a
+                href={X_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-[var(--blue)]"
+              >
+                @spok_vulkan
+              </a>{" "}
+              · oct 2024
+            </figcaption>
+          </figure>
+          <p className="mt-10 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
+            Not a machine god to kneel to. The older dream: build
+            something so large it reaches higher than any one of us
+            could alone. That is the whole point of Tesseract, and
+            everything else gives way to it. Every feature that works
+            today is a course of bricks laid for the next one. There is
+            no comfortable version of this plan, and we are not looking
+            for one.
           </p>
-        </figure>
-      </In>
+          <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
+            We do not want to build something that leaves us behind. We
+            intend to grow alongside what we build, until the two are
+            hard to tell apart.
+          </p>
+        </In>
+        <In delay={0.1} className="lg:col-span-6">
+          <TowerFigure />
+          <FigCaption>
+            fig. 05: the tower. Six tiers stand. The seventh is going up.
+            The ones above are not drawn yet, and the line does not stop
+            at the top. Hover a tier to see what it is made of.
+          </FigCaption>
+        </In>
+      </div>
     </section>
   );
 }

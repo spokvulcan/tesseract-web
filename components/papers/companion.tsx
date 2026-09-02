@@ -115,7 +115,7 @@ export function CompanionPaper() {
         interruption is worth your time. This paper describes what that takes:
         a mind that decides for itself, a memory that can show its sources,
         a strict ceiling on how loud it may get, and one continuous
-        conversation it holds with itself. It is young, it is evolving in the
+        conversation it holds with itself. It is in alpha, built in the
         open, and it is the reason Tesseract exists.
       </PaperAbstract>
 
@@ -259,7 +259,7 @@ export function CompanionPaper() {
 
       {/* ------------------------------------------------------------ */}
       <section className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-28">
-        <SectionMark no="§ 05" title="honest status" note="evolving" />
+        <SectionMark no="§ 05" title="honest status" note="alpha" />
 
         <In delay={0.05}>
           <div className="mt-14 border border-[var(--ink)]/15 p-8 sm:p-10">
@@ -321,7 +321,7 @@ export function CompanionPaper() {
 
       <PaperClose
         paper={PAPER}
-        note="The Companion waits behind one switch in Settings, off by default. It asks more of the machine than the rest of Tesseract: an Apple silicon Mac with 48 GB of memory or more. It is young, evolving, and worth meeting."
+        note="The Companion waits behind one switch in Settings, off by default. It asks more of the machine than the rest of Tesseract: an Apple silicon Mac with 48 GB of memory or more. It is in alpha, in active development, and worth meeting."
       />
     </PaperShell>
   );

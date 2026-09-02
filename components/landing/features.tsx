@@ -1,83 +1,172 @@
 "use client";
 
+import type { ComponentType } from "react";
 import { serif } from "./fonts";
-import { In, SectionMark } from "./shared";
-import { Theorem } from "@/components/papers/paper";
+import { Chips, HAIR, In, PaperLink, SectionMark } from "./shared";
+import { STATUS_NOTE, paperBySlug, type Paper } from "@/components/papers/list";
+import {
+  AppshotVignette,
+  ChatVignette,
+  DictationVignette,
+  ServerVignette,
+  SkillsVignette,
+  VoiceVignette,
+} from "./vignettes";
 
-/* The survey of the instrument: one theorem per shipped capability,
-   each one the abstract of a paper of its own. */
+/* What works today: one block per shipped capability, each one a
+   name, a plain headline, one sentence on how it works, and a drawn
+   scene of the feature in the act. Each block links to its paper. */
 
-const THEOREMS = [
+type Feature = {
+  /** The paper this block links to; name and route come from it. */
+  paper: Paper["slug"];
+  /** Shown instead of the paper's name when the block is a capability
+      inside a paper rather than a paper of its own. */
+  label?: string;
+  keys: string;
+  head: string;
+  body: string;
+  chips: string[];
+  Scene: ComponentType;
+  /** The developer strip: copy takes the wider column, scene the narrower. */
+  compact?: boolean;
+};
+
+const FEATURES: Feature[] = [
   {
-    n: "3.1",
-    name: "dictation",
-    stmt: "Any text field becomes a microphone.",
-    proof:
-      "Hold option and space, and speak. Your words are typed into whatever app is in front of you, in any of 99 languages, and a second, tiny model repairs punctuation and misheard words before they land. Nothing leaves the Mac.",
+    paper: "dictation",
+    keys: "⌥ space",
+    head: "Speak. It types into any app.",
+    body:
+      "Hold option and space, talk, let go. Your words land in whatever app is in front of you, in 99 languages, checked for punctuation and misheard words by a small local model. Nothing leaves the Mac.",
     chips: ["hold ⌥ space, speak, release", "99 languages", "works offline"],
-    href: "/dictation",
+    Scene: DictationVignette,
   },
   {
-    n: "3.2",
-    name: "voice",
-    stmt: "It reads to you, in a voice made on your Mac.",
-    proof:
-      "Select any text and press fn and space: it is read aloud in a natural voice generated on your machine, the words lighting up as they are spoken. You design the voice by describing it in words, and it stays steady through the longest read.",
-    chips: ["fn space on any selection", "a voice you design", "no cloud voice"],
-    href: "/voice",
+    paper: "chat",
+    keys: "⌃ space to talk",
+    head: "The chat you already know, on your own Mac.",
+    body:
+      "Like ChatGPT or Claude, except every word stays on your machine. Type or talk, attach images, let it browse the web, and it remembers what matters across conversations, with sources you can check.",
+    chips: ["text, voice, images", "remembers across chats", "runs on your Mac"],
+    Scene: ChatVignette,
   },
   {
-    n: "3.3",
-    name: "chat",
-    stmt: "It remembers what you told it in March.",
-    proof:
-      "Underneath everything is a full chat assistant, like the AI apps you already know, except it runs whole on your Mac. Speak or type, paste a screenshot, hand it a task. What matters from every conversation joins a living memory that can show its sources.",
-    chips: ["text, voice, images", "living memory", "everything stays local"],
-    href: "/chat",
+    paper: "appshot",
+    keys: "⌘ ⌘ together",
+    head: "Press both command keys. It sees your window.",
+    body:
+      "An Appshot grabs the window you are looking at and drops it into the chat, named after the app it came from. Ask about the error, the thread, the draft, without describing your screen to anyone.",
+    chips: ["both ⌘ keys, once", "the frontmost window, whole", "lands in the chat"],
+    Scene: AppshotVignette,
   },
   {
-    n: "3.4",
-    name: "appshot",
-    stmt: "Tap command twice, and it sees your window.",
-    proof:
-      "An Appshot captures the frontmost window in one gesture and stages it in the chat, named after the app it came from. Proofread the reply before it goes to the whole channel, translate the thread, decode the error, without describing your screen to anyone's cloud.",
-    chips: ["double-tap ⌘", "the frontmost window, whole", "staged in the chat"],
-    href: "/appshot",
+    paper: "chat",
+    label: "skills",
+    keys: "✦ above the chat",
+    head: "One tap for the things you do every day.",
+    body:
+      "A ✦ button above the chat fans out into skills: proofread, reply, summarize, explain, translate. Tap one and whatever is in the composer, text or an Appshot, goes through it. Add your own as a folder with a markdown file.",
+    chips: ["five built in", "works on an Appshot too", "write your own in markdown"],
+    Scene: SkillsVignette,
   },
   {
-    n: "3.5",
-    name: "the server",
-    stmt: "Your tools will think it is the cloud.",
-    proof:
-      "For developers: an OpenAI-compatible server on localhost, backed by a tiered RAM and SSD radix prefix cache that makes reused context ~50× cheaper than re-prefilling, rehydrating from disk at up to 0.87 GB/s. Same models, same machine, one brain.",
-    chips: ["openai-compatible api", "~50× cheaper context reuse", "up to 0.87 GB/s reload"],
-    href: "/server",
+    paper: "voice",
+    keys: "fn space",
+    head: "Select any text. It reads it aloud.",
+    body:
+      "Press fn and space on any selection and hear it in a natural voice generated on your Mac, the words lighting up as they are spoken. Describe the voice you want in plain words.",
+    chips: ["fn space on any selection", "a voice you describe", "no cloud voice"],
+    Scene: VoiceVignette,
+  },
+  {
+    paper: "server",
+    keys: "for developers",
+    head: "Point your tools at it.",
+    body:
+      "Turn on the server and Tesseract answers on localhost as an OpenAI-compatible API. Works with Pi, Claude Code, OpenCode, or any AI harness. Same models, same machine.",
+    chips: ["openai-compatible", "localhost only", "off until you switch it on"],
+    Scene: ServerVignette,
+    compact: true,
   },
 ];
+
+const LAYOUT = {
+  full: {
+    row: "py-16 lg:py-20",
+    copy: "lg:col-span-5",
+    scene: "lg:col-span-7",
+    head: "text-[clamp(2rem,3.4vw,3.1rem)] leading-[1.05] tracking-[-0.03em]",
+    body: "max-w-md sm:text-base",
+  },
+  compact: {
+    row: "py-14",
+    copy: "lg:col-span-7",
+    scene: "lg:col-span-5",
+    head: "text-[clamp(1.6rem,2.6vw,2.3rem)] leading-[1.08] tracking-[-0.02em]",
+    body: "max-w-lg",
+  },
+} as const;
+
+function FeatureBlock({ f, index, flip }: { f: Feature; index: number; flip: boolean }) {
+  const paper = paperBySlug(f.paper);
+  const name = f.label ?? paper.name;
+  const L = LAYOUT[f.compact ? "compact" : "full"];
+  return (
+    <In>
+      <div className={`grid gap-10 border-t ${HAIR} lg:grid-cols-12 lg:items-center lg:gap-14 ${L.row}`}>
+        <div className={`${L.copy} ${flip ? "lg:order-2" : ""}`}>
+          <p className="font-mono text-[11px] text-[var(--blue)]">
+            {String(index + 1).padStart(2, "0")}
+            <span className="text-[var(--gray)]">
+              {" "}· {name} · {f.keys}
+            </span>
+          </p>
+          <h3 className={`mt-5 font-light ${L.head}`}>{f.head}</h3>
+          <p className={`mt-6 text-[15px] font-light leading-relaxed text-[var(--body)] ${L.body}`}>
+            {f.body}
+          </p>
+          <Chips chips={f.chips} className="mt-7" />
+          <PaperLink href={`/${paper.slug}`} className="mt-7 text-[12px]">
+            more about {name} →
+          </PaperLink>
+        </div>
+        <div className={`${L.scene} ${flip ? "lg:order-1" : ""}`}>
+          <f.Scene />
+        </div>
+      </div>
+    </In>
+  );
+}
 
 export function FeaturesSection() {
   return (
     <section id="features" className="px-6 pt-24 sm:px-12 lg:px-16 lg:pt-32">
-      <SectionMark no="§ 03" title="the instrument" />
+      <SectionMark no="§ 01" title="what works today" note={STATUS_NOTE.shipped} />
 
       <In delay={0.05}>
-        <p className="mt-14 max-w-2xl text-lg font-light leading-relaxed text-[var(--body)] sm:text-xl">
-          The Companion stands on an instrument that already works:{" "}
-          <span className={`${serif.className} italic text-[var(--ink)]`}>
-            shipped, measured, and worn daily.
-          </span>{" "}
-          Each piece has a paper of its own; these are the abstracts.
+        <h2 className="mt-14 max-w-4xl text-[clamp(2.4rem,4.6vw,4.2rem)] font-light leading-[1.02] tracking-[-0.03em]">
+          Everything here works today,{" "}
+          <span className={`${serif.className} italic`}>entirely on your Mac.</span>
+        </h2>
+      </In>
+
+      <In delay={0.12}>
+        <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
+          Six things you can use the minute it is installed. No account, no
+          cloud, nothing sent anywhere. The Companion, further down, is where
+          they are all headed.
         </p>
       </In>
 
-      <div className="mt-6">
-        {THEOREMS.map((th, i) => (
-          <Theorem key={th.n} {...th} delay={0.03 * i} />
+      <div className="mt-16">
+        {FEATURES.map((f, i) => (
+          <FeatureBlock key={f.label ?? f.paper} f={f} index={i} flip={!f.compact && i % 2 === 1} />
         ))}
       </div>
 
       {/* measured values */}
-      <div className="mt-20 grid gap-12 sm:grid-cols-3 sm:gap-8">
+      <div className={`mt-4 grid gap-12 border-t ${HAIR} pt-16 sm:grid-cols-3 sm:gap-8`}>
         {[
           ["99", "languages it understands when you speak"],
           ["16 GB", "of memory is all your Mac needs to start"],

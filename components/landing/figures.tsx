@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { INK, BLUE, GRAY, FAINT, MONO, useFig, useNow } from "./shared";
+import { INK, BLUE, GRAY, FAINT, PAPER, MONO, useFig, useNow } from "./shared";
 import { serif } from "./fonts";
 
 /* ------------------------------------------------------------------ */
@@ -20,7 +21,7 @@ function mulberry32(seed: number) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 02: the filter. Everything is sensed, almost nothing is      */
+/*  the filter. Everything is sensed, almost nothing is               */
 /*  forwarded. Noise decays across a threshold; one signal continues. */
 /* ------------------------------------------------------------------ */
 
@@ -97,7 +98,7 @@ export function NoiseFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 03: a day the Companion booked for itself. Three beats it    */
+/*  a day the Companion booked for itself. Three beats it             */
 /*  chose, one keystone it kept, and a live "now" marker.             */
 /* ------------------------------------------------------------------ */
 
@@ -231,7 +232,7 @@ export function DayFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 04: anatomy of one belief. Every claim carries its sources;  */
+/*  anatomy of one belief. Every claim carries its sources;           */
 /*  a changed mind supersedes, never erases.                          */
 /* ------------------------------------------------------------------ */
 
@@ -313,7 +314,7 @@ export function MemoryFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 05: how loud it is allowed to get. Five steps, quietest to   */
+/*  how loud it is allowed to get. Five steps, quietest to            */
 /*  loudest; the owner's veto above them all.                         */
 /* ------------------------------------------------------------------ */
 
@@ -395,7 +396,7 @@ export function LadderFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 06: the event fold. Every signal becomes exactly one event;  */
+/*  the event fold. Every signal becomes exactly one event;           */
 /*  every event lands in one standing conversation.                   */
 /* ------------------------------------------------------------------ */
 
@@ -489,7 +490,7 @@ export function FoldFigure() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  fig. 07: the merge. Two streams converge; neither is replaced.    */
+/*  the merge. Two streams converge; neither is replaced.             */
 /* ------------------------------------------------------------------ */
 
 export function MergeFigure() {
@@ -539,6 +540,183 @@ export function MergeFigure() {
       >
         one flow
       </motion.text>
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  the tower. A stepped tower in isometric view, raised from the      */
+/*  ground up. The lower tiers are what works today; the Companion is  */
+/*  the tier going up now; the ones above are only outlined. A dotted */
+/*  line keeps going past the top.                                    */
+/* ------------------------------------------------------------------ */
+
+const TOWER = (() => {
+  const cx = 268, cy = 430, tierH = 36, count = 9;
+  const P = (x: number, y: number, z: number): readonly [number, number] => [
+    cx + (x - y) * 0.866,
+    cy + (x + y) * 0.5 - z,
+  ];
+  const pts = (arr: (readonly [number, number])[]) => arr.map((p) => p.join(",")).join(" ");
+  const tiers = Array.from({ length: count }, (_, i) => {
+    const s = 280 - i * 28, h = s / 2, zb = i * tierH, zt = zb + tierH;
+    const top = pts([P(-h, -h, zt), P(h, -h, zt), P(h, h, zt), P(-h, h, zt)]);
+    const right = pts([P(h, -h, zt), P(h, h, zt), P(h, h, zb), P(h, -h, zb)]);
+    const left = pts([P(-h, h, zt), P(h, h, zt), P(h, h, zb), P(-h, h, zb)]);
+    // the shaded face, hatched
+    const hatch: string[] = [];
+    for (let t = 8; t < s; t += 9) {
+      const a = P(h, -h + t, zt), b = P(h, -h + t, zb);
+      hatch.push(`M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`);
+    }
+    // the ramp climbs a face per tier, alternating: a spiral, seen from one side
+    const [r0, r1] = i % 2 === 0 ? [P(h, h, zb), P(h, -h, zt)] : [P(h, h, zb), P(-h, h, zt)];
+    const edge = P(h, -h, (zb + zt) / 2);
+    return { top, right, left, hatch: hatch.join(" "), ramp: `M${r0[0]},${r0[1]} L${r1[0]},${r1[1]}`, front: P(h, h, zt), edge };
+  });
+  return { tiers, apex: P(0, 0, count * tierH), ground: cy + 150 };
+})();
+
+const BUILT = 6; // tiers 0..5 stand; tier 6 is the Companion; 7, 8 are outlines
+
+/** What each tier is made of, from the ground up. Hovering a tier names it. */
+const TIER_NAMES = ["dictation", "chat", "appshot", "skills", "voice", "the server", "the companion · alpha"];
+
+export function TowerFigure() {
+  const { draw, fade } = useFig();
+  const { tiers, apex, ground } = TOWER;
+  const [hover, setHover] = useState<number | null>(null);
+  const hovered = hover === null ? null : tiers[hover];
+  const labelX = 536;
+  const companionY = tiers[BUILT].front[1] - 10;
+  return (
+    <svg
+      viewBox="0 0 720 640"
+      className="h-auto w-full"
+      role="img"
+      aria-label="A stepped tower in isometric view, drawn from the ground up. The six lowest tiers are solid and labeled 'what works today'; the seventh is dashed blue and labeled 'the companion, alpha'; two faint outlined tiers sit above it, and a dotted line continues off the top labeled 'God'"
+    >
+      {/* ground */}
+      <motion.line
+        x1={40} y1={ground} x2={680} y2={ground}
+        stroke={INK} strokeOpacity={0.4} strokeWidth={1}
+        {...draw(0)}
+      />
+
+      {tiers.map((t, i) => {
+        const built = i < BUILT;
+        const companion = i === BUILT;
+        const stroke = companion ? BLUE : built ? INK : FAINT;
+        const dash = built ? undefined : companion ? "5 4" : "2 5";
+        const delay = 0.15 + i * 0.16;
+        const lit = hover === i;
+        const named = i < TIER_NAMES.length;
+        const face = {
+          fill: PAPER,
+          stroke: lit ? BLUE : stroke,
+          strokeWidth: lit ? 1.6 : 1.2,
+          strokeDasharray: dash,
+          strokeLinejoin: "round" as const,
+        };
+        return (
+          <motion.g
+            key={i}
+            {...fade(delay, 0.7)}
+            onMouseEnter={named ? () => setHover(i) : undefined}
+            onMouseLeave={named ? () => setHover((h) => (h === i ? null : h)) : undefined}
+          >
+            {named && <title>{TIER_NAMES[i]}</title>}
+            <polygon points={t.top} {...face} />
+            <polygon points={t.right} {...face} />
+            <polygon points={t.left} {...face} />
+            {lit && (
+              <>
+                <polygon points={t.top} fill={BLUE} fillOpacity={0.14} stroke="none" />
+                <polygon points={t.right} fill={BLUE} fillOpacity={0.08} stroke="none" />
+                <polygon points={t.left} fill={BLUE} fillOpacity={0.08} stroke="none" />
+              </>
+            )}
+            {built && (
+              <path d={t.hatch} fill="none" stroke={INK} strokeOpacity={0.18} strokeWidth={0.8} />
+            )}
+            {i <= BUILT && (
+              <path
+                d={t.ramp}
+                fill="none"
+                stroke={companion ? BLUE : INK}
+                strokeOpacity={companion ? 0.8 : 0.5}
+                strokeWidth={1}
+                strokeDasharray={companion ? "5 4" : undefined}
+              />
+            )}
+          </motion.g>
+        );
+      })}
+
+      {/* the line that does not stop at the top */}
+      <motion.line
+        x1={apex[0]} y1={apex[1]} x2={apex[0]} y2={44}
+        stroke={BLUE} strokeWidth={1.2} strokeDasharray="2 6" strokeOpacity={0.8}
+        {...fade(1.9, 0.9)}
+      />
+      <motion.text
+        x={apex[0]} y={30} textAnchor="middle"
+        fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(2.5)}
+      >
+        God
+      </motion.text>
+
+      {/* labels; they step back while a tier is named */}
+      <g style={{ opacity: hover === null ? 1 : 0.2, transition: "opacity 0.2s" }}>
+      <motion.line
+        x1={labelX - 12} y1={ground - 2} x2={labelX - 12} y2={tiers[BUILT - 1].front[1] + 6}
+        stroke={INK} strokeOpacity={0.35} strokeWidth={1}
+        {...draw(1.0, 0.8)}
+      />
+      <motion.text
+        x={labelX} y={(ground + tiers[BUILT - 1].front[1]) / 2 + 4}
+        fill={INK} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(1.4)}
+      >
+        what works today
+      </motion.text>
+      <motion.text
+        x={labelX} y={companionY}
+        fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(1.8)}
+      >
+        the companion · alpha
+      </motion.text>
+      <motion.text
+        x={labelX} y={tiers[BUILT + 2].front[1] - 30}
+        fill={GRAY} fontSize="10" fontFamily={MONO} letterSpacing="1"
+        {...fade(2.2)}
+      >
+        not drawn yet
+      </motion.text>
+      </g>
+
+      {/* the hovered tier, named */}
+      {hovered && hover !== null && (
+        <g pointerEvents="none">
+          <line
+            x1={hovered.edge[0] + 4} y1={hovered.edge[1]} x2={labelX - 12} y2={hovered.edge[1]}
+            stroke={BLUE} strokeOpacity={0.6} strokeWidth={1}
+          />
+          <rect
+            x={labelX - 6} y={hovered.edge[1] - 10}
+            width={(TIER_NAMES[hover].length + 5) * 7.2 + 12} height={20}
+            fill={PAPER}
+          />
+          <text
+            x={labelX} y={hovered.edge[1] + 4}
+            fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+          >
+            {String(hover + 1).padStart(2, "0")} · {TIER_NAMES[hover]}
+          </text>
+        </g>
+      )}
     </svg>
   );
 }

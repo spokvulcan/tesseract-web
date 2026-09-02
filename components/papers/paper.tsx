@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { SiteHeader, SiteFooter } from "@/components/navigation";
 import { grotesk, serif } from "@/components/landing/fonts";
-import { DOWNLOAD_URL, GITHUB_URL, HAIR, In } from "@/components/landing/shared";
+import { DOWNLOAD_URL, GITHUB_URL, HAIR, In, PaperLink, Chips } from "@/components/landing/shared";
 import { paperAfter, type Paper } from "./list";
 
 /* ------------------------------------------------------------------ */
@@ -126,26 +126,16 @@ export function Theorem({
             {proof}
           </p>
           {href && (
-            <Link
-              href={href}
-              className="mt-5 inline-block font-mono text-[12px] text-[var(--blue)] underline decoration-[var(--blue)]/30 underline-offset-4 transition-colors hover:decoration-[var(--blue)]"
-            >
+            <PaperLink href={href} className="mt-5 text-[12px]">
               read the paper →
-            </Link>
+            </PaperLink>
           )}
         </div>
         <div className="lg:col-span-3">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--faint)]">
             in plain terms
           </p>
-          <ul className="mt-3 space-y-2 font-mono text-[12px] text-[var(--body)]">
-            {chips.map((c) => (
-              <li key={c} className="flex gap-2.5">
-                <span className="text-[var(--blue)]">·</span>
-                {c}
-              </li>
-            ))}
-          </ul>
+          <Chips chips={chips} layout="stack" className="mt-3" />
         </div>
       </div>
     </In>
