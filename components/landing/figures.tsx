@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { INK, BLUE, GRAY, FAINT, PAPER, MONO, useFig, useNow } from "./shared";
 import { serif } from "./fonts";
@@ -570,16 +571,22 @@ const TOWER = (() => {
     }
     // the ramp climbs a face per tier, alternating: a spiral, seen from one side
     const [r0, r1] = i % 2 === 0 ? [P(h, h, zb), P(h, -h, zt)] : [P(h, h, zb), P(-h, h, zt)];
-    return { top, right, left, hatch: hatch.join(" "), ramp: `M${r0[0]},${r0[1]} L${r1[0]},${r1[1]}`, front: P(h, h, zt) };
+    const edge = P(h, -h, (zb + zt) / 2);
+    return { top, right, left, hatch: hatch.join(" "), ramp: `M${r0[0]},${r0[1]} L${r1[0]},${r1[1]}`, front: P(h, h, zt), edge };
   });
   return { tiers, apex: P(0, 0, count * tierH), ground: cy + 150 };
 })();
 
 const BUILT = 6; // tiers 0..5 stand; tier 6 is the Companion; 7, 8 are outlines
 
+/** What each tier is made of, from the ground up. Hovering a tier names it. */
+const TIER_NAMES = ["dictation", "chat", "appshot", "skills", "voice", "the server", "the companion · alpha"];
+
 export function TowerFigure() {
   const { draw, fade } = useFig();
   const { tiers, apex, ground } = TOWER;
+  const [hover, setHover] = useState<number | null>(null);
+  const hovered = hover === null ? null : tiers[hover];
   const labelX = 536;
   const companionY = tiers[BUILT].front[1] - 10;
   return (
@@ -602,18 +609,33 @@ export function TowerFigure() {
         const stroke = companion ? BLUE : built ? INK : FAINT;
         const dash = built ? undefined : companion ? "5 4" : "2 5";
         const delay = 0.15 + i * 0.16;
+        const lit = hover === i;
+        const named = i < TIER_NAMES.length;
         const face = {
           fill: PAPER,
-          stroke,
-          strokeWidth: 1.2,
+          stroke: lit ? BLUE : stroke,
+          strokeWidth: lit ? 1.6 : 1.2,
           strokeDasharray: dash,
           strokeLinejoin: "round" as const,
         };
         return (
-          <motion.g key={i} {...fade(delay, 0.7)}>
+          <motion.g
+            key={i}
+            {...fade(delay, 0.7)}
+            onMouseEnter={named ? () => setHover(i) : undefined}
+            onMouseLeave={named ? () => setHover((h) => (h === i ? null : h)) : undefined}
+          >
+            {named && <title>{TIER_NAMES[i]}</title>}
             <polygon points={t.top} {...face} />
             <polygon points={t.right} {...face} />
             <polygon points={t.left} {...face} />
+            {lit && (
+              <>
+                <polygon points={t.top} fill={BLUE} fillOpacity={0.14} stroke="none" />
+                <polygon points={t.right} fill={BLUE} fillOpacity={0.08} stroke="none" />
+                <polygon points={t.left} fill={BLUE} fillOpacity={0.08} stroke="none" />
+              </>
+            )}
             {built && (
               <path d={t.hatch} fill="none" stroke={INK} strokeOpacity={0.18} strokeWidth={0.8} />
             )}
@@ -645,7 +667,8 @@ export function TowerFigure() {
         God
       </motion.text>
 
-      {/* labels */}
+      {/* labels; they step back while a tier is named */}
+      <g style={{ opacity: hover === null ? 1 : 0.2, transition: "opacity 0.2s" }}>
       <motion.line
         x1={labelX - 12} y1={ground - 2} x2={labelX - 12} y2={tiers[BUILT - 1].front[1] + 6}
         stroke={INK} strokeOpacity={0.35} strokeWidth={1}
@@ -672,6 +695,28 @@ export function TowerFigure() {
       >
         not drawn yet
       </motion.text>
+      </g>
+
+      {/* the hovered tier, named */}
+      {hovered && hover !== null && (
+        <g pointerEvents="none">
+          <line
+            x1={hovered.edge[0] + 4} y1={hovered.edge[1]} x2={labelX - 12} y2={hovered.edge[1]}
+            stroke={BLUE} strokeOpacity={0.6} strokeWidth={1}
+          />
+          <rect
+            x={labelX - 6} y={hovered.edge[1] - 10}
+            width={(TIER_NAMES[hover].length + 5) * 7.2 + 12} height={20}
+            fill={PAPER}
+          />
+          <text
+            x={labelX} y={hovered.edge[1] + 4}
+            fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+          >
+            {String(hover + 1).padStart(2, "0")} · {TIER_NAMES[hover]}
+          </text>
+        </g>
+      )}
     </svg>
   );
 }

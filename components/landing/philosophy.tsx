@@ -95,7 +95,7 @@ export function PhilosophySection() {
           <FigCaption>
             fig. 05: the tower. Six tiers stand. The seventh is going up.
             The ones above are not drawn yet, and the line does not stop
-            at the top.
+            at the top. Hover a tier to see what it is made of.
           </FigCaption>
         </In>
       </div>
