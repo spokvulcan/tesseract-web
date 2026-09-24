@@ -4,12 +4,7 @@ import { useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export const DOWNLOAD_URL =
-  "https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg";
-
-export const GITHUB_URL = "https://github.com/spokvulcan/tesseract";
-
-export const X_URL = "https://x.com/spok_vulkan";
+export { DOWNLOAD_URL, GITHUB_URL, X_URL } from "@/lib/site";
 
 /* The paper's palette. These resolve through CSS variables, so every
    figure follows the active theme (see custom.css). */
