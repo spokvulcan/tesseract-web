@@ -3,12 +3,14 @@ import { PageShell } from "@/components/page-shell";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/support",
   title: "Support · Tesseract",
   description:
     "Get help with Tesseract. Find answers to common questions or contact support.",
-};
+});
 
 export default function SupportPage() {
   return (

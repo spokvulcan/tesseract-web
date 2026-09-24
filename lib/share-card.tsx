@@ -166,7 +166,9 @@ async function card({
 
 export const HOME_CARD_ALT = "Tesseract: the first AI you can tell everything.";
 
-/** The survey's card: the hero's headline, three lines as on the page. */
+/** The survey's card: the hero's headline, three lines as on the page.
+    The fine-print pages wear it too, from image files of their own,
+    since a page's openGraph metadata hides the root's card from it. */
 export function homeCard() {
   return card({
     label: "PRIVATE AI FOR YOUR MAC",

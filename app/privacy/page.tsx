@@ -1,12 +1,14 @@
 import { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
 import { Reveal } from "@/components/ui/reveal";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/privacy",
   title: "Privacy Policy · Tesseract",
   description:
     "Tesseract privacy policy. No data collection, no tracking, no accounts. Everything runs locally on your Mac.",
-};
+});
 
 export default function PrivacyPage() {
   return (
