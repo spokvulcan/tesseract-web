@@ -112,7 +112,7 @@ const KEYSTONE = { start: 15 * 60 + 5, end: 15 * 60 + 25, time: "15:05" };
 export function DayFigure() {
   const now = useNow();
   const { draw, fade } = useFig();
-  const minutes = now.getHours() * 60 + now.getMinutes();
+  const minutes = now ? now.getHours() * 60 + now.getMinutes() : 0;
 
   const X0 = 48;
   const X1 = 952;
@@ -211,22 +211,25 @@ export function DayFigure() {
         );
       })}
 
-      {/* now */}
-      <motion.g {...fade(1.3)}>
-        <line
-          x1={x(minutes)} y1={44} x2={x(minutes)} y2={AXIS + 34}
-          stroke={BLUE} strokeWidth={1} strokeDasharray="1 3" strokeOpacity={0.8}
-        />
-        <text
-          x={Math.min(Math.max(x(minutes), X0 + 24), X1 - 24)}
-          y={34}
-          textAnchor="middle"
-          fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
-        >
-          now {String(now.getHours()).padStart(2, "0")}:
-          {String(now.getMinutes()).padStart(2, "0")}
-        </text>
-      </motion.g>
+      {/* now: drawn once the page runs in the reader's browser, where
+          their clock is */}
+      {now && (
+        <motion.g {...fade(1.3)}>
+          <line
+            x1={x(minutes)} y1={44} x2={x(minutes)} y2={AXIS + 34}
+            stroke={BLUE} strokeWidth={1} strokeDasharray="1 3" strokeOpacity={0.8}
+          />
+          <text
+            x={Math.min(Math.max(x(minutes), X0 + 24), X1 - 24)}
+            y={34}
+            textAnchor="middle"
+            fill={BLUE} fontSize="10" fontFamily={MONO} letterSpacing="1"
+          >
+            now {String(now.getHours()).padStart(2, "0")}:
+            {String(now.getMinutes()).padStart(2, "0")}
+          </text>
+        </motion.g>
+      )}
     </svg>
   );
 }
