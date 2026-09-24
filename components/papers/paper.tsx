@@ -27,7 +27,9 @@ export function PaperShell({ children }: { children: ReactNode }) {
   );
 }
 
-/** The paper's front matter: series line, title claim, and lede. */
+/** The paper's front matter: series line, title claim, and lede. It is
+    on screen at load, so it rises on the CSS entrance (.rise in
+    custom.css) rather than waiting for hydration like the rest. */
 export function PaperOpening({
   paper,
   title,
@@ -39,27 +41,21 @@ export function PaperOpening({
 }) {
   return (
     <section className="px-6 pt-40 sm:px-12 lg:px-16 lg:pt-48">
-      <In>
-        <div className="flex items-baseline justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.3em]">
-          <span>
-            <span className="text-[var(--blue)]">paper no. {paper.no}</span>
-            <span className="ml-4 text-[var(--gray)]">{paper.name}</span>
-          </span>
-          <span className="border border-[var(--blue)]/40 px-2.5 py-1 text-[9px] tracking-[0.25em] text-[var(--blue)]">
-            {paper.status}
-          </span>
-        </div>
-      </In>
-      <In delay={0.08}>
-        <h1 className="mt-12 max-w-4xl text-[clamp(2.8rem,6vw,5.4rem)] font-light leading-[1.0] tracking-[-0.03em]">
-          {title}
-        </h1>
-      </In>
-      <In delay={0.16}>
-        <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] sm:text-lg">
-          {lede}
-        </p>
-      </In>
+      <div className="rise flex items-baseline justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.3em]">
+        <span>
+          <span className="text-[var(--blue)]">paper no. {paper.no}</span>
+          <span className="ml-4 text-[var(--gray)]">{paper.name}</span>
+        </span>
+        <span className="border border-[var(--blue)]/40 px-2.5 py-1 text-[9px] tracking-[0.25em] text-[var(--blue)]">
+          {paper.status}
+        </span>
+      </div>
+      <h1 className="rise mt-12 max-w-4xl text-[clamp(2.8rem,6vw,5.4rem)] font-light leading-[1.0] tracking-[-0.03em] [--rise-delay:80ms]">
+        {title}
+      </h1>
+      <p className="rise mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] [--rise-delay:160ms] sm:text-lg">
+        {lede}
+      </p>
     </section>
   );
 }
