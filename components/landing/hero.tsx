@@ -516,6 +516,8 @@ export function Hero() {
 
         {/* copy */}
         <div className="order-1 flex flex-col justify-center px-6 pb-10 pt-32 sm:px-12 lg:order-2 lg:px-16 lg:pt-24">
+          {/* The spaces between the lines keep the words apart for
+              crawlers that read the text without the layout. */}
           <h1 className="text-[clamp(2.8rem,5.5vw,5.4rem)] font-light leading-[0.98] tracking-[-0.03em]">
             <motion.span
               className="block"
@@ -524,7 +526,7 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
               The first AI
-            </motion.span>
+            </motion.span>{" "}
             <motion.span
               className={`block ${serif.className} italic`}
               initial={{ opacity: 0, y: 24 }}
@@ -532,7 +534,7 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
             >
               you can tell
-            </motion.span>
+            </motion.span>{" "}
             <motion.span
               className="block"
               initial={{ opacity: 0, y: 24 }}
