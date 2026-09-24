@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { serif } from "./fonts";
-import { BLUE, DOWNLOAD_URL, EASE, INK, useFig, usePrefersReducedMotion } from "./shared";
+import { BLUE, DOWNLOAD_URL, INK, useFig, usePrefersReducedMotion } from "./shared";
 
 /* A tesseract is two cubes: the w=+1 shell projects larger, the w=-1
    shell nests inside it. The figure gives that structure a meaning —
@@ -516,39 +516,20 @@ export function Hero() {
 
         {/* copy */}
         <div className="order-1 flex flex-col justify-center px-6 pb-10 pt-32 sm:px-12 lg:order-2 lg:px-16 lg:pt-24">
+          {/* The copy rises on a CSS animation (.rise in custom.css), so
+              it starts at first paint rather than after hydration: the
+              lede is the page's largest paint. The spaces between the
+              lines keep the words apart for crawlers that read the text
+              without the layout. */}
           <h1 className="text-[clamp(2.8rem,5.5vw,5.4rem)] font-light leading-[0.98] tracking-[-0.03em]">
-            <motion.span
-              className="block"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
-            >
-              The first AI
-            </motion.span>
-            <motion.span
-              className={`block ${serif.className} italic`}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
-            >
+            <span className="rise block [--rise-delay:150ms]">The first AI</span>{" "}
+            <span className={`rise block [--rise-delay:300ms] ${serif.className} italic`}>
               you can tell
-            </motion.span>
-            <motion.span
-              className="block"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
-            >
-              everything.
-            </motion.span>
+            </span>{" "}
+            <span className="rise block [--rise-delay:450ms]">everything.</span>
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] sm:text-lg"
-          >
+          <p className="rise mt-8 max-w-md text-base font-light leading-relaxed text-[var(--body)] [--rise-delay:600ms] [--rise-duration:700ms] [--rise-y:16px] sm:text-lg">
             Tesseract is a companion that lives on your Mac. Not a
             chatbot you visit, but a presence that spends the day with
             you: it notices your notifications, knows which app
@@ -557,14 +538,9 @@ export function Hero() {
             and keeps what mattered, as beliefs you can read, question,
             and veto. And because all of it runs on your Mac&apos;s own
             chip, nothing you tell it ever leaves the machine.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.75 }}
-            className="mt-10"
-          >
+          <div className="rise mt-10 [--rise-delay:750ms] [--rise-duration:700ms] [--rise-y:16px]">
             <a
               href={DOWNLOAD_URL}
               target="_blank"
@@ -574,7 +550,7 @@ export function Hero() {
               Download for Mac
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

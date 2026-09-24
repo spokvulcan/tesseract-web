@@ -53,7 +53,7 @@ export function NoiseSection() {
           <blockquote
             className={`${serif.className} text-[clamp(1.8rem,3.4vw,2.9rem)] italic leading-[1.15] text-[var(--ink)]`}
           >
-            “AI is the signal.
+            “AI is the signal.{" "}
             <br />
             Everything else is noise.”
           </blockquote>

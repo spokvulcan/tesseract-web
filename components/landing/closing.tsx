@@ -15,7 +15,7 @@ function PrivacySection() {
         </In>
         <In delay={0.08}>
           <h2 className="mt-6 text-[clamp(2.6rem,5.2vw,4.8rem)] font-light leading-[1.02] tracking-[-0.03em]">
-            Your data never
+            Your data never{" "}
             <br />
             leaves your Mac.
           </h2>

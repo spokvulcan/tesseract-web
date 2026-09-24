@@ -1,11 +1,13 @@
 import { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
 import { Reveal } from "@/components/ui/reveal";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/terms",
   title: "Terms of Use · Tesseract",
   description: "Terms of use for the Tesseract macOS application.",
-};
+});
 
 export default function TermsPage() {
   return (

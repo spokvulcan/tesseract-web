@@ -264,7 +264,7 @@ export function AppshotFigure() {
       viewBox="0 0 1000 260"
       className="h-auto w-full"
       role="img"
-      aria-label="A Slack window is captured by a double tap of the command key and lands in the chat composer as a named image beside a typed question"
+      aria-label="A Slack window is captured by pressing both command keys and lands in the chat composer as a named image beside a typed question"
     >
       {/* the window */}
       <motion.rect x={60} y={44} width={330} height={170} fill="none" stroke={INK} strokeOpacity={0.55} {...draw(0.1)} />

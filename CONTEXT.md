@@ -43,8 +43,9 @@ already know". Never "the agent" in public copy.
 
 ## Appshot
 
-The public name (matching the app's own UI) for the double-tap-⌘
-capture of the frontmost window into the chat. Always "Appshot", one
+The public name (matching the app's own UI) for the capture of the
+frontmost window into the chat, fired by pressing both ⌘ keys at once
+(the app's default; "double-tap" is wrong). Always "Appshot", one
 word, capital A. Never "screenshot": an Appshot is the frontmost
 window specifically, captured as an image and nothing more.
 

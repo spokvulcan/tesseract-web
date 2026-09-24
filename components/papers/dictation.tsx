@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -20,12 +19,6 @@ export function DictationPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            Any text field{" "}
-            <span className={`${serif.className} italic`}>becomes a microphone.</span>
-          </>
-        }
         lede="Hold option and space, and speak. Your words are typed into whatever app is in front of you, in any of 99 languages, with nothing leaving the Mac. Release the keys and the sentence is already there."
       />
 

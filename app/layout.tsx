@@ -3,6 +3,7 @@ import { IBM_Plex_Serif, Space_Mono, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./custom.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SITE_NAME, SITE_URL, X_HANDLE } from "@/lib/site";
 
 const display = IBM_Plex_Serif({
   subsets: ["latin"],
@@ -25,9 +26,13 @@ const mono = Space_Mono({
   display: "swap",
 });
 
+/* Defaults for a page that sets nothing of its own (the 404). Every
+   published page gets its full set, canonical URL included, from
+   pageMetadata() in lib/site.ts; the share image comes from the
+   opengraph-image files. */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thetesseract.app"),
-  title: "Tesseract: the first AI you can tell everything",
+  metadataBase: new URL(SITE_URL),
+  title: "Tesseract: private AI that runs entirely on your Mac",
   description:
     "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
   icons: {
@@ -41,26 +46,13 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tesseract: the first AI you can tell everything",
-    description:
-      "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
-    siteName: "Tesseract",
-    images: [
-      {
-        url: "/icon-512x512.png",
-        width: 512,
-        height: 512,
-        alt: "Tesseract",
-      },
-    ],
     type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: "Tesseract: the first AI you can tell everything",
-    description:
-      "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
-    images: ["/icon-512x512.png"],
+    card: "summary_large_image",
+    creator: X_HANDLE,
   },
 };
 

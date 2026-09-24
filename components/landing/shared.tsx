@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export const DOWNLOAD_URL =
-  "https://github.com/spokvulcan/tesseract/releases/latest/download/Tesseract.dmg";
-
-export const GITHUB_URL = "https://github.com/spokvulcan/tesseract";
-
-export const X_URL = "https://x.com/spok_vulkan";
+export { DOWNLOAD_URL, GITHUB_URL, X_URL } from "@/lib/site";
 
 /* The paper's palette. These resolve through CSS variables, so every
    figure follows the active theme (see custom.css). */
@@ -51,14 +46,25 @@ export function usePrefersReducedMotion() {
   return useSyncExternalStore(subscribeReducedMotion, readReducedMotion, serverReducedMotion);
 }
 
-/** Live clock, re-rendered once a minute — powers the "now" markers. */
-export function useNow(intervalMs = 60_000) {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), intervalMs);
-    return () => clearInterval(id);
-  }, [intervalMs]);
-  return now;
+/* The clock, read in whole minutes, so a tick that lands inside the
+   same minute re-renders nothing. */
+function subscribeMinute(onStoreChange: () => void) {
+  const id = setInterval(onStoreChange, 10_000);
+  return () => clearInterval(id);
+}
+function readMinute() {
+  return Math.floor(Date.now() / 60_000);
+}
+function serverMinute() {
+  return null;
+}
+
+/** Live clock, re-rendered once a minute — powers the "now" markers.
+    Null on the server and through hydration: the page is prerendered,
+    and a time baked in at build never matches the reader's clock. */
+export function useNow(): Date | null {
+  const minute = useSyncExternalStore(subscribeMinute, readMinute, serverMinute);
+  return minute === null ? null : new Date(minute * 60_000);
 }
 
 /** Scroll-into-view reveal shared by every section of the paper. */

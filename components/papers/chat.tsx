@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -20,12 +19,6 @@ export function ChatPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            It remembers what you{" "}
-            <span className={`${serif.className} italic`}>told it in March.</span>
-          </>
-        }
         lede="Underneath everything in Tesseract is a full chat assistant, like the AI apps you already know. Speak or type, paste a screenshot, hand it a task. The difference is where it lives, and what it keeps."
       />
 

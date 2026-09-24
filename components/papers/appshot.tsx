@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -9,7 +8,7 @@ import { AppshotFigure } from "./figures";
 const PAPER = PAPERS[4];
 
 const PRACTICE = [
-  ["the gesture", "tap ⌘ command twice · changeable in Settings"],
+  ["the gesture", "both ⌘ command keys at once · changeable in Settings"],
   ["what is captured", "the frontmost window, whole, as an image and nothing more"],
   ["the permission", "Screen Recording, granted once, applied after a relaunch"],
   ["where it goes", "the chat composer on your Mac · never anywhere else"],
@@ -20,16 +19,10 @@ export function AppshotPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            Tap command twice, and it{" "}
-            <span className={`${serif.className} italic`}>sees your window.</span>
-          </>
-        }
-        lede="An Appshot is the fastest way to show the assistant what you are looking at. Double-tap the command key and the window in front of you is captured and staged in the chat, named after the app it came from. Then ask."
+        lede="An Appshot is the fastest way to show the assistant what you are looking at. Press both command keys and the window in front of you is captured and staged in the chat, named after the app it came from. Then ask."
       />
 
-      <PaperAbstract keywords="double-tap ⌘ · the window, not the screen · ask about what you see">
+      <PaperAbstract keywords="both ⌘ keys · the window, not the screen · ask about what you see">
         Most of what you want from an AI at work is about something already
         on your screen: the Slack reply you are about to send, a client
         email in a language you half know, an error that means nothing to
@@ -47,8 +40,8 @@ export function AppshotPaper() {
             n="5.1"
             name="the capture"
             stmt="One gesture, no framing."
-            proof="No crosshair to drag, no region to pick. Double-tap command and the frontmost window is the shot, whatever window that is, one of Tesseract's own included. It lands in the composer labeled with the app and window title, ready for a question."
-            chips={["double-tap ⌘", "the frontmost window, whole", "staged in the chat, named"]}
+            proof="No crosshair to drag, no region to pick. Press both command keys and the frontmost window is the shot, whatever window that is, one of Tesseract's own included. It lands in the composer labeled with the app and window title, ready for a question."
+            chips={["both ⌘ keys, once", "the frontmost window, whole", "staged in the chat, named"]}
           />
           <Theorem
             n="5.2"
