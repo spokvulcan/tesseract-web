@@ -1,10 +1,13 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
+/* Import order matches the other papers (shared, list, paper first):
+   the bundler orders the shared chunk by it, and a different order
+   gives this page its own copy of that chunk instead of sharing it. */
 import { In, SectionMark, FigCaption, HAIR } from "@/components/landing/shared";
-import { DayFigure, MemoryFigure, LadderFigure, FoldFigure } from "@/components/landing/figures";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose } from "./paper";
+import { DayFigure, MemoryFigure, LadderFigure, FoldFigure } from "@/components/landing/figures";
+import { serif } from "@/components/landing/fonts";
 
 const PAPER = PAPERS[0];
 
@@ -99,12 +102,6 @@ export function CompanionPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            An entity,{" "}
-            <span className={`${serif.className} italic`}>not a feature.</span>
-          </>
-        }
         lede="The Companion is not a reminder app, and not a chatbot waiting for a prompt. It is closer to a colleague who shares your Mac: it wakes up on its own, plans its own day around yours, decides for itself when to speak and when to stay quiet, and writes down every decision it makes. Its one job is your success: your health, your mind, your work."
       />
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -21,12 +20,6 @@ export function ServerPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            Your tools will think{" "}
-            <span className={`${serif.className} italic`}>it is the cloud.</span>
-          </>
-        }
         lede="Tesseract runs an OpenAI-compatible inference server on your Mac. Point any client with a base-URL field at localhost, and the same local models that power the app answer. This is the one paper on this site allowed to speak jargon."
       />
 

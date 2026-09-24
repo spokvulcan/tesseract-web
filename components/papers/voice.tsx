@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -20,12 +19,6 @@ export function VoicePaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            It reads to you, in a voice{" "}
-            <span className={`${serif.className} italic`}>made on your Mac.</span>
-          </>
-        }
         lede="Select any text, in any app, and press fn and space. Your Mac reads it aloud in a natural voice generated on your own machine, and the words light up as they are spoken. No cloud voice, no robot monotone."
       />
 

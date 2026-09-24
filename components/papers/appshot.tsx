@@ -1,6 +1,5 @@
 "use client";
 
-import { serif } from "@/components/landing/fonts";
 import { In, SectionMark, FigCaption } from "@/components/landing/shared";
 import { PAPERS } from "./list";
 import { PaperShell, PaperOpening, PaperAbstract, PaperClose, Practice, Theorem } from "./paper";
@@ -20,12 +19,6 @@ export function AppshotPaper() {
     <PaperShell>
       <PaperOpening
         paper={PAPER}
-        title={
-          <>
-            Press both command keys, and it{" "}
-            <span className={`${serif.className} italic`}>sees your window.</span>
-          </>
-        }
         lede="An Appshot is the fastest way to show the assistant what you are looking at. Press both command keys and the window in front of you is captured and staged in the chat, named after the app it came from. Then ask."
       />
 

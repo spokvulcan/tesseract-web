@@ -45,22 +45,13 @@ export const metadata: Metadata = {
     description:
       "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
     siteName: "Tesseract",
-    images: [
-      {
-        url: "/icon-512x512.png",
-        width: 512,
-        height: 512,
-        alt: "Tesseract",
-      },
-    ],
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Tesseract: the first AI you can tell everything",
     description:
       "A companion, not a chatbot. Tesseract lives on your Mac, remembers what matters, and guards your attention. Nothing you tell it ever leaves the machine.",
-    images: ["/icon-512x512.png"],
   },
 };
 

@@ -32,13 +32,12 @@ export function PaperShell({ children }: { children: ReactNode }) {
     custom.css) rather than waiting for hydration like the rest. */
 export function PaperOpening({
   paper,
-  title,
   lede,
 }: {
   paper: Paper;
-  title: ReactNode;
   lede: ReactNode;
 }) {
+  const [plain, turn] = paper.headline;
   return (
     <section className="px-6 pt-40 sm:px-12 lg:px-16 lg:pt-48">
       <div className="rise flex items-baseline justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.3em]">
@@ -51,7 +50,7 @@ export function PaperOpening({
         </span>
       </div>
       <h1 className="rise mt-12 max-w-4xl text-[clamp(2.8rem,6vw,5.4rem)] font-light leading-[1.0] tracking-[-0.03em] [--rise-delay:80ms]">
-        {title}
+        {plain} <span className={`${serif.className} italic`}>{turn}</span>
       </h1>
       <p className="rise mt-8 max-w-xl text-base font-light leading-relaxed text-[var(--body)] [--rise-delay:160ms] sm:text-lg">
         {lede}
